@@ -1,0 +1,23 @@
+<div class="container mt-4">
+    <h1>{{titulo}}</h1>
+    <p>¡Hola! Somos los integrantes del equipo:</p>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>DNI</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#integrantes}}
+            <tr>
+                <td>{{nombre}}</td>
+                <td>{{apellido}}</td>
+                <td>{{dni}}</td>
+            </tr>
+            {{/integrantes}}
+        </tbody>
+    </table>
+</div>

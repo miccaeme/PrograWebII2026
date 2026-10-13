@@ -8,7 +8,7 @@
 
 </head>
 <body>
-<h1> Hola! Somos el equipo de progra web II </h1>
+<h3> Entrega 1: 13-Oct-2026 </h3>
 </body>
 
 </html>

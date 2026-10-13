@@ -13,7 +13,7 @@ class IntegrantesController
     }
 
     public function show(){
-        $data["mensaje"] = "Somos el qrupo Dinamita.";
+        $data["mensaje"] = "¡Hola! Somos los integrantes del equipo:";
         $data["integrantes"] = $this->model->getIntegrantes();
 
          $this->render->renderiza("integrantes", $data);

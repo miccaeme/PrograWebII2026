@@ -8,7 +8,7 @@
 
 </head>
 <body>
-<h3> Entrega 1: 13-Oct-2026 </h3>
+<h1>Cerebrito</h1>
 </body>
 
 </html>

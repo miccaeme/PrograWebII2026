@@ -7,11 +7,13 @@ use MyDatabase;
 use Router;
 use app\model\IntegrantesModel;
 use app\controller\IntegrantesController;
+use app\controller\RegistroController;
 
 require_once("helper/Autoloader.php");
 require_once("helper/Router.php");
 include_once("model/IntegrantesModel.php");
 include_once("controller/IntegrantesController.php");
+include_once("controller/RegistroController.php");
 
 class Configuration
 {
@@ -27,6 +29,10 @@ class Configuration
     public function getIntegrantesController()
     {
         return new IntegrantesController($this->getIntegrantesModel(), $this->getRender());
+    }
+
+    public function getRegistroController(){
+        return new RegistroController($this->getRender());
     }
 
     private function getDatabase()

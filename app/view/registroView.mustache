@@ -1,0 +1,56 @@
+<div class="w3-container" style="max-width: 500px; margin: auto;">
+    <h2>Crear cuenta</h2>
+
+    {{#error}}
+        <p class="w3-text-red">{{error}}</p>
+    {{/error}}
+
+    <form method="POST" action="/registro/procesar" enctype="multipart/form-data">
+
+        <p>
+            <label>Nombre completo</label>
+            <input class="w3-input" type="text" name="nombre_completo" value="{{nombre_completo}}" required>
+        </p>
+
+        <p>
+            <label>Año de nacimiento</label>
+            <input class="w3-input" type="number" name="anio_nacimiento" value="{{anio_nacimiento}}" min="1900" max="2026" required>
+        </p>
+
+        <p>
+            <label>Sexo</label>
+            <select class="w3-select" name="sexo" required>
+                <option value="">Elegí una opción</option>
+                <option value="M">Masculino</option>
+                <option value="F">Femenino</option>
+                <option value="N">Prefiero no cargarlo</option>
+            </select>
+        </p>
+
+        <p>
+            <label>Email</label>
+            <input class="w3-input" type="email" name="email" value="{{email}}" required>
+        </p>
+
+        <p>
+            <label>Nombre de usuario</label>
+            <input class="w3-input" type="text" name="nombre_usuario" value="{{nombre_usuario}}" required>
+        </p>
+
+        <p>
+            <label>Contraseña</label>
+            <input class="w3-input" type="password" name="password" required>
+        </p>
+
+        <p>
+            <label>Repetir contraseña</label>
+            <input class="w3-input" type="password" name="password_repetida" required>
+        </p>
+
+        <p>
+            <button class="w3-button w3-blue w3-block" type="submit">Registrarme</button>
+        </p>
+
+        <p>¿Ya tenés cuenta? <a href="/login">Ingresá acá</a></p>
+    </form>
+</div>

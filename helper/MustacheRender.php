@@ -18,8 +18,8 @@ class MustacheRender
 
     public function renderiza($view, $data = [])
     {
-        require_once($this->viewPath . "/header.php");
+        require_once($this->viewPath . "/header.mustache");
         echo $this->mustache->render($view . "View", $data);
-        require_once($this->viewPath . "/footer.php");
+        require_once($this->viewPath . "/footer.mustache");
     }
 }

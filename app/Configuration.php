@@ -31,8 +31,9 @@ class Configuration
         return new IntegrantesController($this->getIntegrantesModel(), $this->getRender());
     }
 
+    /*Modique esto,porque necesitaba dos parametros*/
     public function getRegistroController(){
-        return new RegistroController($this->getRender());
+        return new IntegrantesController($this->getIntegrantesModel(), $this->getRender());
     }
 
     private function getDatabase()

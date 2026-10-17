@@ -1,0 +1,68 @@
+/* Shared page and form styling */
+.w3-container {
+    max-width: 560px;
+    margin: 36px auto !important;
+    padding: 32px !important;
+    border-radius: 24px;
+    background: #fffdf8;
+    box-shadow: 0 12px 36px rgba(48, 38, 83, .09);
+}
+
+.w3-container h1,
+.w3-container h2 {
+    margin: 0 0 22px;
+    color: #302653;
+    font-size: clamp(25px, 4vw, 32px);
+    font-weight: 900;
+    letter-spacing: -.7px;
+}
+
+.w3-container label {
+    display: inline-block;
+    margin-bottom: 7px;
+    color: #51496b;
+    font-weight: 800;
+}
+
+.w3-container input,
+.w3-container select {
+    width: 100%;
+    min-height: 46px;
+    padding: 11px 14px;
+    border: 1px solid #e8e3f2;
+    border-radius: 12px;
+    background: #fff;
+    color: #302653;
+    font: inherit;
+    outline: none;
+    transition: border-color .2s ease, box-shadow .2s ease;
+}
+
+.w3-container input:focus,
+.w3-container select:focus {
+    border-color: #8577e8;
+    box-shadow: 0 0 0 4px rgba(102, 85, 217, .12);
+}
+
+.w3-container form p { margin: 0 0 17px; }
+
+.w3-container button {
+    min-height: 48px;
+    border: 0;
+    border-radius: 14px;
+    background: #6655d9;
+    color: #fff;
+    font: inherit;
+    font-weight: 900;
+    cursor: pointer;
+    transition: background .2s ease, transform .2s ease;
+}
+
+.w3-container button:hover { background: #5543c8; transform: translateY(-1px); }
+
+.w3-container a { color: #6655d9; font-weight: 800; }
+.w3-container .w3-text-red { padding: 12px 14px; border-radius: 12px; background: #fff0ed; }
+
+@media (max-width: 600px) {
+    .w3-container { margin: 24px 16px !important; padding: 24px 20px !important; }
+}

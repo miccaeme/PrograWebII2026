@@ -1,0 +1,48 @@
+.integrantes-page {
+    width: 100%;
+    flex: 1 0 auto;
+    min-height: 0;
+    display: grid;
+    place-items: center;
+    padding: 24px 20px;
+}
+
+.integrantes-card {
+    width: min(100%, 760px);
+    padding: 16px 0;
+    text-align: center;
+}
+
+.integrantes-titulo {
+    margin: 0 0 16px;
+    color: #302653;
+    font-size: clamp(24px, 4vw, 34px);
+    font-weight: 900;
+    line-height: 1.25;
+}
+
+.integrantes-tabla {
+    width: 100%;
+    border-collapse: collapse;
+    color: #51496b;
+    text-align: center;
+}
+
+.integrantes-tabla th {
+    padding: 7px 14px;
+    color: #6655d9;
+    font-size: 14px;
+    font-weight: 900;
+}
+
+.integrantes-tabla td {
+    padding: 7px 14px;
+    font-weight: 700;
+}
+
+@media (max-width: 480px) {
+    .integrantes-page { padding: 24px 14px; }
+    .integrantes-card { padding: 16px 0; }
+    .integrantes-tabla th,
+    .integrantes-tabla td { padding: 11px 6px; font-size: 13px; }
+}

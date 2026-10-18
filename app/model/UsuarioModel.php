@@ -87,12 +87,16 @@ class UsuarioModel
         $hash = password_hash($password, PASSWORD_DEFAULT);
 
         return $this->database->executeParams(
-            "INSERT INTO usuarios (nombre_completo, anio_nacimiento, sexo, email, nombre_usuario, password)
-         VALUES (?, ?, ?, ?, ?, ?)",
+            "INSERT INTO usuarios (nombre_completo, anio_nacimiento, sexo, pais, ciudad, latitud, longitud, email, nombre_usuario, password)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
             [
                 $datos["nombre_completo"],
                 $datos["anio_nacimiento"],
                 $datos["sexo"],
+                "No especificado",
+                "No especificada",
+                0,
+                0,
                 $datos["email"],
                 $datos["nombre_usuario"],
                 $hash

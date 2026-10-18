@@ -31,7 +31,7 @@ class UsuarioModel
         }
 
         if (!filter_var($datos["anio_nacimiento"], FILTER_VALIDATE_INT, $opcionesAnio)) {
-            return "Introduce un año válido entre 1920 y " . $anioActual;
+            return "Introduce un año válido entre 1900 y " . $anioActual;
         }
 
         $sexosPermitidos = ["M", "F", "N"];
@@ -51,7 +51,52 @@ class UsuarioModel
             return "La contraseña debe tener al menos 8 caracteres";
         }
 
+        if ($this->existeEmail($datos["email"])) {
+            return "Ese email ya está registrado";
+        }
+
+        if ($this->existeUsuario($datos["nombre_usuario"])) {
+            return "El usuario ya existe";
+        }
+
+
+
         return null;
 
+    }
+
+    public function existeEmail($email)
+    {
+        $fila = $this->database->queryOneParams(
+            "SELECT id FROM usuarios WHERE email = ?",
+            [$email]
+        );
+        return $fila !== null;
+    }
+
+    public function existeUsuario($nombre_usuario)
+    {
+        $fila = $this->database->queryOneParams(
+            "SELECT id FROM usuarios WHERE nombre_usuario = ?",
+            [$nombre_usuario]
+        );
+        return $fila !== null;
+    }
+
+    public function crear($datos, $password){
+        $hash = password_hash($password, PASSWORD_DEFAULT);
+
+        return $this->database->executeParams(
+            "INSERT INTO usuarios (nombre_completo, anio_nacimiento, sexo, email, nombre_usuario, password)
+         VALUES (?, ?, ?, ?, ?, ?)",
+            [
+                $datos["nombre_completo"],
+                $datos["anio_nacimiento"],
+                $datos["sexo"],
+                $datos["email"],
+                $datos["nombre_usuario"],
+                $hash
+            ]
+        );
     }
 }

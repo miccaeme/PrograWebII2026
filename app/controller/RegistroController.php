@@ -40,7 +40,7 @@ class RegistroController
             $this->render->renderiza("registro", $datos);
             return;
         }
-
-        echo "¡Datos válidos!";
+        $this->model->crear($datos, $password);
+        $this->render->renderiza("registro", ["exito" => "¡Registro exitoso!"]);
     }
 }

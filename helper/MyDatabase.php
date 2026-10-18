@@ -34,4 +34,20 @@ class MyDatabase
     {
         return $this->conexion->lastInsertId();
     }
+
+    public function queryOneParams(string $sql, array $params)
+    {
+        Log::info($sql);
+        $stmt = $this->conexion->prepare($sql);
+        $stmt->execute($params);
+        $fila = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $fila === false ? null : $fila;
+    }
+    public function executeParams(string $sql, array $params)
+    {
+        Log::info($sql);
+        $stmt = $this->conexion->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->rowCount();
+    }
 }

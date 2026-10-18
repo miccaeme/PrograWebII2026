@@ -6,12 +6,14 @@ use MustacheRender;
 use MyDatabase;
 use Router;
 use app\model\IntegrantesModel;
+use app\model\UsuarioModel;
 use app\controller\IntegrantesController;
 use app\controller\RegistroController;
 
 require_once("helper/Autoloader.php");
 require_once("helper/Router.php");
 include_once("model/IntegrantesModel.php");
+include_once("model/UsuarioModel.php");
 include_once("controller/IntegrantesController.php");
 include_once("controller/RegistroController.php");
 
@@ -26,14 +28,18 @@ class Configuration
         return new IntegrantesModel($this->getDatabase());
     }
 
+    public function getUsuarioModel()
+    {
+        return new UsuarioModel($this->getDatabase());
+    }
+
     public function getIntegrantesController()
     {
         return new IntegrantesController($this->getIntegrantesModel(), $this->getRender());
     }
 
-    /*Modique esto,porque necesitaba dos parametros*/
     public function getRegistroController(){
-        return new IntegrantesController($this->getIntegrantesModel(), $this->getRender());
+        return new RegistroController($this->getUsuarioModel(), $this->getRender());
     }
 
     private function getDatabase()

@@ -1,0 +1,31 @@
+
+<div class="w3-container" style="max-width: 500px; margin: auto;">
+    <h2>Iniciar sesión</h2>
+
+    {{#error}}
+        <p class="w3-text-red">{{error}}</p>
+    {{/error}}
+    {{#exito}}
+        <p class="exito">{{exito}}</p>
+    {{/exito}}
+
+    <form method="POST" action="/login/procesar">
+
+        <p>
+            <label>Nombre de usuario o Email</label>
+            <input class="w3-input" type="text" name="usuario" value="{{usuario}}" required autocomplete="username">
+        </p>
+
+        <p>
+            <label>Contraseña</label>
+            <input class="w3-input" type="password" name="password" required autocomplete="current-password">
+        </p>
+
+        <p>
+            <button class="w3-button w3-blue w3-block" type="submit">Ingresar</button>
+        </p>
+
+        <p>¿No tenés cuenta? <a href="index.php?controller=registro&action=show">Registrate acá</a></p>
+    </form>
+</div>
+

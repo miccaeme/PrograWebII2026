@@ -2,6 +2,7 @@
 
 namespace app;
 
+use app\controller\LoginController;
 use MustacheRender;
 use MyDatabase;
 use Router;
@@ -16,6 +17,7 @@ include_once("model/IntegrantesModel.php");
 include_once("model/UsuarioModel.php");
 include_once("controller/IntegrantesController.php");
 include_once("controller/RegistroController.php");
+include_once("controller/LoginController.php");
 
 class Configuration
 {
@@ -38,6 +40,10 @@ class Configuration
         return new IntegrantesController($this->getIntegrantesModel(), $this->getRender());
     }
 
+    public function getLoginController(){
+        return new LoginController($this->getUsuarioModel(), $this->getRender());
+
+    }
     public function getRegistroController(){
         return new RegistroController($this->getUsuarioModel(), $this->getRender());
     }

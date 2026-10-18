@@ -1,3 +1,6 @@
 .idea/
 config/mail.ini
 *.log
+__MACOSX/
+._*
+.DS_Store

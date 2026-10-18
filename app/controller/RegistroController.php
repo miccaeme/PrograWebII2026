@@ -29,18 +29,21 @@ class RegistroController
         $password = Request::post("password", "");
         $passwordRepetida = Request::post("password_repetida", "");
 
+        $errores = $this->model->validar($datos, $password);
         if($password !== $passwordRepetida){
-            $error = "Las contraseñas no coinciden.";
-        } else {
-            $error = $this->model->validar($datos, $password);
+            $errores["password_repetida"] = "Las contraseñas no coinciden.";
         }
 
-        if($error !== null){
-            $datos["error"] = $error;
+        if($errores){
+            $datos["errores"] = $errores;
+            $datos["sexo_M"] = $datos["sexo"] === "M";
+            $datos["sexo_F"] = $datos["sexo"] === "F";
+            $datos["sexo_N"] = $datos["sexo"] === "N";
             $this->render->renderiza("registro", $datos);
             return;
         }
         $this->model->crear($datos, $password);
         $this->render->renderiza("registro", ["exito" => "¡Registro exitoso!"]);
     }
+
 }

@@ -8,9 +8,8 @@
         <p class="exito">{{exito}}</p>
     {{/exito}}
 
+    <form method="POST" action="index.php?controller=registro&method=procesar">
 
-        <input type="hidden" name="controller" value="registro">
-        <input type="hidden" name="action" value="procesar">
         <p>
             <label>Nombre completo</label>
             <input class="w3-input" type="text" name="nombre_completo" value="{{nombre_completo}}" required>
@@ -30,7 +29,7 @@
                 <option value="N">Prefiero no cargarlo</option>
             </select>
         </p>
-        <form method="POST" action="index.php?controller=registro&method=procesar" >
+
         <p>
             <label>Email</label>
             <input class="w3-input" type="email" name="email" value="{{email}}" required>
@@ -55,6 +54,6 @@
             <button class="w3-button w3-blue w3-block" type="submit">Registrarme</button>
         </p>
 
-        <p>¿Ya tenés cuenta? <a href="/login">Ingresá acá</a></p>
+        <p>¿Ya tenés cuenta? <a href="index.php?controller=login&method=show">Ingresá acá</a></p>
     </form>
 </div>

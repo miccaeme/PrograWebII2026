@@ -93,6 +93,10 @@ class UsuarioModel
                 $datos["nombre_completo"],
                 $datos["anio_nacimiento"],
                 $datos["sexo"],
+                "No especificado",
+                "No especificada",
+                0,
+                0,
                 $datos["email"],
                 $datos["nombre_usuario"],
                 $hash

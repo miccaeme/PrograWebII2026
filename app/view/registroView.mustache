@@ -1,53 +1,57 @@
 <div class="w3-container" style="max-width: 500px; margin: auto;">
     <h2>Crear cuenta</h2>
 
-    {{#error}}
-        <p class="w3-text-red">{{error}}</p>
-    {{/error}}
     {{#exito}}
         <p class="exito">{{exito}}</p>
     {{/exito}}
 
-    <form method="POST" action="index.php?controller=registro&method=procesar">
+    <form id="registro-form" method="POST" action="index.php?controller=registro&method=procesar">
 
         <p>
             <label>Nombre completo</label>
-            <input class="w3-input" type="text" name="nombre_completo" value="{{nombre_completo}}" required>
+            <input class="w3-input" type="text" name="nombre_completo" value="{{nombre_completo}}" maxlength="100" aria-describedby="nombre-completo-error">
+            <small id="nombre-completo-error" class="field-error" role="alert">{{errores.nombre_completo}}</small>
         </p>
 
         <p>
             <label>Año de nacimiento</label>
-            <input class="w3-input" type="number" name="anio_nacimiento" value="{{anio_nacimiento}}" min="1900" max="2026" required>
+            <input class="w3-input" type="number" name="anio_nacimiento" value="{{anio_nacimiento}}" min="1900" max="2026" step="1" aria-describedby="anio-error">
+            <small id="anio-error" class="field-error" role="alert">{{errores.anio_nacimiento}}</small>
         </p>
 
         <p>
             <label>Sexo</label>
-            <select class="w3-select" name="sexo" required>
+            <select class="w3-select" name="sexo">
                 <option value="">Elegí una opción</option>
-                <option value="M">Masculino</option>
-                <option value="F">Femenino</option>
-                <option value="N">Prefiero no cargarlo</option>
+                <option value="M" {{#sexo_M}}selected{{/sexo_M}}>Masculino</option>
+                <option value="F" {{#sexo_F}}selected{{/sexo_F}}>Femenino</option>
+                <option value="N" {{#sexo_N}}selected{{/sexo_N}}>Prefiero no cargarlo</option>
             </select>
+            <small id="sexo-error" class="field-error" role="alert">{{errores.sexo}}</small>
         </p>
 
         <p>
             <label>Email</label>
-            <input class="w3-input" type="email" name="email" value="{{email}}" required>
+            <input class="w3-input" type="email" name="email" value="{{email}}" maxlength="150" aria-describedby="email-error">
+            <small id="email-error" class="field-error" role="alert">{{errores.email}}</small>
         </p>
 
         <p>
             <label>Nombre de usuario</label>
-            <input class="w3-input" type="text" name="nombre_usuario" value="{{nombre_usuario}}" required>
+            <input class="w3-input" type="text" name="nombre_usuario" value="{{nombre_usuario}}" minlength="1" maxlength="30" aria-describedby="usuario-error">
+            <small id="usuario-error" class="field-error" role="alert">{{errores.nombre_usuario}}</small>
         </p>
 
         <p>
             <label>Contraseña</label>
-            <input class="w3-input" type="password" name="password" required>
+            <input class="w3-input" id="password" type="password" name="password" minlength="8" aria-describedby="password-error">
+            <small id="password-error" class="field-error" role="alert">{{errores.password}}</small>
         </p>
 
         <p>
             <label>Repetir contraseña</label>
-            <input class="w3-input" type="password" name="password_repetida" required>
+            <input class="w3-input" id="password-repetida" type="password" name="password_repetida" minlength="8" aria-describedby="password-repetida-error">
+            <small id="password-repetida-error" class="field-error" role="alert">{{errores.password_repetida}}</small>
         </p>
 
         <p>
@@ -57,3 +61,5 @@
         <p>¿Ya tenés cuenta? <a href="index.php?controller=login&method=show">Ingresá acá</a></p>
     </form>
 </div>
+
+<script src="/PrograWebII2026/public/javascript/registro.js" defer></script>

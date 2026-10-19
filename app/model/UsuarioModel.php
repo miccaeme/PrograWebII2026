@@ -12,11 +12,12 @@ class UsuarioModel
 
 
     public function validar($datos, $password) {
+        $errores = [];
         if(empty(trim($datos["nombre_completo"]))){
-            return "El nombre es obligatorio";
+            $errores["nombre_completo"] = "El nombre es obligatorio.";
         }
         if (!filter_var($datos["email"], FILTER_VALIDATE_EMAIL)) {
-            return "El email no es valido";
+            $errores["email"] = "Ingresá un email válido.";
         }
 
         $anioActual = (int)date("Y");
@@ -27,41 +28,35 @@ class UsuarioModel
             ]
         ];
         if (empty($datos["anio_nacimiento"])) {
-            return "El año de nacimiento es obligatorio.";
-        }
-
-        if (!filter_var($datos["anio_nacimiento"], FILTER_VALIDATE_INT, $opcionesAnio)) {
-            return "Introduce un año válido entre 1900 y " . $anioActual;
+            $errores["anio_nacimiento"] = "El año de nacimiento es obligatorio.";
+        } elseif (!filter_var($datos["anio_nacimiento"], FILTER_VALIDATE_INT, $opcionesAnio)) {
+            $errores["anio_nacimiento"] = "Ingresá un año válido entre 1900 y " . $anioActual . ".";
         }
 
         $sexosPermitidos = ["M", "F", "N"];
         if (!in_array( $datos["sexo"] , $sexosPermitidos , true)) {
-            return "Elegí una opción válida para el sexo.";
+            $errores["sexo"] = "Elegí una opción válida.";
         }
 
         if(empty(trim($datos["nombre_usuario"]))){
-            return "El nombre de usuario es obligatorio";
+            $errores["nombre_usuario"] = "El nombre de usuario es obligatorio.";
         }
 
         if(empty(($password))){
-            return "La contraseña es obligatoria";
+            $errores["password"] = "La contraseña es obligatoria.";
+        } elseif(strlen($password) < 8){
+            $errores["password"] = "La contraseña debe tener al menos 8 caracteres.";
         }
 
-        if(strlen($password) < 8){
-            return "La contraseña debe tener al menos 8 caracteres";
+        if (filter_var($datos["email"], FILTER_VALIDATE_EMAIL) && $this->existeEmail($datos["email"])) {
+            $errores["email"] = "Ese email ya está registrado.";
         }
 
-        if ($this->existeEmail($datos["email"])) {
-            return "Ese email ya está registrado";
+        if ($datos["nombre_usuario"] !== "" && $this->existeUsuario($datos["nombre_usuario"])) {
+            $errores["nombre_usuario"] = "Ese nombre de usuario ya existe.";
         }
 
-        if ($this->existeUsuario($datos["nombre_usuario"])) {
-            return "El usuario ya existe";
-        }
-
-
-
-        return null;
+        return $errores;
 
     }
 

@@ -1,65 +1,77 @@
-<div class="w3-container" style="max-width: 500px; margin: auto;">
-    <h2>Crear cuenta</h2>
+<main class="registro">
+    <section class="registro__presentacion">
+        <div class="registro__presentacion-contenido">
+            <img class="registro__personaje" src="/PrograWebII2026/public/img/Cerebro%20kawaii%20graduado%20y%20triunfante.png" alt="Cerebrito, la mascota del juego">
+            <h1 class="registro__titulo-presentacion">Creá tu cuenta y empezá a jugar</h1>
+            <p class="registro__descripcion">Sumate a Cerebrito, poné a prueba tus conocimientos, ganá puntos y competí con jugadores de todo el mundo</p>
+        </div>
+    </section>
 
-    {{#exito}}
-        <p class="exito">{{exito}}</p>
-    {{/exito}}
+    <section class="registro__panel">
+        <div class="registro__tarjeta">
+            <h2 class="registro__titulo">Crear cuenta</h2>
+            <p class="registro__subtitulo">Completá tus datos para unirte a Cerebrito</p>
 
-    <form id="registro-form" method="POST" action="index.php?controller=registro&method=procesar">
+            {{#exito}}
+                <p class="exito registro__exito">{{exito}}</p>
+            {{/exito}}
 
-        <p>
-            <label>Nombre completo</label>
-            <input class="w3-input" type="text" name="nombre_completo" value="{{nombre_completo}}" maxlength="100" aria-describedby="nombre-completo-error">
-            <small id="nombre-completo-error" class="field-error" role="alert">{{errores.nombre_completo}}</small>
-        </p>
+            <form id="registro-form" class="registro__formulario" method="POST" action="index.php?controller=registro&method=procesar">
+                <p class="registro__campo registro__campo--ancho">
+                    <label class="registro__etiqueta">Nombre completo</label>
+                    <input class="w3-input registro__entrada" type="text" name="nombre_completo" value="{{nombre_completo}}" maxlength="100" aria-describedby="nombre-completo-error">
+                    <small id="nombre-completo-error" class="field-error registro__error" role="alert">{{errores.nombre_completo}}</small>
+                </p>
 
-        <p>
-            <label>Año de nacimiento</label>
-            <input class="w3-input" type="number" name="anio_nacimiento" value="{{anio_nacimiento}}" min="1900" max="2026" step="1" aria-describedby="anio-error">
-            <small id="anio-error" class="field-error" role="alert">{{errores.anio_nacimiento}}</small>
-        </p>
+                <p class="registro__campo">
+                    <label class="registro__etiqueta">Año de nacimiento</label>
+                    <input class="w3-input registro__entrada" type="number" name="anio_nacimiento" value="{{anio_nacimiento}}" min="1900" max="2026" step="1" aria-describedby="anio-error">
+                    <small id="anio-error" class="field-error registro__error" role="alert">{{errores.anio_nacimiento}}</small>
+                </p>
 
-        <p>
-            <label>Sexo</label>
-            <select class="w3-select" name="sexo">
-                <option value="">Elegí una opción</option>
-                <option value="M" {{#sexo_M}}selected{{/sexo_M}}>Masculino</option>
-                <option value="F" {{#sexo_F}}selected{{/sexo_F}}>Femenino</option>
-                <option value="N" {{#sexo_N}}selected{{/sexo_N}}>Prefiero no cargarlo</option>
-            </select>
-            <small id="sexo-error" class="field-error" role="alert">{{errores.sexo}}</small>
-        </p>
+                <p class="registro__campo">
+                    <label class="registro__etiqueta">Sexo</label>
+                    <select class="w3-select registro__entrada" name="sexo">
+                        <option value="">Elegí una opción</option>
+                        <option value="M" {{#sexo_M}}selected{{/sexo_M}}>Masculino</option>
+                        <option value="F" {{#sexo_F}}selected{{/sexo_F}}>Femenino</option>
+                        <option value="N" {{#sexo_N}}selected{{/sexo_N}}>Prefiero no cargarlo</option>
+                    </select>
+                    <small id="sexo-error" class="field-error registro__error" role="alert">{{errores.sexo}}</small>
+                </p>
 
-        <p>
-            <label>Email</label>
-            <input class="w3-input" type="email" name="email" value="{{email}}" maxlength="150" aria-describedby="email-error">
-            <small id="email-error" class="field-error" role="alert">{{errores.email}}</small>
-        </p>
+                <p class="registro__campo">
+                    <label class="registro__etiqueta">Email</label>
+                    <input class="w3-input registro__entrada" type="email" name="email" value="{{email}}" maxlength="150" aria-describedby="email-error">
+                    <small id="email-error" class="field-error registro__error" role="alert">{{errores.email}}</small>
+                </p>
 
-        <p>
-            <label>Nombre de usuario</label>
-            <input class="w3-input" type="text" name="nombre_usuario" value="{{nombre_usuario}}" minlength="1" maxlength="30" aria-describedby="usuario-error">
-            <small id="usuario-error" class="field-error" role="alert">{{errores.nombre_usuario}}</small>
-        </p>
+                <p class="registro__campo">
+                    <label class="registro__etiqueta">Nombre de usuario</label>
+                    <input class="w3-input registro__entrada" type="text" name="nombre_usuario" value="{{nombre_usuario}}" minlength="1" maxlength="30" aria-describedby="usuario-error">
+                    <small id="usuario-error" class="field-error registro__error" role="alert">{{errores.nombre_usuario}}</small>
+                </p>
 
-        <p>
-            <label>Contraseña</label>
-            <input class="w3-input" id="password" type="password" name="password" minlength="8" aria-describedby="password-error">
-            <small id="password-error" class="field-error" role="alert">{{errores.password}}</small>
-        </p>
+                <p class="registro__campo">
+                    <label class="registro__etiqueta">Contraseña</label>
+                    <input class="w3-input registro__entrada" id="password" type="password" name="password" minlength="8" aria-describedby="password-error">
+                    <small id="password-error" class="field-error registro__error" role="alert">{{errores.password}}</small>
+                </p>
 
-        <p>
-            <label>Repetir contraseña</label>
-            <input class="w3-input" id="password-repetida" type="password" name="password_repetida" minlength="8" aria-describedby="password-repetida-error">
-            <small id="password-repetida-error" class="field-error" role="alert">{{errores.password_repetida}}</small>
-        </p>
+                <p class="registro__campo">
+                    <label class="registro__etiqueta">Repetir contraseña</label>
+                    <input class="w3-input registro__entrada" id="password-repetida" type="password" name="password_repetida" minlength="8" aria-describedby="password-repetida-error">
+                    <small id="password-repetida-error" class="field-error registro__error" role="alert">{{errores.password_repetida}}</small>
+                </p>
 
-        <p>
-            <button class="w3-button w3-blue w3-block" type="submit">Registrarme</button>
-        </p>
+                <p class="registro__acciones registro__campo--ancho">
+                    <button class="w3-button w3-blue w3-block registro__boton" type="submit">Registrarme</button>
+                </p>
 
-        <p>¿Ya tenés cuenta? <a href="index.php?controller=login&method=show">Ingresá acá</a></p>
-    </form>
-</div>
+                <p class="registro__ingreso registro__campo--ancho">¿Ya tenés cuenta? <a class="registro__enlace" href="index.php?controller=login&method=show">Ingresá acá</a></p>
+            </form>
+        </div>
+    </section>
+</main>
 
 <script src="/PrograWebII2026/public/javascript/registro.js" defer></script>

@@ -62,8 +62,10 @@
 
 .w3-container a { color: #6655d9; font-weight: 800; }
 .w3-container .w3-text-red { padding: 12px 14px; border-radius: 12px; background: #fff0ed; }
-.w3-container .field-error { display: block; min-height: 1.2em; margin-top: 5px; color: #b42318; }
+.field-error { display: block; min-height: 1.2em; margin-top: 5px; color: #b42318; font-weight: 400; }
+
 
 @media (max-width: 600px) {
     .w3-container { margin: 24px 16px !important; padding: 24px 20px !important; }
 }
+

@@ -30,9 +30,7 @@ body {
     font-family: 'Nunito', sans-serif;
 }
 
-/* =========================================
-   HEADER (Tus estilos base adaptados)
-   ========================================= */
+
 .header {
     width: 100%;
     background: #fffdf8;
@@ -136,9 +134,7 @@ body {
     transform: translateY(1px);
 }
 
-/* =========================================
-   SECCIÓN DE LOGIN
-   ========================================= */
+/* SECCIÓN DE LOGIN */
 .login-wrapper {
     flex: 1;
     display: flex;
@@ -337,9 +333,7 @@ body {
     transform: translateY(1px);
 }
 
-/* =========================================
-   RESPONSIVE DESIGN (Móviles y Tablets)
-   ========================================= */
+/* RESPONSIVE DESIGN (Móviles y Tablets) */
 @media (max-width: 950px) {
     .header__container {
         flex-wrap: wrap;

@@ -3,11 +3,12 @@
 namespace app;
 
 use app\controller\LoginController;
+use app\model\UsuarioModel;
 use MustacheRender;
 use MyDatabase;
 use Router;
 use app\model\IntegrantesModel;
-use app\model\UsuarioModel;
+use app\model\LoginModel;
 use app\controller\IntegrantesController;
 use app\controller\RegistroController;
 
@@ -40,9 +41,9 @@ class Configuration
         return new IntegrantesController($this->getIntegrantesModel(), $this->getRender());
     }
 
-    public function getLoginController(){
+    public function getLoginController()
+    {
         return new LoginController($this->getUsuarioModel(), $this->getRender());
-
     }
     public function getRegistroController(){
         return new RegistroController($this->getUsuarioModel(), $this->getRender());

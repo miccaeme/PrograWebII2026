@@ -19,6 +19,7 @@ class RegistroController
     }
 
     public function procesar(){
+
         $datos = [
             "nombre_completo" => trim(Request::post("nombre_completo", "")),
             "anio_nacimiento" => trim(Request::post("anio_nacimiento", "")),

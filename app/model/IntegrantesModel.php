@@ -12,7 +12,16 @@ class IntegrantesModel
     public function getIntegrantes(){
         return $this->database->queryAll("SELECT * FROM integrantes");
     }
+    public function show()
+    {
+        $data = [
+            "logueado"       => $_SESSION["logueado"] ?? false,
+            "nombre_usuario" => $_SESSION["nombre_usuario"] ?? null,
 
+        ];
+
+        $this->render->renderiza("integrantes", $data);
+    }
 
 
 

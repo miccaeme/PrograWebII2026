@@ -8,8 +8,9 @@
         <p class="exito">{{exito}}</p>
     {{/exito}}
 
-    <form method="POST" action="index.php?controller=registro&action=procesar" enctype="multipart/form-data">
 
+        <input type="hidden" name="controller" value="registro">
+        <input type="hidden" name="action" value="procesar">
         <p>
             <label>Nombre completo</label>
             <input class="w3-input" type="text" name="nombre_completo" value="{{nombre_completo}}" required>
@@ -29,7 +30,7 @@
                 <option value="N">Prefiero no cargarlo</option>
             </select>
         </p>
-
+        <form method="POST" action="index.php?controller=registro&method=procesar" >
         <p>
             <label>Email</label>
             <input class="w3-input" type="email" name="email" value="{{email}}" required>

@@ -20,15 +20,16 @@
             <img src="/PrograWebII2026/public/img/logo.png" alt="Logo Cerebrito">
         </a>
 
-
-
         <nav class="header__nav" aria-label="Navegación principal">
             <a href="/PrograWebII2026/" class="header__link">Inicio</a>
             <a href="#" class="header__link">Categorías</a>
             <a href="#" class="header__link">Ranking</a>
         </nav>
+        <div class="header__actions">
 
-
+                <a href="index.php?controller=login&method=show" class="header__login">Ingresar</a>
+                <a href="index.php?controller=registro&method=show" class="header__play">Registrarse</a>
+             <a href="index.php?controller=login&method=logout" class="header__login">Cerrar sesión</a>
 
         <div class="header__actions">
             <!-- Botón Ingresar -->
@@ -36,8 +37,13 @@
 
             <!-- Botón Registrarse -->
             <a href="index.php?controller=registro&method=show" class="header__play">Registrarse</a>
+        </div>
+
+
+
 
         </div>
+
 
     </div>
 </header>

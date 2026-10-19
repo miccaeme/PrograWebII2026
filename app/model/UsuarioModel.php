@@ -82,8 +82,8 @@ class UsuarioModel
         $hash = password_hash($password, PASSWORD_DEFAULT);
 
         return $this->database->executeParams(
-            "INSERT INTO usuarios (nombre_completo, anio_nacimiento, sexo, pais, ciudad, latitud, longitud, email, nombre_usuario, password)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            "INSERT INTO usuarios (nombre_completo, anio_nacimiento, sexo, email, nombre_usuario, password)
+         VALUES (?, ?, ?, ?, ?, ?)",
             [
                 $datos["nombre_completo"],
                 $datos["anio_nacimiento"],
@@ -97,5 +97,28 @@ class UsuarioModel
                 $hash
             ]
         );
+    }
+    public function buscarPorUsuarioOEmail($identificador)
+    {
+        return $this->database->queryOneParams(
+            "SELECT * FROM usuarios WHERE email = ? OR nombre_usuario = ?",
+            [$identificador, $identificador]
+        );
+    }
+    public function autenticar($identificador, $password)
+    {
+        $usuario = $this->buscarPorUsuarioOEmail($identificador);
+
+        if (!$usuario) {
+            return ["error" => "El usuario o correo no existe."];
+        }
+
+        // Si al registrar guardaste con password_hash():
+        if (!password_verify($password, $usuario['password'])) {
+            return ["error" => "Contraseña incorrecta."];
+        }
+
+        // Si el usuario y contraseña son válidos, retornamos los datos del usuario
+        return ["usuario" => $usuario];
     }
 }

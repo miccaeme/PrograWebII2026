@@ -38,6 +38,34 @@ body {
     gap: 28px;
 }
 
+.header__menu-toggle {
+    display: none;
+    width: 44px;
+    height: 44px;
+    padding: 10px;
+    border: 1px solid rgba(255, 255, 255, .45);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, .14);
+    cursor: pointer;
+}
+
+.header__menu-toggle span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    margin: 4px 0;
+    border-radius: 2px;
+    background: currentColor;
+}
+
+.header__menu {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
 .header__logo {
     display: flex;
     align-items: center;
@@ -126,7 +154,8 @@ body {
 
 @media (max-width: 950px) {
     .header__container { flex-wrap: wrap; justify-content: space-between; gap: 8px 18px; }
-    .header__nav { order: 3; width: 100%; padding: 4px 0 8px; }
+    .header__menu { order: 3; flex-basis: 100%; width: 100%; }
+    .header__nav { width: auto; padding: 4px 0 8px; }
 }
 
 @media (max-width: 600px) {
@@ -144,5 +173,33 @@ body {
 @media (max-width: 380px) {
     .header__container { justify-content: center; }
     .header__actions { width: 100%; justify-content: center; }
+}
+
+@media (max-width: 700px) {
+    .header__container { position: relative; flex-wrap: nowrap; justify-content: space-between; }
+    .header__menu-toggle { display: block; color: var(--cerebrito-ink); }
+    .header:has(+ .inicio-sesion) .header__menu-toggle,
+    .header:has(+ .registro) .header__menu-toggle { color: #fff; }
+    .header__menu {
+        display: none;
+        position: absolute;
+        z-index: 5;
+        top: 100%;
+        right: 0;
+        left: 0;
+        align-items: stretch;
+        flex-direction: column;
+        gap: 10px;
+        padding: 14px 16px 18px;
+        border-radius: 0 0 18px 18px;
+        background: #fffdf8;
+        box-shadow: 0 12px 24px rgba(48, 38, 83, .16);
+    }
+    .header__menu.is-open { display: flex; }
+    .header__nav { order: 0; width: 100%; align-items: stretch; flex-direction: column; padding: 0; }
+    .header__link { color: var(--cerebrito-ink) !important; }
+    .header__actions { width: 100%; align-items: stretch; flex-direction: column; gap: 8px; }
+    .header__login { padding: 9px 15px; color: var(--cerebrito-ink) !important; }
+    .header__play { align-self: flex-start; }
 }
 

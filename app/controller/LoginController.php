@@ -3,6 +3,7 @@
 namespace app\controller;
 
 use Request;
+use Redirect;
 
 class LoginController
 {
@@ -50,17 +51,13 @@ class LoginController
         $_SESSION["logueado"] = true;
 
         // Redireccionamos a la pantalla principal o de inicio
-        $basePath = rtrim(dirname($_SERVER["SCRIPT_NAME"] ?? "/index.php"), "/\\\\");
-        header("Location: " . $basePath . "/index.php?controller=integrantes&method=show");
-        exit();
+        Redirect::toController("integrantes", "show");
     }
 
     public function logout()
     {
         session_destroy();
-        $basePath = rtrim(dirname($_SERVER["SCRIPT_NAME"] ?? "/index.php"), "/\\\\");
-        header("Location: " . $basePath . "/index.php?controller=login&method=show");
-        exit();
+        Redirect::toController("login", "show");
     }
 
 }

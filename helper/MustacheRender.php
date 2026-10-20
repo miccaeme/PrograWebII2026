@@ -18,8 +18,10 @@ class MustacheRender
 
     public function renderiza($view, $data = [])
     {
-        require_once($this->viewPath . "/header.mustache");
+        $data["baseUrl"] = Redirect::baseUrl();
+
+        echo $this->mustache->render("header", $data);
         echo $this->mustache->render($view . "View", $data);
-        require_once($this->viewPath . "/footer.mustache");
+        echo $this->mustache->render("footer", $data);
     }
 }

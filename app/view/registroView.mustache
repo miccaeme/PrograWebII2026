@@ -1,7 +1,7 @@
 <main class="registro">
     <section class="registro__presentacion">
         <div class="registro__presentacion-contenido">
-            <img class="registro__personaje" src="/PrograWebII2026/public/img/Cerebro%20kawaii%20graduado%20y%20triunfante.png" alt="Cerebrito, la mascota del juego">
+            <img class="registro__personaje" src="{{baseUrl}}/public/img/Cerebro%20kawaii%20graduado%20y%20triunfante.png" alt="Cerebrito, la mascota del juego">
             <h1 class="registro__titulo-presentacion">Creá tu cuenta y empezá a jugar</h1>
             <p class="registro__descripcion">Sumate a Cerebrito, poné a prueba tus conocimientos, ganá puntos y competí con jugadores de todo el mundo</p>
         </div>
@@ -16,7 +16,7 @@
                 <p class="exito registro__exito">{{exito}}</p>
             {{/exito}}
 
-            <form id="registro-form" class="registro__formulario" method="POST" action="index.php?controller=registro&method=procesar">
+            <form id="registro-form" class="registro__formulario" method="POST" action="{{baseUrl}}/index.php?controller=registro&amp;method=procesar">
                 <p class="registro__campo registro__campo--ancho">
                     <label class="registro__etiqueta">Nombre completo</label>
                     <input class="w3-input registro__entrada" type="text" name="nombre_completo" value="{{nombre_completo}}" maxlength="100" aria-describedby="nombre-completo-error">
@@ -68,10 +68,10 @@
                     <button class="w3-button w3-blue w3-block registro__boton" type="submit">Registrarme</button>
                 </p>
 
-                <p class="registro__ingreso registro__campo--ancho">¿Ya tenés cuenta? <a class="registro__enlace" href="index.php?controller=login&method=show">Ingresá acá</a></p>
+                <p class="registro__ingreso registro__campo--ancho">¿Ya tenés cuenta? <a class="registro__enlace" href="{{baseUrl}}/index.php?controller=login&amp;method=show">Ingresá acá</a></p>
             </form>
         </div>
     </section>
 </main>
 
-<script src="/PrograWebII2026/public/javascript/registro.js" defer></script>
+<script src="{{baseUrl}}/public/javascript/registro.js" defer></script>

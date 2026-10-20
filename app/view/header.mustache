@@ -5,41 +5,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cerebrito | Juego de preguntas</title>
-    <link rel="stylesheet" href="/PrograWebII2026/public/css/header.css">
-    <link rel="stylesheet" href="/PrograWebII2026/public/css/footer.css">
-    <link rel="stylesheet" href="/PrograWebII2026/public/css/app.css">
-    <link rel="stylesheet" href="/PrograWebII2026/public/css/registro.css">
-    <link rel="stylesheet" href="/PrograWebII2026/public/css/login.css">
-    <link rel="stylesheet" href="/PrograWebII2026/public/css/integrantes.css">
+    <link rel="stylesheet" href="{{baseUrl}}/public/css/header.css">
+    <link rel="stylesheet" href="{{baseUrl}}/public/css/footer.css">
+    <link rel="stylesheet" href="{{baseUrl}}/public/css/app.css">
+    <link rel="stylesheet" href="{{baseUrl}}/public/css/registro.css">
+    <link rel="stylesheet" href="{{baseUrl}}/public/css/login.css">
+    <link rel="stylesheet" href="{{baseUrl}}/public/css/integrantes.css">
 </head>
 <body>
-
 <header class="header">
     <div class="header__container">
-
-      <!--CAMBIAR-->
-        <a href="/PrograWebII2026/" class="header__logo">
-            <img src="/PrograWebII2026/public/img/logo.png" alt="Logo Cerebrito">
+        <a href="{{baseUrl}}/" class="header__logo">
+            <img src="{{baseUrl}}/public/img/logo.png" alt="Logo Cerebrito">
         </a>
-
-        <nav class="header__nav" aria-label="Navegación principal">
-            <a href="/PrograWebII2026/" class="header__link">Inicio</a>
-            <a href="#" class="header__link">Categorías</a>
-            <a href="#" class="header__link">Ranking</a>
-        </nav>
-        <div class="header__actions">
-
-                <a href="index.php?controller=login&method=show" class="header__login">Ingresar</a>
-                <a href="index.php?controller=registro&method=show" class="header__play">Registrarse</a>
-             <a href="index.php?controller=login&method=logout" class="header__login">Cerrar sesión</a>
-
-
-
-
-
-
+        <button class="header__menu-toggle" type="button" aria-label="Abrir men&uacute;" aria-expanded="false" aria-controls="header-menu">
+            <span></span><span></span><span></span>
+        </button>
+        <div class="header__menu" id="header-menu">
+            <nav class="header__nav" aria-label="Navegaci&oacute;n principal">
+                <a href="{{baseUrl}}/" class="header__link">Inicio</a>
+                <a href="#" class="header__link">Categor&iacute;as</a>
+                <a href="#" class="header__link">Ranking</a>
+            </nav>
+            <div class="header__actions">
+                <a href="{{baseUrl}}/index.php?controller=login&amp;method=show" class="header__login">Ingresar</a>
+                <a href="{{baseUrl}}/index.php?controller=registro&amp;method=show" class="header__play">Registrarse</a>
+                <a href="{{baseUrl}}/index.php?controller=login&amp;method=logout" class="header__login">Cerrar sesi&oacute;n</a>
+            </div>
         </div>
-
-
+        <script src="{{baseUrl}}/public/javascript/menu.js" defer></script>
     </div>
 </header>

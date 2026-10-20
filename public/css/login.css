@@ -1,5 +1,5 @@
 .header:has(+ .inicio-sesion) {
-    background: url("/PrograWebII2026/public/img/Cielo mágico para aprender y jugar.png") center 45% / cover fixed;
+    background: url("../img/Cielo%20m%C3%A1gico%20para%20aprender%20y%20jugar.png") center 45% / cover fixed;
     border-bottom: 1px solid rgba(255, 255, 255, .2);
 }
 
@@ -45,7 +45,7 @@
     align-items: center;
     gap: clamp(24px, 4vw, 64px);
     padding: clamp(32px, 5vh, 64px) clamp(24px, 5vw, 80px);
-    background: url("/PrograWebII2026/public/img/Cielo mágico para aprender y jugar.png") center 45% / cover fixed no-repeat;
+    background: url("../img/Cielo%20m%C3%A1gico%20para%20aprender%20y%20jugar.png") center 45% / cover fixed no-repeat;
 }
 
 .inicio-sesion__presentacion {
@@ -240,25 +240,30 @@
 @media (max-width: 800px) {
     .inicio-sesion {
         grid-template-columns: minmax(0, 1fr);
-        gap: 28px;
-        padding: 32px 20px 40px;
+        align-content: start;
+        gap: 14px;
+        padding: 24px 20px 32px;
     }
 
+    .inicio-sesion__presentacion,
     .inicio-sesion__presentacion-contenido {
-        gap: 12px;
+        display: contents;
     }
 
-    .inicio-sesion__personaje {
-        width: min(100%, 260px);
-        max-height: none;
+    .inicio-sesion__descripcion,
+    .inicio-sesion__personaje,
+    .inicio-sesion__subtitulo {
+        display: none;
     }
 
     .inicio-sesion__bienvenida {
-        font-size: clamp(28px, 6vw, 38px);
+        width: 100%;
+        margin: 0;
+        font-size: clamp(28px, 7vw, 38px);
     }
 
-    .inicio-sesion__descripcion {
-        font-size: 15px;
+    .inicio-sesion__panel {
+        width: 100%;
     }
 
     .inicio-sesion__tarjeta {

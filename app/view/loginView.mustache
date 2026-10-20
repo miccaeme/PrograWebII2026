@@ -3,7 +3,7 @@
         <div class="inicio-sesion__presentacion-contenido">
             <h1 id="bienvenida-titulo" class="inicio-sesion__bienvenida">¡Bienvenido a Cerebrito!</h1>
             <p class="inicio-sesion__descripcion">Iniciá sesión para seguir sumando conocimientos, ganar puntos y competir con jugadores de todo el mundo.</p>
-            <img class="inicio-sesion__personaje" src="/PrograWebII2026/public/img/Cerebro%20kawaii%20graduado%20y%20triunfante.png" alt="Cerebrito, la mascota del juego">
+            <img class="inicio-sesion__personaje" src="{{baseUrl}}/public/img/Cerebro%20kawaii%20graduado%20y%20triunfante.png" alt="Cerebrito, la mascota del juego">
         </div>
     </section>
 
@@ -18,7 +18,7 @@
                 <p class="inicio-sesion__mensaje inicio-sesion__mensaje--exito" role="status">{{exito}}</p>
             {{/exito}}
 
-            <form id="login-form" class="inicio-sesion__formulario" method="POST" action="/PrograWebII2026/index.php?controller=login&amp;method=procesar" novalidate>
+            <form id="login-form" class="inicio-sesion__formulario" method="POST" action="{{baseUrl}}/index.php?controller=login&amp;method=procesar" novalidate>
                 <p class="inicio-sesion__campo">
                     <label class="inicio-sesion__etiqueta" for="login-usuario">Nombre de usuario o Email</label>
                     <input id="login-usuario" class="inicio-sesion__entrada" type="text" name="usuario" value="{{usuario}}" autocomplete="username" aria-describedby="login-usuario-error">
@@ -38,10 +38,10 @@
                     <button class="inicio-sesion__boton" type="submit">Ingresar</button>
                 </p>
 
-                <p class="inicio-sesion__registro">¿No tenés cuenta? <a class="inicio-sesion__enlace" href="/PrograWebII2026/index.php?controller=registro&amp;method=show">Registrate acá</a></p>
+                <p class="inicio-sesion__registro">¿No tenés cuenta? <a class="inicio-sesion__enlace" href="{{baseUrl}}/index.php?controller=registro&amp;method=show">Registrate acá</a></p>
             </form>
         </div>
     </section>
 </main>
 
-<script src="/PrograWebII2026/public/javascript/login.js" defer></script>
+<script src="{{baseUrl}}/public/javascript/login.js" defer></script>

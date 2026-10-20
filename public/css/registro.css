@@ -2,7 +2,7 @@
     flex: 1;
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
-    background: url("/PrograWebII2026/public/img/Cielo mágico para aprender y jugar.png") center 45% / cover fixed no-repeat;
+    background: url("../img/Cielo%20m%C3%A1gico%20para%20aprender%20y%20jugar.png") center 45% / cover fixed no-repeat;
 }
 
 .registro__presentacion {
@@ -177,7 +177,7 @@
 }
 
 .header:has(+ .registro) {
-    background: url("/PrograWebII2026/public/img/Cielo mágico para aprender y jugar.png") center 45% / cover fixed;
+    background: url("../img/Cielo%20m%C3%A1gico%20para%20aprender%20y%20jugar.png") center 45% / cover fixed;
     border-bottom: 1px solid rgba(255, 255, 255, .2);
 }
 
@@ -219,29 +219,32 @@
 @media (max-width: 800px) {
     .registro {
         grid-template-columns: 1fr;
+        align-content: start;
+        gap: 10px;
         min-height: 0;
     }
 
-    .registro__presentacion {
-        padding: 26px 20px;
+    .registro__presentacion,
+    .registro__presentacion-contenido {
+        display: contents;
     }
 
-    .registro__personaje {
-        width: min(100%, 240px);
-        max-height: none;
-        margin-top: 0;
+    .registro__personaje,
+    .registro__descripcion,
+    .registro__subtitulo {
+        display: none;
     }
 
     .registro__titulo-presentacion {
-        font-size: 27px;
-    }
-
-    .registro__descripcion {
-        font-size: 14px;
+        order: -1;
+        width: 100%;
+        margin: 22px 20px 0;
+        font-size: clamp(25px, 6vw, 32px);
     }
 
     .registro__panel {
-        padding: 24px 16px;
+        width: 100%;
+        padding: 8px 16px 24px;
     }
 }
 

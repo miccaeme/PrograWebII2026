@@ -18,7 +18,7 @@
                 <p class="inicio-sesion__mensaje inicio-sesion__mensaje--exito" role="status">{{exito}}</p>
             {{/exito}}
 
-            <form id="login-form" class="inicio-sesion__formulario" method="POST" action="{{baseUrl}}/index.php?controller=login&amp;method=procesar" novalidate>
+            <form id="login-form" class="inicio-sesion__formulario" method="POST" action="{{baseUrl}}/login/procesar" novalidate>
                 <p class="inicio-sesion__campo">
                     <label class="inicio-sesion__etiqueta" for="login-usuario">Nombre de usuario o Email</label>
                     <input id="login-usuario" class="inicio-sesion__entrada" type="text" name="usuario" value="{{usuario}}" autocomplete="username" aria-describedby="login-usuario-error">
@@ -38,7 +38,7 @@
                     <button class="inicio-sesion__boton" type="submit">Ingresar</button>
                 </p>
 
-                <p class="inicio-sesion__registro">¿No tenés cuenta? <a class="inicio-sesion__enlace" href="{{baseUrl}}/index.php?controller=registro&amp;method=show">Registrate acá</a></p>
+                <p class="inicio-sesion__registro">¿No tenés cuenta? <a class="inicio-sesion__enlace" href="{{baseUrl}}/registro/show">Registrate acá</a></p>
             </form>
         </div>
     </section>

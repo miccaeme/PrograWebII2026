@@ -4,12 +4,6 @@ namespace app\controller;
 
 use Request;
 
-class LoginController {
-    private $usuarioModel;
-    private $renderer;
-
-use Request;
-
 class LoginController
 {
     private $model;
@@ -56,33 +50,17 @@ class LoginController
         $_SESSION["logueado"] = true;
 
         // Redireccionamos a la pantalla principal o de inicio
-        header("Location: index.php?controller=integrantes&method=show");
+        $basePath = rtrim(dirname($_SERVER["SCRIPT_NAME"] ?? "/index.php"), "/\\\\");
+        header("Location: " . $basePath . "/index.php?controller=integrantes&method=show");
         exit();
     }
 
     public function logout()
     {
         session_destroy();
-        header("Location: index.php?controller=login&method=show");
+        $basePath = rtrim(dirname($_SERVER["SCRIPT_NAME"] ?? "/index.php"), "/\\\\");
+        header("Location: " . $basePath . "/index.php?controller=login&method=show");
         exit();
     }
 
-    public function procesar() {
-        $usuarioRecibido = Request::post("usuario", "");
-        $passwordRecibida = Request::post("password", "");
-        $usuario = is_string($usuarioRecibido) ? trim($usuarioRecibido) : "";
-        $password = is_string($passwordRecibida) ? $passwordRecibida : "";
-        $errores = [];
-
-        if ($usuario === "") {
-            $errores["usuario"] = "Ingresá tu nombre de usuario o email.";
-        }
-
-        if ($password === "") {
-            $errores["password"] = "Ingresá tu contraseña.";
-        }
-
-        $datos = ["usuario" => $usuario, "errores" => $errores];
-        $this->renderer->renderiza("login", $datos);
-    }
 }

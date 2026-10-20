@@ -4,3 +4,4 @@ config/mail.ini
 __MACOSX/
 ._*
 .DS_Store
+referencias/

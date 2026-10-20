@@ -17,6 +17,21 @@
 
     password.addEventListener('input', validarCoincidencia);
     confirmation.addEventListener('input', validarCoincidencia);
+    form.addEventListener('keydown', (event) => {
+        if (event.key !== 'Enter' || !(event.target instanceof HTMLInputElement)) {
+            return;
+        }
+
+        const campos = Array.from(form.querySelectorAll('input:not([type="hidden"]), select'))
+            .filter((campo) => !campo.disabled);
+        const siguiente = campos[campos.indexOf(event.target) + 1];
+
+        if (siguiente) {
+            event.preventDefault();
+            siguiente.focus();
+        }
+    });
+
     form.addEventListener('submit', (event) => {
         if (!validarCoincidencia()) {
             event.preventDefault();

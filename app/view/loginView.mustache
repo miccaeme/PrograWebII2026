@@ -1,31 +1,47 @@
+<main class="inicio-sesion">
+    <section class="inicio-sesion__presentacion" aria-labelledby="bienvenida-titulo">
+        <div class="inicio-sesion__presentacion-contenido">
+            <h1 id="bienvenida-titulo" class="inicio-sesion__bienvenida">¡Bienvenido a Cerebrito!</h1>
+            <p class="inicio-sesion__descripcion">Iniciá sesión para seguir sumando conocimientos, ganar puntos y competir con jugadores de todo el mundo.</p>
+            <img class="inicio-sesion__personaje" src="/PrograWebII2026/public/img/Cerebro%20kawaii%20graduado%20y%20triunfante.png" alt="Cerebrito, la mascota del juego">
+        </div>
+    </section>
 
-<div class="w3-container" style="max-width: 500px; margin: auto;">
-    <h2>Iniciar sesión</h2>
+    <section class="inicio-sesion__panel" aria-labelledby="inicio-sesion-titulo">
+        <div class="inicio-sesion__tarjeta">
+            <header class="inicio-sesion__encabezado">
+                <h2 id="inicio-sesion-titulo" class="inicio-sesion__titulo">Iniciar sesión</h2>
+                <p class="inicio-sesion__subtitulo">Ingresá a tu cuenta de Cerebrito.</p>
+            </header>
 
-    {{#error}}
-        <p class="w3-text-red">{{error}}</p>
-    {{/error}}
-    {{#exito}}
-        <p class="exito">{{exito}}</p>
-    {{/exito}}
+            {{#exito}}
+                <p class="inicio-sesion__mensaje inicio-sesion__mensaje--exito" role="status">{{exito}}</p>
+            {{/exito}}
 
-    <form method="POST" action="index.php?controller=login&method=procesar" >
+            <form id="login-form" class="inicio-sesion__formulario" method="POST" action="/login/procesar" novalidate>
+                <p class="inicio-sesion__campo">
+                    <label class="inicio-sesion__etiqueta" for="login-usuario">Nombre de usuario o Email</label>
+                    <input id="login-usuario" class="inicio-sesion__entrada" type="text" name="usuario" value="{{usuario}}" autocomplete="username" aria-describedby="login-usuario-error">
+                    <small id="login-usuario-error" class="inicio-sesion__error" role="alert">{{errores.usuario}}</small>
+                </p>
 
-        <p>
-            <label>Nombre de usuario o Email</label>
-            <input class="w3-input" type="text" name="usuario" value="{{usuario}}" required autocomplete="username">
-        </p>
+                <p class="inicio-sesion__campo">
+                    <label class="inicio-sesion__etiqueta" for="login-password">Contraseña</label>
+                    <input id="login-password" class="inicio-sesion__entrada" type="password" name="password" autocomplete="current-password" aria-describedby="login-password-error">
+                    <small id="login-password-error" class="inicio-sesion__error" role="alert">{{errores.password}}</small>
+                    {{#error}}
+                        <small class="inicio-sesion__error inicio-sesion__error--servidor" role="alert">{{error}}</small>
+                    {{/error}}
+                </p>
 
-        <p>
-            <label>Contraseña</label>
-            <input class="w3-input" type="password" name="password" required autocomplete="current-password">
-        </p>
+                <p class="inicio-sesion__acciones">
+                    <button class="inicio-sesion__boton" type="submit">Ingresar</button>
+                </p>
 
-        <p>
-            <button class="w3-button w3-blue w3-block" type="submit">Ingresar</button>
-        </p>
+                <p class="inicio-sesion__registro">¿No tenés cuenta? <a class="inicio-sesion__enlace" href="index.php?controller=registro&action=show">Registrate acá</a></p>
+            </form>
+        </div>
+    </section>
+</main>
 
-        <p>¿No tenés cuenta? <a href="index.php?controller=registro&action=show">Registrate acá</a></p>
-    </form>
-</div>
-
+<script src="/PrograWebII2026/public/javascript/login.js" defer></script>

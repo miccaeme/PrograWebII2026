@@ -18,7 +18,7 @@ class MustacheRender
 
     public function renderiza($view, $data = [])
     {
-        $data["baseUrl"] = Redirect::baseUrl();
+        $data["baseUrl"] = UrlHelper::baseUrl();
 
         echo $this->mustache->render("header", $data);
         echo $this->mustache->render($view . "View", $data);

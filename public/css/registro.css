@@ -90,6 +90,109 @@
     gap: 8px 14px;
 }
 
+.registro__foto-perfil {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto auto;
+    align-items: center;
+    justify-content: start;
+    column-gap: 12px;
+    margin: 0;
+}
+
+.registro__foto-marco {
+    grid-column: 1;
+    grid-row: 1;
+    position: relative;
+    width: 68px;
+    aspect-ratio: 1;
+    overflow: hidden;
+    border: 2px solid #d8d0ff;
+    border-radius: 50%;
+    background: #f1edff;
+}
+
+.registro__avatar-predeterminado {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: #f1edff;
+}
+
+.registro__avatar-predeterminado::before,
+.registro__avatar-predeterminado::after {
+    position: absolute;
+    left: 50%;
+    content: "";
+    transform: translateX(-50%);
+    background: #9a89e8;
+}
+
+.registro__avatar-predeterminado::before {
+    top: 21%;
+    width: 27%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+}
+
+.registro__avatar-predeterminado::after {
+    bottom: 12%;
+    width: 58%;
+    height: 34%;
+    border-radius: 50% 50% 38% 38%;
+}
+
+.registro__foto-vista-previa {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.registro__foto-boton {
+    grid-column: 2;
+    grid-row: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 34px;
+    padding: 6px 14px;
+    border: 1px solid #d8d0ff;
+    border-radius: 10px;
+    background: #f6f3ff;
+    color: #5543c8;
+    font-size: 13px;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.registro__foto-boton:hover {
+    border-color: #b9aaff;
+    background: #eee9ff;
+}
+
+.registro__foto-entrada {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+}
+
+.registro__foto-error {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    color: #d00000;
+    font-size: 13px;
+    text-align: center;
+}
+
+.registro__foto-error:empty {
+    display: none;
+}
+
 .registro__campo {
     min-width: 0;
     margin: 0;

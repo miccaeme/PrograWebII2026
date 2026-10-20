@@ -1,6 +1,16 @@
 <main class="integrantes-page">
     <section class="integrantes-card" aria-labelledby="integrantes-titulo">
-        <h1 class="integrantes-titulo" id="integrantes-titulo">{{mensaje}}</h1>
+        {{#logueado}}
+            <div class="w3-panel w3-pale-green w3-round-large w3-padding-16 w3-center" style="margin-bottom: 2rem;">
+                <h2 style="margin: 0; color: var(--cerebrito-ink, #2B2D42);">
+                    ¡Bienvenido/a, <strong>{{nombre_usuario}}</strong>! 👋
+                </h2>
+            </div>
+        {{/logueado}}
+
+
+
+       <h1 class="integrantes-titulo" id="integrantes-titulo">{{mensaje}}</h1>
 
         <table class="integrantes-tabla">
         <thead>
@@ -11,6 +21,8 @@
             </tr>
         </thead>
         <tbody>
+
+
             {{#integrantes}}
             <tr>
                 <td>{{nombre}}</td>
@@ -18,6 +30,8 @@
                 <td>{{dni}}</td>
             </tr>
             {{/integrantes}}
+
+
         </tbody>
         </table>
     </section>

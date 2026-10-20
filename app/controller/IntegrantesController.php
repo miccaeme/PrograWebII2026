@@ -13,8 +13,14 @@ class IntegrantesController
     }
 
     public function show(){
-        $data["mensaje"] = "¡Hola! Somos los integrantes del equipo:";
-        $data["integrantes"] = $this->model->getIntegrantes();
+
+        $data = [
+            "mensaje"        => "¡Hola! Somos los integrantes del equipo:",
+            "logueado"       => isset($_SESSION["logueado"]) && $_SESSION["logueado"] === true,
+            "nombre_usuario" => $_SESSION["nombre_usuario"] ?? null,
+            "integrantes"    => $this->model->getIntegrantes()
+        ];
+
 
          $this->render->renderiza("integrantes", $data);
     }

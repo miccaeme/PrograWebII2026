@@ -27,6 +27,9 @@ class RegistroController
             "sexo" => Request::post("sexo", ""),
             "email" => trim(Request::post("email", "")),
             "nombre_usuario" => trim(Request::post("nombre_usuario", "")),
+            "pais"            => Request::post("pais", ""),
+            "latitud"         => Request::post("latitud", ""),
+            "longitud"        => Request::post("longitud", "")
         ];
         $password = Request::post("password", "");
         $passwordRepetida = Request::post("password_repetida", "");

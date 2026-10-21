@@ -1,6 +1,7 @@
 <?php
 
 namespace app\controller;
+use Redirect;
 
 class IntegrantesController
 {
@@ -15,9 +16,8 @@ class IntegrantesController
     public function show(){
 
         $data = [
-            "mensaje"        => "¡Hola! Somos los integrantes del equipo:",
-            "logueado"       => isset($_SESSION["logueado"]) && $_SESSION["logueado"] === true,
-            "nombre_usuario" => $_SESSION["nombre_usuario"] ?? null,
+            "logueado"       => !empty($_SESSION["logueado"]),
+            "nombre_usuario" => $_SESSION["nombre_usuario"] ?? "",
             "integrantes"    => $this->model->getIntegrantes()
         ];
 

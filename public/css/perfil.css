@@ -1,0 +1,176 @@
+
+.perfil {
+    display: flex;
+    justify-content: center;
+    padding: 24px 16px;
+}
+
+.perfil__tarjeta {
+    width: 100%;
+    padding: 24px 18px;
+    border-radius: 20px;
+    background: #fff;
+    box-shadow: 0 14px 42px rgba(48, 38, 83, .12);
+    text-align: center;
+}
+
+.perfil__marco {
+    width: 110px;
+    aspect-ratio: 1;
+    margin: 0 auto 14px;
+    overflow: hidden;
+    border: 3px solid #d8d0ff;
+    border-radius: 50%;
+    background: #f1edff;
+}
+
+.perfil__foto {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.perfil__usuario {
+    margin: 0;
+    color: #302653;
+    font-size: 24px;
+    font-weight: 900;
+}
+
+.perfil__nombre {
+    margin: 4px 0 20px;
+    color: #51496b;
+}
+
+.perfil__datos {
+    display: grid;
+    grid-template-columns: 1fr;
+    margin: 0 0 24px;
+    text-align: left;
+}
+
+.perfil__datos dt {
+    color: #51496b;
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.perfil__datos dd {
+    margin: 2px 0 12px;
+    color: #302653;
+    overflow-wrap: anywhere;
+}
+
+.perfil__formulario {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+}
+
+.perfil__boton {
+    width: 100%;
+    min-height: 44px;
+    border: 0;
+    border-radius: 12px;
+    background: #6655d9;
+    color: #fff;
+    font: inherit;
+    font-weight: 900;
+    cursor: pointer;
+}
+
+.perfil__error {
+    color: #c0392b;
+    font-weight: 700;
+}
+
+.perfil__entrada {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+}
+
+.perfil__elegir {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 44px;
+    border: 2px solid #6655d9;
+    border-radius: 12px;
+    background: #fff;
+    color: #6655d9;
+    font-weight: 900;
+    cursor: pointer;
+    transition: background .2s ease;
+}
+
+.perfil__elegir:hover {
+    background: #f1edff;
+}
+
+
+.perfil__entrada:focus-visible + .perfil__elegir {
+    outline: 3px solid #d8d0ff;
+    outline-offset: 2px;
+}
+
+.perfil__archivo {
+    max-width: 100%;
+    overflow: hidden;
+    color: #51496b;
+    font-size: 14px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.perfil__error:empty {
+    display: none;
+}
+
+
+@media (min-width: 768px) {
+    .perfil {
+        padding: 48px 24px;
+    }
+
+    .perfil__tarjeta {
+        width: min(100%, 560px);
+        padding: 36px;
+        border-radius: 24px;
+    }
+
+    .perfil__marco {
+        width: 150px;
+    }
+
+    .perfil__usuario {
+        font-size: 30px;
+    }
+
+    .perfil__datos {
+        grid-template-columns: auto 1fr;
+        gap: 10px 20px;
+    }
+
+    .perfil__datos dd {
+        margin: 0;
+    }
+
+    .perfil__formulario {
+        align-items: center;
+    }
+
+    .perfil__boton {
+        width: 260px;
+    }
+
+     .perfil__elegir {
+        width: 260px;
+    }
+}

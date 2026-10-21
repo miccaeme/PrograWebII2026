@@ -11,17 +11,20 @@ class MustacheRender
     public function __construct()
     {
         $this->viewPath = dirname(__DIR__) . "/app/view";
+
+        $loader = new Mustache_Loader_FilesystemLoader($this->viewPath, [
+            "extension" => ".mustache"
+        ]);
         $this->mustache = new Mustache_Engine([
-            "loader" => new Mustache_Loader_FilesystemLoader($this->viewPath, ["extension" => ".mustache"])
+            "loader" => $loader,
+            // Configuramos el partials_loader apuntando a la misma carpeta
+            "partials_loader" => $loader
         ]);
     }
 
     public function renderiza($view, $data = [])
     {
-        $data["baseUrl"] = UrlHelper::baseUrl();
 
-        echo $this->mustache->render("header", $data);
         echo $this->mustache->render($view . "View", $data);
-        echo $this->mustache->render("footer", $data);
     }
 }

@@ -55,6 +55,9 @@ class UsuarioModel
         if ($datos["nombre_usuario"] !== "" && $this->existeUsuario($datos["nombre_usuario"])) {
             $errores["nombre_usuario"] = "Ese nombre de usuario ya existe.";
         }
+        if (empty($datos["pais"]) && empty($datos["latitud"])) {
+            return "Debes seleccionar tu ubicación en el mapa.";
+        }
 
         return $errores;
 
@@ -82,19 +85,18 @@ class UsuarioModel
         $hash = password_hash($password, PASSWORD_DEFAULT);
 
         return $this->database->executeParams(
-            "INSERT INTO usuarios (nombre_completo, anio_nacimiento, sexo, pais, ciudad, latitud, longitud, email, nombre_usuario, password)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            "INSERT INTO usuarios (nombre_completo, anio_nacimiento, sexo,  email, nombre_usuario, password,  pais, latitud, longitud)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
             [
                 $datos["nombre_completo"],
                 $datos["anio_nacimiento"],
                 $datos["sexo"],
-                "No especificado",
-                "No especificada",
-                0,
-                0,
                 $datos["email"],
                 $datos["nombre_usuario"],
-                $hash
+                $hash,
+                $datos["pais"],
+                $datos["latitud"],
+                $datos["longitud"]
             ]
         );
     }
@@ -175,12 +177,12 @@ class UsuarioModel
             return ["error" => "El usuario o correo no existe."];
         }
 
-        // Si al registrar guardaste con password_hash():
+
         if (!password_verify($password, $usuario['password'])) {
             return ["error" => "Contraseña incorrecta."];
         }
 
-        // Si el usuario y contraseña son válidos, retornamos los datos del usuario
+
         return ["usuario" => $usuario];
     }
 }

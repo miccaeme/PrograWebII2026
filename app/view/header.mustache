@@ -28,9 +28,15 @@
                 <a href="#" class="header__link">Ranking</a>
             </nav>
             <div class="header__actions">
-                <a href="{{baseUrl}}/login/show" class="header__login">Ingresar</a>
-                <a href="{{baseUrl}}/registro/show" class="header__play">Registrarse</a>
-                <a href="{{baseUrl}}/login/logout" class="header__login">Cerrar sesión</a>
+                {{#logueado}}
+                    <span class="usuario-badge">¡Hola, {{nombre_usuario}}!</span>
+                    <a href="index.php?controller=login&method=logout" class="header__login">Cerrar sesión</a>
+                {{/logueado}}
+
+                {{^logueado}}
+                    <a href="index.php?controller=login&method=show" class="header__login">Ingresar</a>
+                    <a href="index.php?controller=registro&method=show" class="header__play">Registrarse</a>
+                {{/logueado}}
             </div>
         </div>
         <script src="{{baseUrl}}/public/javascript/menu.js" defer></script>

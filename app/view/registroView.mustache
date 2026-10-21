@@ -1,4 +1,5 @@
 {{> header}}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <main class="registro">
     <section class="registro__presentacion">
         <div class="registro__presentacion-contenido">
@@ -72,15 +73,85 @@
                     <small id="password-repetida-error" class="field-error registro__error" role="alert">{{errores.password_repetida}}</small>
                 </p>
 
+                <div style="margin-top: 1rem;">
+                    <label><strong>Selecciona tu ubicación en el mapa:</strong></label>
+                    <div id="map" style="height: 300px; width: 100%; position: relative; border-radius: 8px; margin-top: 0.5rem; z-index: 1;"></div>
+                    <p id="pais-seleccionado" style="font-weight: bold; color: #2B2D42; margin-top: 0.5rem;">
+                        País / Ubicación: Ninguna seleccionada
+                    </p>
+                </div>
+
+                <!-- Campos ocultos que viajarán a PHP -->
+                <input type="hidden" name="latitud" id="latitud">
+                <input type="hidden" name="longitud" id="longitud">
+                <input type="hidden" name="pais" id="pais">
+
+
+
                 <p class="registro__acciones registro__campo--ancho">
                     <button class="w3-button w3-blue w3-block registro__boton" type="submit">Registrarme</button>
                 </p>
 
                 <p class="registro__ingreso registro__campo--ancho">¿Ya tenés cuenta? <a class="registro__enlace" href="{{baseUrl}}/login/show">Ingresá acá</a></p>
             </form>
+
+
+            </div>
+
+
+
+
+
         </div>
     </section>
 </main>
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
+<script>
+    const map = L.map('map').setView([-34.6037, -58.3816], 4);
+
+    // 2. Cargar los mosaicos de OpenStreetMap
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 18,
+        attribution: '© OpenStreetMap'
+    }).addTo(map);
+
+    // Forzar recalculo de dimensiones para evitar cortes de imagen
+    setTimeout(() => {
+        map.invalidateSize();
+    }, 250);
+
+    let marcador;
+
+    // 3. Capturar el evento clic en el mapa
+    map.on('click', function(e) {
+        const lat = e.latlng.lat;
+        const lng = e.latlng.lng;
+
+        // Mover o crear el marcador
+        if (marcador) {
+            marcador.setLatLng(e.latlng);
+        } else {
+            marcador = L.marker(e.latlng).addTo(map);
+        }
+
+        // Guardar latitud y longitud en los inputs ocultos
+        document.getElementById('latitud').value = lat;
+        document.getElementById('longitud').value = lng;
+
+        // 4. Geocodificación inversa gratuita (Nominatim OpenStreetMap) para obtener el País
+        fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`)
+                .then(response => response.json())
+                .then(data => {
+                    const pais = data.address && data.address.country ? data.address.country : 'Desconocido';
+                    document.getElementById('pais').value = pais;
+                    document.getElementById('pais-seleccionado').textContent = `País seleccionado: ${pais}`;
+                })
+                .catch(() => {
+                    document.getElementById('pais-seleccionado').textContent = `Coordenadas: ${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+                });
+    });
+</script>
 {{> footer}}
 <script src="{{baseUrl}}/public/javascript/registro.js" defer></script>

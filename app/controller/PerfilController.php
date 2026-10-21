@@ -4,7 +4,6 @@ namespace app\controller;
 
 use Request;
 use Redirect;
-use UrlHelper;
 
 class PerfilController
 {
@@ -60,7 +59,7 @@ class PerfilController
     private function mostrarPerfil($extra)
     {
         $usuario = $this->model->buscarPorId($_SESSION["usuario_id"]);
-        $this->render->renderiza("perfil", array_merge(["usuario" => $usuario, "logueado" => !empty($_SESSION["logueado"]), "nombre_usuario" => $_SESSION["nombre_usuario"] ?? "", "baseUrl" => UrlHelper::baseUrl()], $extra));
+        $this->render->renderiza("perfil", array_merge(["usuario" => $usuario, "logueado" => !empty($_SESSION["logueado"]), "nombre_usuario" => $_SESSION["nombre_usuario"] ?? ""], $extra));
     }
 
     private function requiereLogin()

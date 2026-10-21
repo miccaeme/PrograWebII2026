@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="{{baseUrl}}/public/css/registro.css">
     <link rel="stylesheet" href="{{baseUrl}}/public/css/login.css">
     <link rel="stylesheet" href="{{baseUrl}}/public/css/integrantes.css">
+    <link rel="stylesheet" href="{{baseUrl}}/public/css/perfil.css">
 </head>
 <body>
 <header class="header">
@@ -30,12 +31,13 @@
             <div class="header__actions">
                 {{#logueado}}
                     <span class="usuario-badge">¡Hola, {{nombre_usuario}}!</span>
-                    <a href="index.php?controller=login&method=logout" class="header__login">Cerrar sesión</a>
+                    <a href="{{baseUrl}}/perfil/show" class="header__login">Mi perfil</a>
+                    <a href="{{baseUrl}}/login/logout" class="header__login">Cerrar sesión</a>
                 {{/logueado}}
 
                 {{^logueado}}
-                    <a href="index.php?controller=login&method=show" class="header__login">Ingresar</a>
-                    <a href="index.php?controller=registro&method=show" class="header__play">Registrarse</a>
+                    <a href="{{baseUrl}}/login/show" class="header__login">Ingresar</a>
+                    <a href="{{baseUrl}}/registro/show" class="header__play">Registrarse</a>
                 {{/logueado}}
             </div>
         </div>

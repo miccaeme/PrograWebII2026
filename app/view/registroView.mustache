@@ -12,13 +12,9 @@
             <h2 class="registro__titulo">Crear cuenta</h2>
             <p class="registro__subtitulo">Completá tus datos para unirte a Cerebrito</p>
 
-            <form id="registro-form" class="registro__formulario" method="POST" action="{{baseUrl}}/index.php?controller=registro&amp;method=procesar" enctype="multipart/form-data">
-            {{#exito}}
-                <p class="exito registro__exito">{{exito}}</p>
-            {{/exito}}
 
             <form id="registro-form" class="registro__formulario" method="POST" action="{{baseUrl}}/registro/procesar">
-                <p class="registro__campo registro__campo--ancho">
+                <p class="registro__campo">
                     <label class="registro__etiqueta">Nombre completo</label>
                     <input class="w3-input registro__entrada" type="text" name="nombre_completo" value="{{nombre_completo}}" maxlength="100" aria-describedby="nombre-completo-error">
                     <small id="nombre-completo-error" class="field-error registro__error" role="alert">{{errores.nombre_completo}}</small>
@@ -31,6 +27,12 @@
                 </p>
 
                 <p class="registro__campo">
+                    <label class="registro__etiqueta">Email</label>
+                    <input class="w3-input registro__entrada" type="email" name="email" value="{{email}}" maxlength="150" aria-describedby="email-error">
+                    <small id="email-error" class="field-error registro__error" role="alert">{{errores.email}}</small>
+                </p>
+
+                <p class="registro__campo">
                     <label class="registro__etiqueta">Sexo</label>
                     <select class="w3-select registro__entrada" name="sexo">
                         <option value="">Elegí una opción</option>
@@ -39,12 +41,6 @@
                         <option value="N" {{#sexo_N}}selected{{/sexo_N}}>Prefiero no cargarlo</option>
                     </select>
                     <small id="sexo-error" class="field-error registro__error" role="alert">{{errores.sexo}}</small>
-                </p>
-
-                <p class="registro__campo">
-                    <label class="registro__etiqueta">Email</label>
-                    <input class="w3-input registro__entrada" type="email" name="email" value="{{email}}" maxlength="150" aria-describedby="email-error">
-                    <small id="email-error" class="field-error registro__error" role="alert">{{errores.email}}</small>
                 </p>
 
                 <p class="registro__campo">

@@ -104,7 +104,7 @@
     grid-column: 1;
     grid-row: 1;
     position: relative;
-    width: 68px;
+    width: 40px;
     aspect-ratio: 1;
     overflow: hidden;
     border: 2px solid #d8d0ff;
@@ -156,20 +156,19 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-height: 34px;
-    padding: 6px 14px;
-    border: 1px solid #d8d0ff;
-    border-radius: 10px;
-    background: #f6f3ff;
+    min-height: 30px;
+    padding: 5px 11px;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
     color: #5543c8;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 800;
     cursor: pointer;
 }
 
 .registro__foto-boton:hover {
-    border-color: #b9aaff;
-    background: #eee9ff;
+    color: #4332b5;
 }
 
 .registro__foto-entrada {

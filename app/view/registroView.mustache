@@ -12,6 +12,7 @@
             <h2 class="registro__titulo">Crear cuenta</h2>
             <p class="registro__subtitulo">Completá tus datos para unirte a Cerebrito</p>
 
+            <form id="registro-form" class="registro__formulario" method="POST" action="{{baseUrl}}/index.php?controller=registro&amp;method=procesar" enctype="multipart/form-data">
             {{#exito}}
                 <p class="exito registro__exito">{{exito}}</p>
             {{/exito}}
@@ -51,6 +52,16 @@
                     <input class="w3-input registro__entrada" type="text" name="nombre_usuario" value="{{nombre_usuario}}" minlength="1" maxlength="30" aria-describedby="usuario-error">
                     <small id="usuario-error" class="field-error registro__error" role="alert">{{errores.nombre_usuario}}</small>
                 </p>
+
+                <div class="registro__foto-perfil">
+                    <label class="registro__foto-boton" for="foto-perfil">Seleccionar foto</label>
+                    <input id="foto-perfil" class="registro__foto-entrada" type="file" name="foto_perfil" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" aria-describedby="foto-perfil-error">
+                    <div class="registro__foto-marco">
+                        <div id="avatar-predeterminado" class="registro__avatar-predeterminado" aria-hidden="true"></div>
+                        <img id="foto-perfil-vista-previa" class="registro__foto-vista-previa" alt="Vista previa de la foto de perfil" hidden>
+                    </div>
+                    <small id="foto-perfil-error" class="registro__foto-error" role="alert"></small>
+                </div>
 
                 <p class="registro__campo">
                     <label class="registro__etiqueta">Contraseña</label>

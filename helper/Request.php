@@ -11,4 +11,9 @@ class Request
     {
         return $_POST[$key] ?? $default;
     }
+
+    public static function file($key)
+    {
+        return $_FILES[$key] ?? null;
+    }
 }

@@ -105,6 +105,68 @@ class UsuarioModel
             [$identificador, $identificador]
         );
     }
+
+    public function buscarPorId($id)
+    {
+        $usuario = $this->database->queryOneParams(
+            "SELECT id, nombre_completo, anio_nacimiento, sexo, pais, ciudad, email, nombre_usuario, foto_perfil, fecha_registro
+            FROM usuarios WHERE id = ?", [$id]
+        );
+
+        if(!$usuario) {
+            return null;
+        }
+
+        $sexos = ["M" => "Masculino", "F" => "Femenino", "N" => "Prefiero no cargarlo"];
+        $usuario["sexo_texto"] = $sexos[$usuario["sexo"]] ?? "";
+        
+        return $usuario;
+    }
+
+    private function actualizarFoto($id, $ruta)
+    {
+        return $this->database->executeParams(
+            "UPDATE usuarios SET foto_perfil = ? WHERE id = ?",
+            [$ruta, $id]
+        );
+    }
+
+    public function cambiarFoto($id, $archivo)
+    {
+        $resultado = $this->guardarFoto($id, $archivo);
+        if(isset($resultado["error"])) {
+            return $resultado;
+        }
+
+        $this->actualizarFoto($id, $resultado["ruta"]);
+        return $resultado;
+    }
+
+    private function guardarFoto($id, $archivo)
+    {
+        if($archivo["size"] > 2 * 1024 * 1024) {
+            return ["error" => "La imagen no puede superar los 2 MB."];
+        }
+
+        $permitidos = ["image/jpeg" => "jpg", "image/png" => "png", "image/webp" => "webp"];
+        $tipo = (new \finfo(FILEINFO_MIME_TYPE))->file($archivo["tmp_name"]);
+        if(!isset($permitidos[$tipo])){
+            return ["error" => "Solo se permiten imágenes JPG, PNG o WEBP."];
+        }
+
+        $carpeta = "public/uploads/perfiles";
+        if(!is_dir($carpeta)){
+            mkdir($carpeta, 0755, true);
+        }
+
+        $ruta = $carpeta . "/usuario_" . $id . "_" . bin2hex(random_bytes(8)) . "." . $permitidos[$tipo];
+
+        if (!move_uploaded_file($archivo["tmp_name"], $ruta)){
+            return["error" => "No se pudo guardar la imagen."];
+        }
+        return ["ruta" => $ruta];
+    }
+
     public function autenticar($identificador, $password)
     {
         $usuario = $this->buscarPorUsuarioOEmail($identificador);

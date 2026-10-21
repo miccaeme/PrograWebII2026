@@ -1,0 +1,27 @@
+{{> header}}
+<main class="perfil">
+    {{#usuario}}
+    <section class="perfil__tarjeta">
+        {{#foto_perfil}}
+            <img class="perfil__foto" src="{{baseUrl}}/{{foto_perfil}}" alt="Foto de perfil de {{nombre_usuario}}">
+                {{/foto_perfil}}
+                {{^foto_perfil}}
+                    <div class="perfil__foto perfil__foto--vacia" aria-hidden="true"></div>
+                    {{/foto_perfil}}
+
+                    <h1>{{nombre_usuario}}</h1>
+                    <p>{{nombre_completo}}</p>
+                    <p>Email: {{email}}</p>
+                    <p>Año de nacimiento: {{anio_nacimiento}}</p>
+                    <p>Sexo: {{sexo_texto}}</p>
+                    <p>País: {{pais}}</p>
+    </section>
+    {{/usuario}}
+
+    <form method="POST" action="{{baseUrl}}/perfil/subirFoto" enctype="multipart/form-data">
+        <input type="file" name="foto_perfil" accept="image/jpeg, image/png, image/webp">
+            <button type="submit">Cambiar foto</button>
+            <small role="alert">{{error}}</small>
+    </form>
+</main>
+{{> footer}}

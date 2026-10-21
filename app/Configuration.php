@@ -11,6 +11,7 @@ use app\model\IntegrantesModel;
 use app\model\LoginModel;
 use app\controller\IntegrantesController;
 use app\controller\RegistroController;
+use app\controller\PerfilController;
 
 require_once("helper/Autoloader.php");
 require_once("helper/Router.php");
@@ -19,6 +20,7 @@ include_once("model/UsuarioModel.php");
 include_once("controller/IntegrantesController.php");
 include_once("controller/RegistroController.php");
 include_once("controller/LoginController.php");
+include_once("controller/PerfilController.php");
 
 class Configuration
 {
@@ -47,6 +49,10 @@ class Configuration
     }
     public function getRegistroController(){
         return new RegistroController($this->getUsuarioModel(), $this->getRender());
+    }
+
+    public function getPerfilController(){
+        return new PerfilController($this->getUsuarioModel(), $this->getRender());
     }
 
     private function getDatabase()

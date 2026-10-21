@@ -1,0 +1,40 @@
+{{> header}}
+<main class="perfil">
+    <section class="perfil__tarjeta">
+        {{#usuario}}
+        <div class="perfil__marco">
+            {{#foto_perfil}}
+                <img class="perfil__foto" src="{{baseUrl}}/{{foto_perfil}}" alt="Foto de perfil de {{nombre_usuario}}">
+            {{/foto_perfil}}
+            {{^foto_perfil}}
+                <div class="perfil__foto perfil__foto--vacia" aria-hidden="true"></div>
+            {{/foto_perfil}}
+        </div>
+
+        <h1 class="perfil__usuario">{{nombre_usuario}}</h1>
+        <p class="perfil__nombre">{{nombre_completo}}</p>
+
+        <dl class="perfil__datos">
+            <dt>Email</dt>
+            <dd>{{email}}</dd>
+            <dt>Año de nacimiento</dt>
+            <dd>{{anio_nacimiento}}</dd>
+            <dt>Sexo</dt>
+            <dd>{{sexo_texto}}</dd>
+            <dt>País</dt>
+            <dd>{{pais}}</dd>
+        </dl>
+        {{/usuario}}
+
+        <form class="perfil__formulario" method="POST" action="{{baseUrl}}/perfil/subirFoto" enctype="multipart/form-data">
+            <input id="perfil-foto" class="perfil__entrada" type="file" name="foto_perfil" accept="image/jpeg,image/png,image/webp">
+            <label class="perfil__elegir" for="perfil-foto">Elegir foto</label>
+            <span id="perfil-foto-nombre" class="perfil__archivo">Ningún archivo elegido</span>
+            <button class="perfil__boton" type="submit">Guardar foto</button>
+            <small class="perfil__error" role="alert">{{error}}</small>
+        </form>
+    </section>
+</main>
+{{> footer}}
+
+<script src="{{baseUrl}}/public/javascript/perfil.js" defer></script>

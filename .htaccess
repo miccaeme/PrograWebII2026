@@ -27,7 +27,8 @@ Options -Indexes
 
     # Raíz desde donde se aplican las reglas (relativo al DocumentRoot).
     # Si el proyecto no está en la raíz de htdocs, cambiar a /nombre-carpeta/
-    RewriteBase /PrograWebII2026/
+    # EN ESTE CASO: No usamos RewriteBase para que funcione igual en local (subcarpeta) y en el hosting (raíz)
+    # RewriteBase /PrograWebII2026/
 
     # ── SEGURIDAD: código interno inaccesible por URL directa ──
     # app/, helper/ y vendor/ son PHP interno (controllers, models,

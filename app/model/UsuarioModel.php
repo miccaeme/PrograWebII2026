@@ -113,12 +113,12 @@ class UsuarioModel
             return ["error" => "El usuario o correo no existe."];
         }
 
-        // Si al registrar guardaste con password_hash():
+
         if (!password_verify($password, $usuario['password'])) {
             return ["error" => "Contraseña incorrecta."];
         }
 
-        // Si el usuario y contraseña son válidos, retornamos los datos del usuario
+
         return ["usuario" => $usuario];
     }
 }

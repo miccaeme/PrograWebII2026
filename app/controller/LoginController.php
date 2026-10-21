@@ -44,7 +44,7 @@ class LoginController
             return;
         }
 
-        // Guardamos los datos clave del usuario en la sesión
+
         $usuarioLogueado = $resultado["usuario"];
         $_SESSION["usuario_id"] = $usuarioLogueado["id"] ?? null;
         $_SESSION["nombre_usuario"] = $usuarioLogueado["nombre_usuario"] ?? "";

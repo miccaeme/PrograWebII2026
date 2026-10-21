@@ -28,12 +28,7 @@ class UrlHelper
 
 /*Construir una direccion web*/
     public static function controllerUrl($controller, $method)
-    {
-        $query = http_build_query([
-            "controller" => $controller,
-            "method" => $method
-        ]);
-
-        return self::indexUrl() . "?" . $query;
-    }
+{
+    return self::baseUrl() . "/" . $controller . "/" . $method;
+}
 }

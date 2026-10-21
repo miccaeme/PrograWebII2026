@@ -17,7 +17,8 @@
                 <p class="exito registro__exito">{{exito}}</p>
             {{/exito}}
 
-                <p class="registro__campo">
+            <form id="registro-form" class="registro__formulario" method="POST" action="{{baseUrl}}/registro/procesar">
+                <p class="registro__campo registro__campo--ancho">
                     <label class="registro__etiqueta">Nombre completo</label>
                     <input class="w3-input registro__entrada" type="text" name="nombre_completo" value="{{nombre_completo}}" maxlength="100" aria-describedby="nombre-completo-error">
                     <small id="nombre-completo-error" class="field-error registro__error" role="alert">{{errores.nombre_completo}}</small>
@@ -78,7 +79,7 @@
                     <button class="w3-button w3-blue w3-block registro__boton" type="submit">Registrarme</button>
                 </p>
 
-                <p class="registro__ingreso registro__campo--ancho">¿Ya tenés cuenta? <a class="registro__enlace" href="{{baseUrl}}/index.php?controller=login&amp;method=show">Ingresá acá</a></p>
+                <p class="registro__ingreso registro__campo--ancho">¿Ya tenés cuenta? <a class="registro__enlace" href="{{baseUrl}}/login/show">Ingresá acá</a></p>
             </form>
         </div>
     </section>

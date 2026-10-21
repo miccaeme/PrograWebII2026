@@ -3,6 +3,7 @@
 namespace app\controller;
 
 use Request;
+use Redirect;
 
 class RegistroController
 {

@@ -27,7 +27,7 @@ Options -Indexes
 
     # Raíz desde donde se aplican las reglas (relativo al DocumentRoot).
     # Si el proyecto no está en la raíz de htdocs, cambiar a /nombre-carpeta/
-    RewriteBase /
+   # RewriteBase /
 
     # ── SEGURIDAD: código interno inaccesible por URL directa ──
     # app/, helper/ y vendor/ son PHP interno (controllers, models,

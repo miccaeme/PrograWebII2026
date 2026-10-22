@@ -1,89 +1,163 @@
-
 .perfil {
+    position: relative;
+    isolation: isolate;
     display: flex;
     justify-content: center;
-    padding: 24px 16px;
+    padding: clamp(32px, 5vh, 64px) clamp(24px, 5vw, 80px);
+    background: url("../img/Cielo%20m%C3%A1gico%20para%20aprender%20y%20jugar.png") center 45% / cover fixed no-repeat;
+}
+
+.header:has(+ .perfil) {
+    background: url("../img/Cielo%20m%C3%A1gico%20para%20aprender%20y%20jugar.png") center 45% / cover fixed no-repeat;
+    border-bottom: 1px solid rgba(255, 255, 255, .2);
+}
+
+.header:has(+ .perfil) .header__link,
+.header:has(+ .perfil) .header__login,
+.header:has(+ .perfil) .usuario-badge,
+.header:has(+ .perfil) .header__menu-toggle {
+    color: #fff;
+}
+
+.header:has(+ .perfil) .header__link:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, .16);
+}
+
+.perfil::before {
+    position: absolute;
+    z-index: -1;
+    top: 42%;
+    left: clamp(24px, 5vw, 80px);
+    width: clamp(180px, 22vw, 330px);
+    height: min(66vh, 560px);
+    background: url("../img/Cerebro-2-dedos.png") center bottom / contain no-repeat;
+    content: "";
+    pointer-events: none;
+    transform: translateY(-50%);
 }
 
 .perfil__tarjeta {
-    width: 100%;
-    padding: 24px 18px;
-    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: min(100%, 960px);
+    padding: clamp(18px, 3vw, 32px);
+    border: 1px solid #eee9fb;
+    border-radius: 24px;
     background: #fff;
     box-shadow: 0 14px 42px rgba(48, 38, 83, .12);
-    text-align: center;
+}
+
+.perfil__encabezado {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.perfil__titulo {
+    margin: 0;
+    color: var(--cerebrito-ink);
+    font-size: clamp(26px, 3.4vw, 30px);
+    font-weight: 900;
+}
+
+.perfil__editarVisual,
+.perfil__accionVisual {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 0 20px;
+    border: 1px solid #d8d0ff;
+    border-radius: 12px;
+    color: #6655d9;
+    font-weight: 900;
+    white-space: nowrap;
+}
+
+.perfil__presentacion {
+    position: relative;
+    display: grid;
+    grid-template-columns: 148px minmax(0, 1fr) 210px;
+    grid-template-areas: "foto identidad decoracion" "formulario formulario decoracion";
+    align-items: center;
+    gap: 10px 18px;
+    min-height: 200px;
+    padding: 20px 22px;
+    overflow: hidden;
+    border-radius: 20px;
+    background-image: linear-gradient(rgba(255, 255, 255, .42), rgba(255, 255, 255, .42)),
+        url("../img/Cielo%20so%C3%B1ador%20de%20nubes%20pastel.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 .perfil__marco {
-    width: 110px;
+    position: relative;
+    grid-area: foto;
+    width: 126px;
     aspect-ratio: 1;
-    margin: 0 auto 14px;
-    overflow: hidden;
-    border: 3px solid #d8d0ff;
+    border: 5px solid #fff;
     border-radius: 50%;
     background: #f1edff;
+    box-shadow: 0 0 0 2px #d8d0ff, 0 8px 22px rgba(48, 38, 83, .12);
 }
 
 .perfil__foto {
     display: block;
     width: 100%;
     height: 100%;
+    border-radius: 50%;
     object-fit: cover;
 }
 
-.perfil__usuario {
-    margin: 0;
-    color: #302653;
-    font-size: 24px;
-    font-weight: 900;
+.perfil__foto--vacia {
+    background: #f1edff url("../img/logo.png") center / 78% no-repeat;
+}
+
+.perfil__identidad {
+    z-index: 1;
+    grid-area: identidad;
+    min-width: 0;
 }
 
 .perfil__nombre {
-    margin: 4px 0 20px;
-    color: #51496b;
-}
-
-.perfil__datos {
-    display: grid;
-    grid-template-columns: 1fr;
-    margin: 0 0 24px;
-    text-align: left;
-}
-
-.perfil__datos dt {
-    color: #51496b;
-    font-size: 14px;
-    font-weight: 800;
-}
-
-.perfil__datos dd {
-    margin: 2px 0 12px;
-    color: #302653;
+    margin: 0;
+    color: var(--cerebrito-ink);
+    font-size: clamp(22px, 3.3vw, 30px);
+    font-weight: 900;
+    line-height: 1.15;
     overflow-wrap: anywhere;
 }
 
-.perfil__formulario {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 12px;
+.perfil__usuario {
+    margin: 7px 0 0;
+    color: #716b83;
+    font-size: 17px;
+    font-weight: 800;
+    overflow-wrap: anywhere;
 }
 
-.perfil__boton {
+.perfil__decoracion {
+    grid-area: decoracion;
+    align-self: end;
+    justify-self: center;
+    display: block;
     width: 100%;
-    min-height: 44px;
-    border: 0;
-    border-radius: 12px;
-    background: #6655d9;
-    color: #fff;
-    font: inherit;
-    font-weight: 900;
-    cursor: pointer;
+    max-height: 210px;
+    object-fit: contain;
 }
 
-.perfil__error {
-    color: #c0392b;
-    font-weight: 700;
+.perfil__formulario {
+    grid-area: formulario;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
 }
 
 .perfil__entrada {
@@ -96,81 +170,211 @@
 }
 
 .perfil__elegir {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    min-height: 44px;
-    border: 2px solid #6655d9;
-    border-radius: 12px;
-    background: #fff;
-    color: #6655d9;
-    font-weight: 900;
+    position: absolute;
+    top: 115px;
+    left: 122px;
+    z-index: 2;
+    display: grid;
+    width: 40px;
+    height: 40px;
+    place-items: center;
+    border: 3px solid #fff;
+    border-radius: 50%;
+    background: #6655d9;
+    color: #fff;
+    font-size: 18px;
     cursor: pointer;
-    transition: background .2s ease;
+    box-shadow: 0 4px 12px rgba(48, 38, 83, .18);
 }
-
-.perfil__elegir:hover {
-    background: #f1edff;
-}
-
 
 .perfil__entrada:focus-visible + .perfil__elegir {
-    outline: 3px solid #d8d0ff;
+    outline: 3px solid #302653;
     outline-offset: 2px;
 }
 
 .perfil__archivo {
-    max-width: 100%;
+    max-width: min(220px, 100%);
     overflow: hidden;
+    padding: 5px 10px;
+    border-radius: 9px;
+    background: rgba(255, 255, 255, .72);
     color: #51496b;
-    font-size: 14px;
+    font-size: 13px;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
-.perfil__error:empty {
-    display: none;
+.perfil__archivo:empty { display: none; }
+
+.perfil__boton {
+    min-height: 44px;
+    padding: 0 20px;
+    border: 0;
+    border-radius: 12px;
+    background: #6655d9;
+    color: #fff;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 900;
+    cursor: pointer;
+    transition: background .2s ease, transform .2s ease;
 }
 
+.perfil__boton:hover {
+    background: #5543c8;
+    transform: translateY(-1px);
+}
 
-@media (min-width: 768px) {
-    .perfil {
-        padding: 48px 24px;
-    }
+.perfil__error {
+    flex-basis: 100%;
+    color: #c0392b;
+    font-weight: 700;
+}
+
+.perfil__error:empty { display: none; }
+
+.perfil__seccion,
+.perfil__contrasena {
+    padding: 18px;
+    border: 1px solid #eee9fb;
+    border-radius: 16px;
+    background: #fff;
+}
+
+.perfil__subtitulo {
+    margin: 0;
+    color: var(--cerebrito-ink);
+    font-size: 19px;
+    font-weight: 900;
+}
+
+.perfil__datos {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px 22px;
+    margin: 14px 0 0;
+}
+
+.perfil__dato {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-width: 0;
+}
+
+.perfil__icono {
+    display: grid;
+    flex: 0 0 42px;
+    width: 42px;
+    height: 42px;
+    place-items: center;
+    border-radius: 13px;
+    background: #f1edff;
+    color: #6655d9;
+    font-size: 19px;
+}
+
+.perfil__detalle { min-width: 0; }
+
+.perfil__etiquetaDato {
+    color: #51496b;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.perfil__valorDato {
+    margin: 3px 0 0;
+    color: var(--cerebrito-ink);
+    overflow-wrap: anywhere;
+}
+
+.perfil__contrasena {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.perfil__ayudaContrasena {
+    margin: 5px 0 0;
+    color: #716b86;
+}
+
+.perfil__accionVisual { border-color: var(--cerebrito-purple); }
+
+@media (max-width: 800px) {
+    .perfil { padding: 24px 20px 32px; }
 
     .perfil__tarjeta {
-        width: min(100%, 560px);
-        padding: 36px;
-        border-radius: 24px;
+        gap: 16px;
+        padding: 20px 16px;
+        border-radius: 20px;
     }
 
-    .perfil__marco {
-        width: 150px;
+    .perfil__presentacion {
+        grid-template-columns: 92px minmax(0, 1fr);
+        grid-template-areas: "foto identidad" "formulario formulario";
+        gap: 16px;
+        min-height: 0;
+        padding: 20px 16px;
     }
 
-    .perfil__usuario {
-        font-size: 30px;
+    .perfil__marco { width: 82px; }
+
+    .perfil__elegir {
+        top: 76px;
+        left: 86px;
+        width: 34px;
+        height: 34px;
+        font-size: 15px;
     }
 
-    .perfil__datos {
-        grid-template-columns: auto 1fr;
-        gap: 10px 20px;
+    .perfil__decoracion {
+        position: absolute;
+        right: 8px;
+        bottom: 8px;
+        width: 76px;
+        max-height: 85px;
+        opacity: .24;
     }
 
-    .perfil__datos dd {
-        margin: 0;
+    .perfil__formulario { z-index: 1; }
+
+    .perfil__seccion,
+    .perfil__contrasena { padding: 18px 14px; }
+
+    .perfil__datos { gap: 14px; }
+
+    .perfil__icono {
+        flex-basis: 40px;
+        width: 40px;
+        height: 40px;
+        font-size: 19px;
     }
 
-    .perfil__formulario {
-        align-items: center;
-    }
+    .perfil__contrasena { align-items: flex-start; flex-direction: column; }
+}
 
-    .perfil__boton {
-        width: 260px;
-    }
+@media (min-width: 1050px) {
+    .perfil { justify-content: flex-end; }
 
-     .perfil__elegir {
-        width: 260px;
+    .perfil__tarjeta {
+        width: min(960px, calc(100% - clamp(200px, 22vw, 300px)));
+        margin-left: clamp(200px, 22vw, 300px);
     }
+}
+
+@media (max-width: 1049px) {
+    .perfil::before { display: none; }
+}
+
+@media (max-width: 460px) {
+    .perfil__encabezado { align-items: flex-start; flex-direction: column; }
+    .perfil__datos { grid-template-columns: minmax(0, 1fr); }
+    .perfil__formulario { gap: 8px; }
+    .perfil__archivo { max-width: 100%; }
+}
+
+@media (max-width: 600px) {
+    .perfil { padding: 28px 16px 32px; }
 }

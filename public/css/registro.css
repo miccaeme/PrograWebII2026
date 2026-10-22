@@ -27,7 +27,7 @@
     width: min(100%, 420px);
     max-height: min(43vh, 420px);
     height: auto;
-    margin: auto auto 0;
+    margin: 0 auto;
     object-fit: contain;
 }
 
@@ -278,43 +278,43 @@
     text-decoration: underline;
 }
 
-.header:has(+ .registro) {
+.header:has(~ .registro) {
     background: url("../img/Cielo%20m%C3%A1gico%20para%20aprender%20y%20jugar.png") center 45% / cover fixed;
     border-bottom: 1px solid rgba(255, 255, 255, .2);
 }
 
-.header:has(+ .registro) .header__container {
+.header:has(~ .registro) .header__container {
     max-width: 1500px;
     min-height: 80px;
     padding: 8px clamp(20px, 4vw, 64px);
     gap: 22px;
 }
 
-.header:has(+ .registro) .header__logo img {
+.header:has(~ .registro) .header__logo img {
     width: 64px;
     height: 64px;
 }
 
-.header:has(+ .registro) .header__nav {
+.header:has(~ .registro) .header__nav {
     flex: 1;
     gap: 8px;
 }
 
-.header:has(+ .registro) .header__link,
-.header:has(+ .registro) .header__login {
+.header:has(~ .registro) .header__link,
+.header:has(~ .registro) .header__login {
     color: #fff;
 }
 
-.header:has(+ .registro) .header__link:hover {
+.header:has(~ .registro) .header__link:hover {
     color: #fff;
     background: rgba(255, 255, 255, .16);
 }
 
-.header:has(+ .registro) .header__actions {
+.header:has(~ .registro) .header__actions {
     gap: 18px;
 }
 
-.header:has(+ .registro) .header__play {
+.header:has(~ .registro) .header__play {
     background: #6655d9;
 }
 
@@ -351,17 +351,17 @@
 }
 
 @media (max-width: 600px) {
-    .header:has(+ .registro) .header__container {
+    .header:has(~ .registro) .header__container {
         padding: 8px 16px;
         gap: 6px 12px;
     }
 
-    .header:has(+ .registro) .header__logo img {
+    .header:has(~ .registro) .header__logo img {
         width: 54px;
         height: 54px;
     }
 
-    .header:has(+ .registro) .header__actions {
+    .header:has(~ .registro) .header__actions {
         gap: 12px;
     }
 }

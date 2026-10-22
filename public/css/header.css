@@ -179,7 +179,7 @@ body {
     .header__container { position: relative; flex-wrap: nowrap; justify-content: space-between; }
     .header__menu-toggle { display: block; color: var(--cerebrito-ink); }
     .header:has(+ .inicio-sesion) .header__menu-toggle,
-    .header:has(+ .registro) .header__menu-toggle { color: #fff; }
+    .header:has(~ .registro) .header__menu-toggle { color: #fff; }
     .header__menu {
         display: none;
         position: absolute;

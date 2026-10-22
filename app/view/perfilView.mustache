@@ -1,38 +1,69 @@
 {{> header}}
 <main class="perfil">
     <section class="perfil__tarjeta">
-        {{#usuario}}
-        <div class="perfil__marco">
-            {{#foto_perfil}}
-                <img class="perfil__foto" src="{{baseUrl}}/{{foto_perfil}}" alt="Foto de perfil de {{nombre_usuario}}">
-            {{/foto_perfil}}
-            {{^foto_perfil}}
-                <div class="perfil__foto perfil__foto--vacia" aria-hidden="true"></div>
-            {{/foto_perfil}}
+        <div class="perfil__encabezado">
+            <h1 class="perfil__titulo">Mi perfil</h1>
+<!--            <span class="perfil__editarVisual">Editar perfil</span>-->
         </div>
 
-        <h1 class="perfil__usuario">{{nombre_usuario}}</h1>
-        <p class="perfil__nombre">{{nombre_completo}}</p>
+        {{#usuario}}
+        <section class="perfil__presentacion">
+            <div class="perfil__marco">
+                {{#foto_perfil}}
+                    <img class="perfil__foto" src="{{baseUrl}}/{{foto_perfil}}" alt="Foto de perfil de {{nombre_usuario}}">
+                {{/foto_perfil}}
+                {{^foto_perfil}}
+                    <div class="perfil__foto perfil__foto--vacia" aria-hidden="true"></div>
+                {{/foto_perfil}}
+            </div>
 
-        <dl class="perfil__datos">
-            <dt>Email</dt>
-            <dd>{{email}}</dd>
-            <dt>Año de nacimiento</dt>
-            <dd>{{anio_nacimiento}}</dd>
-            <dt>Sexo</dt>
-            <dd>{{sexo_texto}}</dd>
-            <dt>País</dt>
-            <dd>{{pais}}</dd>
-        </dl>
+            <div class="perfil__identidad">
+                <p class="perfil__nombre">{{nombre_completo}}</p>
+                <p class="perfil__usuario">@{{nombre_usuario}}</p>
+            </div>
+
+            <img class="perfil__decoracion" src="{{baseUrl}}/public/img/Cerebro%20estudioso%20con%20idea%20brillante.png" alt="" aria-hidden="true">
+
+            <form class="perfil__formulario" method="POST" action="{{baseUrl}}/perfil/subirFoto" enctype="multipart/form-data">
+                <input id="perfil-foto" class="perfil__entrada" type="file" name="foto_perfil" accept="image/jpeg,image/png,image/webp">
+                <label class="perfil__elegir" for="perfil-foto" aria-label="Elegir foto de perfil">&#128247;</label>
+                <span id="perfil-foto-nombre" class="perfil__archivo"></span>
+                <button class="perfil__boton" type="submit">Guardar foto</button>
+                <small class="perfil__error" role="alert">{{error}}</small>
+            </form>
+        </section>
+
+        <section class="perfil__seccion">
+            <h2 class="perfil__subtitulo">Información personal</h2>
+            <dl class="perfil__datos">
+                <div class="perfil__dato">
+                    <span class="perfil__icono" aria-hidden="true">&#9993;</span>
+                    <div class="perfil__detalle"><dt class="perfil__etiquetaDato">Email</dt><dd class="perfil__valorDato">{{email}}</dd></div>
+                </div>
+                <div class="perfil__dato">
+                    <span class="perfil__icono" aria-hidden="true">&#128197;</span>
+                    <div class="perfil__detalle"><dt class="perfil__etiquetaDato">Año de nacimiento</dt><dd class="perfil__valorDato">{{anio_nacimiento}}</dd></div>
+                </div>
+                <div class="perfil__dato">
+                    <span class="perfil__icono" aria-hidden="true">&#9794;</span>
+                    <div class="perfil__detalle"><dt class="perfil__etiquetaDato">Sexo</dt><dd class="perfil__valorDato">{{sexo_texto}}</dd></div>
+                </div>
+                <div class="perfil__dato">
+                    <span class="perfil__icono" aria-hidden="true">&#127758;</span>
+                    <div class="perfil__detalle"><dt class="perfil__etiquetaDato">País</dt><dd class="perfil__valorDato">{{pais}}</dd></div>
+                </div>
+            </dl>
+        </section>
+
+        <!--PARA CAMBIAR CONTRASEÑA-->
+        <!--<section class="perfil__contrasena">
+            <div class="perfil__contrasenaTexto">
+                <h2 class="perfil__subtitulo">Cambiar contraseña</h2>
+                <p class="perfil__ayudaContrasena">Si querés, podés cambiar tu contraseña en cualquier momento.</p>
+            </div>
+            <span class="perfil__accionVisual">Cambiar contraseña</span>
+        </section>-->
         {{/usuario}}
-
-        <form class="perfil__formulario" method="POST" action="{{baseUrl}}/perfil/subirFoto" enctype="multipart/form-data">
-            <input id="perfil-foto" class="perfil__entrada" type="file" name="foto_perfil" accept="image/jpeg,image/png,image/webp">
-            <label class="perfil__elegir" for="perfil-foto">Elegir foto</label>
-            <span id="perfil-foto-nombre" class="perfil__archivo">Ningún archivo elegido</span>
-            <button class="perfil__boton" type="submit">Guardar foto</button>
-            <small class="perfil__error" role="alert">{{error}}</small>
-        </form>
     </section>
 </main>
 {{> footer}}

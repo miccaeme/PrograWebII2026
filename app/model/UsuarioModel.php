@@ -83,10 +83,11 @@ class UsuarioModel
 
     public function crear($datos, $password){
         $hash = password_hash($password, PASSWORD_DEFAULT);
+        $token = bin2hex(random_bytes(32));
 
-        return $this->database->executeParams(
-            "INSERT INTO usuarios (nombre_completo, anio_nacimiento, sexo,  email, nombre_usuario, password,  pais, latitud, longitud)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        $filas = $this->database->executeParams(
+            "INSERT INTO usuarios (nombre_completo, anio_nacimiento, sexo,  email, nombre_usuario, password,  pais, latitud, longitud, token_validacion)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?,?)",
             [
                 $datos["nombre_completo"],
                 $datos["anio_nacimiento"],
@@ -96,9 +97,15 @@ class UsuarioModel
                 $hash,
                 $datos["pais"],
                 $datos["latitud"],
-                $datos["longitud"]
+                $datos["longitud"],
+                $token
             ]
         );
+
+        if ($filas === 1) {
+            return $token;
+        }
+        return null;
     }
     public function buscarPorUsuarioOEmail($identificador)
     {
@@ -182,7 +189,29 @@ class UsuarioModel
             return ["error" => "Contraseña incorrecta."];
         }
 
+        if($usuario["activo"] == 0){
+            return ["error" => "El usuario no esta activo. Tenés que activar tu cuenta desde el mail que te enviamos."];
+        }
+
 
         return ["usuario" => $usuario];
+    }
+
+    public function activarCuenta($token){
+        $usuario = $this->database->queryOneParams(
+            "SELECT id FROM usuarios WHERE token_validacion = ?",
+            [$token]
+        );
+
+        if ($usuario === null) {
+            return false;
+        }
+
+        $this->database->executeParams(
+            "UPDATE usuarios SET activo = 1, token_validacion = NULL WHERE id = ?",
+            [$usuario["id"]]
+        );
+
+        return true;
     }
 }

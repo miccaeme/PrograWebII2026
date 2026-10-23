@@ -52,4 +52,17 @@ private function cargarConfig(){
         }
     }
 
+    public function enviarValidacion($email, $nombre, $link){
+        $nombreSeguro = htmlspecialchars($nombre);
+        $asunto = "Activá tu cuenta de Cerebrito";
+
+        $cuerpo = "<h2>¡Hola $nombreSeguro!</h2>"
+            . "<p>Gracias por registrarte en Cerebrito. Para activar tu cuenta hacé clic en el siguiente enlace:</p>"
+            . "<p><a href=\"$link\">Activar mi cuenta</a></p>"
+            . "<p>Si no creaste esta cuenta, ignorá este mensaje.</p>";
+
+        return $this->enviar($email, $nombre, $asunto, $cuerpo);
+
+    }
+
 }

@@ -4,6 +4,9 @@ namespace app\controller;
 
 use Request;
 use Redirect;
+use Mailer;
+use UrlHelper;
+use Log;
 
 class RegistroController
 {
@@ -47,8 +50,38 @@ class RegistroController
             $this->render->renderiza("registro", $datos);
             return;
         }
-        $this->model->crear($datos, $password);
-        $this->render->renderiza("registro", ["exito" => "¡Registro exitoso!"]);
-    }
 
+        $token = $this->model->crear($datos, $password);
+
+        $protocolo = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+        $link = $protocolo . '://' . $_SERVER['HTTP_HOST']
+            . UrlHelper::controllerUrl("registro", "activar")
+            . "?token=" . $token;
+        Log::info("Link de activación: " . $link);
+
+        $mailer = new Mailer();
+        $enviado = $mailer->enviarValidacion($datos["email"], $datos["nombre_completo"], $link);
+
+        if ($enviado) {
+            $datos = ["exito" => "¡Registro exitoso! Te enviamos un mail para activar tu cuenta."];
+        } else {
+            $datos = ["error" => "Tu cuenta se creó, pero no pudimos enviar el mail de activación."];
+        }
+
+        $this->render->renderiza("login", $datos);
+
+}
+
+    public function activar(){
+        $token = Request::get("token", "");
+        $activada = $this->model->activarCuenta($token);
+
+        if ($activada) {
+            $datos = ["exito" => "¡Cuenta activada! Ya podés iniciar sesión."];
+        } else {
+            $datos = ["error" => "El link de activación no es válido o ya fue usado."];
+        }
+
+        $this->render->renderiza("login", $datos);
+    }
 }

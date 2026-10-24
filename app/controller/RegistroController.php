@@ -57,7 +57,7 @@ class RegistroController
         $link = $protocolo . '://' . $_SERVER['HTTP_HOST']
             . UrlHelper::controllerUrl("registro", "activar")
             . "?token=" . $token;
-        Log::info("Link de activación: " . $link);
+
 
         $mailer = new Mailer();
         $enviado = $mailer->enviarValidacion($datos["email"], $datos["nombre_completo"], $link);

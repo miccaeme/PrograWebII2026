@@ -26,3 +26,4 @@ jobs:
             **/.idea/**
             **/__MACOSX/**
             config/config.ini
+            config/mail.ini

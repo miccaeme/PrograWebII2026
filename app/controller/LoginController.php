@@ -2,8 +2,11 @@
 
 namespace app\controller;
 
+use Mailer;
 use Request;
 use Redirect;
+use UrlHelper;
+
 
 class LoginController
 {
@@ -58,6 +61,69 @@ class LoginController
     {
         session_destroy();
         Redirect::toController("login", "show");
+    }
+
+    public function recuperar(){
+        $this->render->renderiza("recuperar", []);
+
+    }
+
+    public function solicitarRecuperacion(){
+        $identificador = trim(Request::post("formulario", ""));
+        if (empty($identificador)) {
+            $this->render->renderiza("recuperar", ["error" => "Por favor, completa todos los campos."]);
+            return;
+        }
+        $resultado = $this->model->crearTokenRecuperacion($identificador);
+        if ($resultado !== null) {
+            $protocolo = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+            $link = $protocolo . '://' . $_SERVER['HTTP_HOST']
+                . UrlHelper::controllerUrl("login", "restablecer")
+                . "?token=" . $resultado["token"];
+
+            $mailer = new Mailer();
+            $enviado = $mailer->enviarRecuperacion($resultado["usuario"]["email"], $resultado["usuario"]["nombre_completo"], $link);
+        }
+
+        $this->render->renderiza("login", ["exito" => "Si los datos corresponden a una cuenta activa, te enviamos un mail para restablecer tu contraseña."]);
+
+    }
+
+    public function restablecer(){
+        $token = Request::get("token", "");
+        $usuario = $this->model->buscarPorTokenRecuperacion($token);
+
+        if ($usuario === null) {
+            $this->render->renderiza("login", ["error" => "El link no es válido o ya venció. Pedí uno nuevo."]);
+            return;
+        }
+
+        $this->render->renderiza("restablecer", ["token" => $token]);
+    }
+
+    public function guardarPassword(){
+        $token = Request::post("token", "");
+        $password = Request::post("password", "");
+        $passwordRepetida = Request::post("password_repetida", "");
+
+        $usuario = $this->model->buscarPorTokenRecuperacion($token);
+        if ($usuario === null) {
+            $this->render->renderiza("login", ["error" => "El link no es válido o ya venció. Pedí uno nuevo."]);
+            return;
+        }
+
+        if (strlen($password) < 8) {
+            $this->render->renderiza("restablecer", ["token" => $token, "error" => "La contraseña debe tener al menos 8 caracteres."]);
+            return;
+        }
+
+        if ($password !== $passwordRepetida) {
+            $this->render->renderiza("restablecer", ["token" => $token, "error" => "Las contraseñas no coinciden."]);
+            return;
+        }
+
+        $this->model->cambiarPassword($usuario["id"], $password);
+        $this->render->renderiza("login", ["exito" => "Contraseña actualizada. Ya podés iniciar sesión."]);
     }
 
 }

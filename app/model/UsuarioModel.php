@@ -214,4 +214,41 @@ class UsuarioModel
 
         return true;
     }
+
+    public function crearTokenRecuperacion($identificador){
+        $usuario = $this->buscarPorUsuarioOEmail($identificador);
+        if (!$usuario || $usuario["activo"] == 0) {
+            return null;
+        }
+        $token = bin2hex(random_bytes(32));
+        $vencimiento = date("Y-m-d H:i:s", time() + 3600);
+
+        $this->database->executeParams(
+            "UPDATE usuarios SET token_recuperacion = ?, token_recuperacion_expira = ? WHERE id = ? ",
+            [ $token,  $vencimiento ,$usuario["id"]]
+        );
+
+        return ["usuario" => $usuario, "token" => $token];
+    }
+
+    public function buscarPorTokenRecuperacion($token){
+        $ahora = date("Y-m-d H:i:s");
+
+        $usuario = $this->database->queryOneParams(
+            "SELECT id FROM usuarios WHERE token_recuperacion = ? AND token_recuperacion_expira > ?",
+            [$token, $ahora]
+        );
+
+        return $usuario;
+    }
+
+    public function cambiarPassword($id, $password){
+        $hashn  = password_hash($password, PASSWORD_DEFAULT);
+
+        return $this->database->executeParams(
+            "UPDATE usuarios SET password = ?, token_recuperacion = NULL, token_recuperacion_expira = NULL WHERE id = ?",
+            [$hashn, $id]
+        );
+    }
+
 }

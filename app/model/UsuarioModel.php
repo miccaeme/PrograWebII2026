@@ -231,4 +231,24 @@ class UsuarioModel
         return ["usuario" => $usuario, "token" => $token];
     }
 
+    public function buscarPorTokenRecuperacion($token){
+        $ahora = date("Y-m-d H:i:s");
+
+        $usuario = $this->database->queryOneParams(
+            "SELECT id FROM usuarios WHERE token_recuperacion = ? AND token_recuperacion_expira > ?",
+            [$token, $ahora]
+        );
+
+        return $usuario;
+    }
+
+    public function cambiarPassword($id, $password){
+        $hashn  = password_hash($password, PASSWORD_DEFAULT);
+
+        return $this->database->executeParams(
+            "UPDATE usuarios SET password = ?, token_recuperacion = NULL, token_recuperacion_expira = NULL WHERE id = ?",
+            [$hashn, $id]
+        );
+    }
+
 }

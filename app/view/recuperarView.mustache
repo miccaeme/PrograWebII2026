@@ -1,0 +1,37 @@
+{{> header}}
+<main class="inicio-sesion">
+    <section class="inicio-sesion__presentacion" aria-labelledby="bienvenida-titulo">
+        <div class="inicio-sesion__presentacion-contenido">
+            <h1 id="bienvenida-titulo" class="inicio-sesion__bienvenida">¡Bienvenido a Cerebrito!</h1>
+            <p class="inicio-sesion__descripcion">Iniciá sesión para seguir sumando conocimientos, ganar puntos y competir con jugadores de todo el mundo.</p>
+            <img class="inicio-sesion__personaje" src="{{baseUrl}}/public/img/Cerebro%20kawaii%20graduado%20y%20triunfante.png" alt="Cerebrito, la mascota del juego">
+        </div>
+    </section>
+
+    <section class="inicio-sesion__panel" aria-labelledby="recuperar-titulo">
+        <div class="inicio-sesion__tarjeta">
+            <header class="inicio-sesion__encabezado">
+                <h2 id="recuperar-titulo" class="inicio-sesion__titulo">Recuperar contraseña</h2>
+                <p class="inicio-sesion__subtitulo">Ingresá tu usuario o mail y te enviamos un link para elegir una contraseña nueva.</p>
+            </header>
+
+            <form id="recuperar-form" class="inicio-sesion__formulario" method="POST" action="{{baseUrl}}/login/solicitarRecuperacion" novalidate>
+                <p class="inicio-sesion__campo">
+                    <label class="inicio-sesion__etiqueta" for="recuperar-formulario">Nombre de usuario o Email</label>
+                    <input id="recuperar-formulario" class="inicio-sesion__entrada" type="text" name="formulario" autocomplete="username">
+                    {{#error}}
+                        <small class="inicio-sesion__error inicio-sesion__error--servidor" role="alert">{{error}}</small>
+                    {{/error}}
+                </p>
+
+                <p class="inicio-sesion__acciones">
+                    <button class="inicio-sesion__boton" type="submit">Enviar link</button>
+                </p>
+
+                <p class="inicio-sesion__registro"><a class="inicio-sesion__enlace" href="{{baseUrl}}/login/show">Volver al login</a></p>
+            </form>
+        </div>
+    </section>
+</main>
+
+{{> footer}}

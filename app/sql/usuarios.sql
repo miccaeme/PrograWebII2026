@@ -16,5 +16,7 @@ CREATE TABLE IF NOT EXISTS usuarios(
     rol ENUM('jugador', 'editor', 'admin') NOT NULL DEFAULT 'jugador',
     activo TINYINT(1) NOT NULL DEFAULT 0,
     token_validacion VARCHAR(64) NULL UNIQUE,
-    fecha_registro DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+    fecha_registro DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    token_recuperacion VARCHAR(64) NULL UNIQUE,
+    token_recuperacion_expira DATETIME NULL
 );

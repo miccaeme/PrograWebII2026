@@ -62,7 +62,19 @@ private function cargarConfig(){
             . "<p>Si no creaste esta cuenta, ignorá este mensaje.</p>";
 
         return $this->enviar($email, $nombre, $asunto, $cuerpo);
+    }
 
+    public function enviarRecuperacion($email, $nombre, $link){
+        $nombreSeguro = htmlspecialchars($nombre);
+        $asunto = "Restablecé tu contraseña de Cerebrito";
+
+        $cuerpo = "<h2>¡Hola $nombreSeguro!</h2>"
+            . "<p>Recibimos un pedido para restablecer tu contraseña. Hacé clic en el siguiente enlace para elegir una nueva:</p>"
+            . "<p><a href=\"$link\">Restablecer mi contraseña</a></p>"
+            . "<p>Este enlace es válido por 1 hora.</p>"
+            . "<p>Si no pediste cambiar tu contraseña, ignorá este mensaje.</p>";
+
+        return $this->enviar($email, $nombre, $asunto, $cuerpo);
     }
 
 }

@@ -214,4 +214,21 @@ class UsuarioModel
 
         return true;
     }
+
+    public function crearTokenRecuperacion($identificador){
+        $usuario = $this->buscarPorUsuarioOEmail($identificador);
+        if (!$usuario || $usuario["activo"] == 0) {
+            return null;
+        }
+        $token = bin2hex(random_bytes(32));
+        $vencimiento = date("Y-m-d H:i:s", time() + 3600);
+
+        $this->database->executeParams(
+            "UPDATE usuarios SET token_recuperacion = ?, token_recuperacion_expira = ? WHERE id = ? ",
+            [ $token,  $vencimiento ,$usuario["id"]]
+        );
+
+        return ["usuario" => $usuario, "token" => $token];
+    }
+
 }

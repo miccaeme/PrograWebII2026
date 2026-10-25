@@ -1,0 +1,42 @@
+{{> header}}
+<main class="inicio-sesion">
+    <section class="inicio-sesion__presentacion" aria-labelledby="bienvenida-titulo">
+        <div class="inicio-sesion__presentacion-contenido">
+            <h1 id="bienvenida-titulo" class="inicio-sesion__bienvenida">¡Bienvenido a Cerebrito!</h1>
+            <p class="inicio-sesion__descripcion">Iniciá sesión para seguir sumando conocimientos, ganar puntos y competir con jugadores de todo el mundo.</p>
+            <img class="inicio-sesion__personaje" src="{{baseUrl}}/public/img/Cerebro%20kawaii%20graduado%20y%20triunfante.png" alt="Cerebrito, la mascota del juego">
+        </div>
+    </section>
+
+    <section class="inicio-sesion__panel" aria-labelledby="restablecer-titulo">
+        <div class="inicio-sesion__tarjeta">
+            <header class="inicio-sesion__encabezado">
+                <h2 id="restablecer-titulo" class="inicio-sesion__titulo">Nueva contraseña</h2>
+                <p class="inicio-sesion__subtitulo">Elegí una contraseña nueva para tu cuenta.</p>
+            </header>
+
+            <form id="restablecer-form" class="inicio-sesion__formulario" method="POST" action="{{baseUrl}}/login/guardarPassword" novalidate>
+                <input type="hidden" name="token" value="{{token}}">
+
+                <p class="inicio-sesion__campo">
+                    <label class="inicio-sesion__etiqueta" for="restablecer-password">Contraseña nueva</label>
+                    <input id="restablecer-password" class="inicio-sesion__entrada" type="password" name="password" autocomplete="new-password">
+                </p>
+
+                <p class="inicio-sesion__campo">
+                    <label class="inicio-sesion__etiqueta" for="restablecer-password-repetida">Repetí la contraseña</label>
+                    <input id="restablecer-password-repetida" class="inicio-sesion__entrada" type="password" name="password_repetida" autocomplete="new-password">
+                    {{#error}}
+                        <small class="inicio-sesion__error inicio-sesion__error--servidor" role="alert">{{error}}</small>
+                    {{/error}}
+                </p>
+
+                <p class="inicio-sesion__acciones">
+                    <button class="inicio-sesion__boton" type="submit">Cambiar contraseña</button>
+                </p>
+            </form>
+        </div>
+    </section>
+</main>
+
+{{> footer}}

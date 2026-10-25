@@ -89,4 +89,41 @@ class LoginController
 
     }
 
+    public function restablecer(){
+        $token = Request::get("token", "");
+        $usuario = $this->model->buscarPorTokenRecuperacion($token);
+
+        if ($usuario === null) {
+            $this->render->renderiza("login", ["error" => "El link no es válido o ya venció. Pedí uno nuevo."]);
+            return;
+        }
+
+        $this->render->renderiza("restablecer", ["token" => $token]);
+    }
+
+    public function guardarPassword(){
+        $token = Request::post("token", "");
+        $password = Request::post("password", "");
+        $passwordRepetida = Request::post("password_repetida", "");
+
+        $usuario = $this->model->buscarPorTokenRecuperacion($token);
+        if ($usuario === null) {
+            $this->render->renderiza("login", ["error" => "El link no es válido o ya venció. Pedí uno nuevo."]);
+            return;
+        }
+
+        if (strlen($password) < 8) {
+            $this->render->renderiza("restablecer", ["token" => $token, "error" => "La contraseña debe tener al menos 8 caracteres."]);
+            return;
+        }
+
+        if ($password !== $passwordRepetida) {
+            $this->render->renderiza("restablecer", ["token" => $token, "error" => "Las contraseñas no coinciden."]);
+            return;
+        }
+
+        $this->model->cambiarPassword($usuario["id"], $password);
+        $this->render->renderiza("login", ["exito" => "Contraseña actualizada. Ya podés iniciar sesión."]);
+    }
+
 }

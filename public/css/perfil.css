@@ -241,6 +241,55 @@
     background: #fff;
 }
 
+.codigoQr {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 20px;
+}
+
+.codigoQrContenido {
+    min-width: 0;
+}
+
+.codigoQrTexto {
+    margin: 8px 0;
+    color: #716b86;
+}
+
+.codigoQrImagen {
+    display: block;
+    width: clamp(140px, 22vw, 190px);
+    height: auto;
+    padding: 8px;
+    border: 1px solid #eee9fb;
+    border-radius: 14px;
+    background: #fff;
+}
+
+.perfilCompartidoTarjeta {
+    align-self: flex-start;
+}
+
+.perfilCompartidoPresentacion {
+    grid-template-areas: "foto identidad decoracion";
+    min-height: 0;
+}
+
+.perfilCompartidoPais {
+    display: grid;
+    gap: 8px;
+}
+
+.perfilCompartidoPais .perfil__valorDato {
+    margin: 0;
+}
+
+.perfilCompartidoMensaje {
+    margin: 0;
+    color: #51496b;
+}
+
 .perfil__subtitulo {
     margin: 0;
     color: var(--cerebrito-ink);
@@ -342,6 +391,10 @@
 
     .perfil__seccion,
     .perfil__contrasena { padding: 18px 14px; }
+
+    .codigoQr { grid-template-columns: minmax(0, 1fr); }
+
+    .codigoQrImagen { width: min(190px, 100%); justify-self: center; }
 
     .perfil__datos { gap: 14px; }
 

@@ -1,0 +1,41 @@
+{{> header}}
+<main class="perfil perfilCompartido">
+    <section class="perfil__tarjeta perfilCompartidoTarjeta">
+        {{#usuario}}
+            <div class="perfil__encabezado">
+                <h1 class="perfil__titulo">Perfil compartido</h1>
+            </div>
+
+            <section class="perfil__presentacion perfilCompartidoPresentacion">
+                <div class="perfil__marco">
+                    {{#foto_perfil}}
+                        <img class="perfil__foto" src="{{baseUrl}}/{{foto_perfil}}" alt="Foto de perfil de {{nombre_usuario}}">
+                    {{/foto_perfil}}
+                    {{^foto_perfil}}
+                        <div class="perfil__foto perfil__foto--vacia" aria-hidden="true"></div>
+                    {{/foto_perfil}}
+                </div>
+
+                <div class="perfil__identidad">
+                    <p class="perfil__nombre">{{nombre_completo}}</p>
+                    <p class="perfil__usuario">@{{nombre_usuario}}</p>
+                </div>
+
+                <img class="perfil__decoracion" src="{{baseUrl}}/public/img/Cerebro%20estudioso%20con%20idea%20brillante.png" alt="" aria-hidden="true">
+            </section>
+
+            <section class="perfil__seccion perfilCompartidoPais" aria-labelledby="perfilCompartidoPaisTitulo">
+                <h2 class="perfil__subtitulo" id="perfilCompartidoPaisTitulo">País</h2>
+                <p class="perfil__valorDato">{{pais}}</p>
+            </section>
+        {{/usuario}}
+
+        {{#noEncontrado}}
+            <div class="perfil__encabezado">
+                <h1 class="perfil__titulo">Perfil no disponible</h1>
+            </div>
+            <p class="perfilCompartidoMensaje">El enlace no es válido o el perfil ya no está disponible.</p>
+        {{/noEncontrado}}
+    </section>
+</main>
+{{> footer}}

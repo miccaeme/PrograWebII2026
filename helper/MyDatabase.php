@@ -43,6 +43,22 @@ class MyDatabase
         $fila = $stmt->fetch(PDO::FETCH_ASSOC);
         return $fila === false ? null : $fila;
     }
+
+    public function beginTransaction()
+    {
+        return $this->conexion->beginTransaction();
+    }
+
+    public function commit()
+    {
+        return $this->conexion->commit();
+    }
+
+    public function rollback()
+    {
+        return $this->conexion->rollBack();
+    }
+
     public function executeParams(string $sql, array $params)
     {
         Log::info($sql);

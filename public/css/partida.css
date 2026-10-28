@@ -1,0 +1,310 @@
+.partida-contenedor {
+    flex: 1 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: calc(100vh - 80px);
+    box-sizing: border-box;
+    padding-top: clamp(100px, 14vh, 130px);
+    padding-bottom: 90px;
+    padding-left: clamp(16px, 4vw, 32px);
+    padding-right: clamp(16px, 4vw, 32px);
+    background: url("../img/Cielo%20m%C3%A1gico%20para%20aprender%20y%20jugar.png") center 45% / cover fixed no-repeat;
+}
+
+/* Tarjeta Madre (Misma estructura, borde redondeado y sombra que en el Lobby) */
+.partida-card {
+    width: 100%;
+    max-width: 580px;
+    background: #fff;
+    border-radius: 24px;
+    padding: clamp(22px, 4vw, 34px);
+    box-shadow: 0 14px 42px rgba(48, 38, 83, 0.16);
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    transition: border-top 0.4s ease, box-shadow 0.4s ease;
+}
+
+/* Encabezados */
+.partida-encabezado {
+    text-align: center;
+    margin-bottom: 6px;
+}
+
+.partida-titulo {
+    margin: 0 0 6px;
+    color: #302653;
+    font-size: clamp(22px, 3.5vw, 26px);
+    font-weight: 900;
+    letter-spacing: -.5px;
+}
+
+.partida-subtitulo {
+    margin: 0;
+    color: #716b83;
+    font-size: 14px;
+}
+
+/* Carrusel de Categorías dentro de la tarjeta */
+.carrusel-marco {
+    background: #fbfbfe;
+    border: 1px dashed #ded9f0;
+    border-radius: 16px;
+    padding: 14px;
+}
+
+.carrusel-tira {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.categoria-tarjeta-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 16px;
+    background: #fff;
+    border: 1px solid #e9e6f5;
+    border-radius: 12px;
+    opacity: 0.4;
+    transform: scale(0.98);
+    transition: all 0.15s ease;
+}
+
+.categoria-tarjeta-item.activa {
+    opacity: 1;
+    transform: scale(1.02);
+    box-shadow: 0 6px 16px rgba(102, 85, 217, 0.18);
+    border-color: #ded9f0;
+}
+
+.categoria-tarjeta-icono {
+    font-size: 1.3rem;
+}
+
+.categoria-tarjeta-nombre {
+    color: #302653;
+    font-size: 14px;
+    font-weight: 800;
+}
+
+/* Fase 2: Layout de Pregunta */
+.partida-fase-pregunta {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+/* Banner de Categoría y Marcador (Estilo banner de Ranking) */
+.partida-banner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #fff;
+    padding: 14px 20px;
+    border-radius: 16px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+.partida-banner__info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.partida-banner__label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    opacity: 0.9;
+}
+
+.partida-banner__nombre {
+    font-size: 20px;
+    font-weight: 900;
+}
+
+.partida-banner__puntos {
+    text-align: right;
+}
+
+.partida-banner__valor {
+    font-size: 22px;
+    font-weight: 900;
+    line-height: 1;
+    display: block;
+}
+
+.partida-banner__sub {
+    font-size: 10px;
+    font-weight: 800;
+    opacity: 0.85;
+}
+
+/* Caja de Enunciado */
+.partida-pregunta-box {
+    text-align: center;
+    padding: 6px 4px 10px;
+}
+
+.partida-enunciado {
+    margin: 0;
+    color: #302653;
+    font-size: clamp(18px, 2.5vw, 22px);
+    font-weight: 900;
+    line-height: 1.35;
+}
+
+/* Lista de Respuestas (Formato "Ver Ranking Global") */
+.partida-respuestas-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.partida-btn-respuesta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+    min-height: 48px;
+    padding: 12px 20px;
+    background: #f5f3ff;
+    color: #302653;
+    border: 1px solid #e4e0ef;
+    border-radius: 14px;
+    font: inherit;
+    font-weight: 800;
+    font-size: 15px;
+    cursor: pointer;
+    box-sizing: border-box;
+    transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.partida-btn-respuesta:hover {
+    background: #ede9fe;
+    border-color: #c4b5fd;
+    color: #6655d9;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 85, 217, 0.12);
+}
+
+.partida-btn-respuesta:active {
+    transform: translateY(0);
+}
+
+
+.resultado-fase {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    width: 100%;
+}
+
+.resultado-personaje {
+    display: block;
+    width: clamp(120px, 24vw, 160px);
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.1));
+    margin: 0 auto 14px;
+}
+
+/* Card del marcador de puntaje (mismo estilo que el de ranking) */
+.resultado-marcador {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(135deg, #302653 0%, #1e183a 100%);
+    color: #fff;
+    padding: 16px 22px;
+    border-radius: 16px;
+    box-shadow: 0 6px 18px rgba(48, 38, 83, 0.15);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.resultado-marcador-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    text-align: left;
+}
+
+.resultado-marcador-etiqueta {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    color: #cbd5e1;
+}
+
+.resultado-marcador-puntos {
+    font-size: 32px;
+    font-weight: 900;
+    line-height: 1;
+}
+
+.resultado-maximo {
+    font-size: 18px;
+    color: #94a3b8;
+    font-weight: 700;
+}
+
+.resultado-marcador-estado {
+    text-align: right;
+}
+
+.resultado-marcador-badge {
+    font-size: 11px;
+    font-weight: 900;
+    padding: 6px 12px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Responsividad para móviles de resultados */
+@media (max-width: 480px) {
+    .resultado-marcador {
+        padding: 12px 16px;
+    }
+
+    .resultado-marcador-puntos {
+        font-size: 26px;
+    }
+
+    .resultado-personaje {
+        width: 110px;
+    }
+}
+/* Adaptación para pantallas de celulares */
+@media (max-width: 480px) {
+    .partida-card {
+        padding: 20px 16px;
+        border-radius: 20px;
+    }
+
+    .partida-banner {
+        padding: 12px 16px;
+    }
+
+    .partida-banner__nombre {
+        font-size: 17px;
+    }
+
+    .partida-enunciado {
+        font-size: 17px;
+    }
+
+    .partida-btn-respuesta {
+        font-size: 14px;
+        padding: 10px 14px;
+    }
+}

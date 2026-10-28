@@ -21,6 +21,10 @@ class LoginController
 
     public function show()
     {
+        if(!empty($_SESSION["logueado"])){
+            header("Location: lobby");
+            exit();
+        }
         $this->render->renderiza("login", []);
     }
 
@@ -54,7 +58,7 @@ class LoginController
         $_SESSION["logueado"] = true;
 
         // Redireccionamos a la pantalla principal o de inicio
-        Redirect::toController("integrantes", "show");
+        Redirect::toController("lobby", "show");
     }
 
     public function logout()

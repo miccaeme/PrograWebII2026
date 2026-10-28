@@ -8,6 +8,6 @@ $configuration = new Configuration();
 $router = $configuration->getRouter();
 
 $router->dispatch(
-    Request::get("controller", "integrantes"),
+    Request::get("controller", "login"),
     Request::get("method", "show")
 );

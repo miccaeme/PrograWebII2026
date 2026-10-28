@@ -21,11 +21,9 @@ class MustacheRender
             "partials_loader" => $loader
         ]);
     }
-
     public function renderiza($view, $data = [])
     {
-        $data["baseUrl"] = UrlHelper::baseUrl();
-        
         echo $this->mustache->render($view . "View", $data);
     }
+
 }

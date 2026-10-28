@@ -1,0 +1,368 @@
+.header:has(+ .lobby) {
+    background: url("../img/Cielo%20m%C3%A1gico%20para%20aprender%20y%20jugar.png") center 45% / cover fixed;
+    border-bottom: 1px solid rgba(255, 255, 255, .2);
+}
+
+.header:has(+ .lobby) .header__container {
+    max-width: 1500px;
+    min-height: 80px;
+    padding: 8px clamp(16px, 4vw, 64px);
+    gap: 16px;
+}
+
+.header:has(+ .lobby) .header__logo img {
+    width: 60px;
+    height: 60px;
+}
+
+.header:has(+ .lobby) .header__link,
+.header:has(+ .lobby) .header__login {
+    color: #fff;
+}
+
+.header:has(+ .lobby) .header__link:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, .16);
+}
+
+.header:has(+ .lobby) .header__play {
+    background: #6655d9;
+}
+
+/* Contenedor Principal Centrado */
+.lobby {
+    flex: 1 0 auto; /* Permite que el contenedor crezca todo lo necesario */
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    box-sizing: border-box;
+    padding-top: clamp(5px, 14vh, 100px);
+    padding-bottom: 90px; /* Margen inferior para que la tarjeta no toque el footer */
+    padding-left: clamp(16px, 4vw, 32px);
+    padding-right: clamp(16px, 4vw, 32px);
+    background: url("../img/Cielo%20m%C3%A1gico%20para%20aprender%20y%20jugar.png") center 45% / cover fixed no-repeat;
+}
+.lobby__contenedor {
+    width: 100%;
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+/* Presentación y Mascota Centrada */
+.lobby__presentacion {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    color: #fff;
+    width: 100%;
+}
+
+.lobby__personaje {
+    display: block;
+    width: clamp(140px, 32vw, 210px);
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 10px 22px rgba(35, 21, 110, .35));
+    margin-bottom: 8px;
+}
+
+.lobby__bienvenida {
+    margin: 0;
+    color: #fff;
+    font-size: clamp(28px, 5vw, 42px);
+    font-weight: 900;
+    line-height: 1.1;
+    text-shadow: 0 2px 12px rgba(35, 21, 110, .3);
+}
+
+.lobby__descripcion {
+    max-width: 480px;
+    margin: 6px 0 0;
+    color: #fff;
+    font-size: clamp(14px, 2.5vw, 17px);
+    font-weight: 700;
+    line-height: 1.4;
+    text-shadow: 0 1px 8px rgba(35, 21, 110, .4);
+}
+
+/* Tarjeta de Control */
+.lobby__panel {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.lobby__tarjeta {
+    width: 100%;
+    padding: clamp(20px, 4vw, 32px);
+    border-radius: 24px;
+    background: #fff;
+    box-shadow: 0 14px 42px rgba(48, 38, 83, .16);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    box-sizing: border-box;
+}
+
+.lobby__encabezado {
+    text-align: center;
+    margin-bottom: 2px;
+}
+
+.lobby__titulo {
+    margin: 0 0 4px;
+    color: #302653;
+    font-size: clamp(22px, 3.5vw, 26px);
+    font-weight: 900;
+    letter-spacing: -.5px;
+}
+
+.lobby__subtitulo {
+    margin: 0;
+    color: #716b83;
+    font-size: 14px;
+}
+
+/* Card de Ranking */
+.lobby__ranking-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(135deg, #6655d9 0%, #4f3ec2 100%);
+    color: #fff;
+    padding: 14px 20px;
+    border-radius: 16px;
+    box-shadow: 0 6px 18px rgba(102, 85, 217, .25);
+}
+
+.lobby__ranking-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.lobby__ranking-etiqueta {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    opacity: .9;
+}
+
+.lobby__ranking-posicion {
+    font-size: 30px;
+    font-weight: 900;
+    line-height: 1;
+}
+
+.lobby__ranking-puntos-box {
+    text-align: right;
+}
+
+.lobby__ranking-puntos-valor {
+    font-size: 24px;
+    font-weight: 900;
+    display: block;
+    line-height: 1;
+}
+
+.lobby__ranking-puntos-label {
+    font-size: 11px;
+    font-weight: 800;
+    opacity: .85;
+}
+
+/* Botones de Acción */
+.lobby__acciones {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.lobby__boton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    min-height: 46px;
+    padding: 10px 18px;
+    border-radius: 12px;
+    font: inherit;
+    font-weight: 900;
+    font-size: 15px;
+    text-decoration: none;
+    cursor: pointer;
+    box-sizing: border-box;
+    transition: background .2s ease, transform .2s ease, box-shadow .2s ease;
+}
+
+.lobby__boton--primario {
+    background: #6655d9;
+    color: #fff;
+    box-shadow: 0 6px 14px rgba(102, 85, 217, .2);
+}
+
+.lobby__boton--primario:hover {
+    background: #5543c8;
+    box-shadow: 0 8px 18px rgba(102, 85, 217, .28);
+    transform: translateY(-1px);
+}
+
+.lobby__boton--secundario {
+    background: #f5f3ff;
+    color: #51496b;
+    border: 1px solid #e4e0ef;
+}
+
+.lobby__boton--secundario:hover {
+    background: #ede9fe;
+    color: #302653;
+}
+
+.lobby__icono-btn {
+    font-size: 1.15rem;
+}
+
+/* Historial de Partidas */
+.lobby__historial {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 4px;
+}
+
+.lobby__historial-titulo {
+    margin: 0;
+    color: #302653;
+    font-size: 15px;
+    font-weight: 800;
+}
+
+.lobby__sin-partidas {
+    text-align: center;
+    padding: 20px 14px;
+    background: #fbfbfe;
+    border-radius: 14px;
+    border: 1px dashed #ded9f0;
+}
+
+.lobby__sin-partidas-texto {
+    margin: 0;
+    color: #51496b;
+    font-weight: 700;
+    font-size: 13px;
+}
+
+.lobby__sin-partidas-subtexto {
+    display: block;
+    margin-top: 4px;
+    color: #8c85a3;
+    font-size: 11px;
+}
+
+.lobby__partidas-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.lobby__partida-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px;
+    background: #fbfbfe;
+    border: 1px solid #e9e6f5;
+    border-left-width: 5px;
+    border-radius: 10px;
+}
+
+.lobby__partida-datos {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.lobby__partida-categoria {
+    color: #302653;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.lobby__partida-fecha {
+    color: #8c85a3;
+    font-size: 11px;
+}
+
+.lobby__partida-score {
+    text-align: right;
+}
+
+.lobby__partida-puntos {
+    display: block;
+    color: #302653;
+    font-size: 14px;
+    font-weight: 900;
+}
+
+.lobby__partida-badge {
+    color: #236b3c;
+    font-size: 10px;
+    font-weight: 800;
+}
+
+.lobby__partidas-ocultas {
+    display: none;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.lobby__ver-mas-btn {
+    background: none;
+    border: none;
+    color: #6655d9;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 800;
+    cursor: pointer;
+    padding: 6px 0;
+    align-self: center;
+}
+
+.lobby__ver-mas-btn:hover {
+    text-decoration: underline;
+}
+
+/* Ajustes Específicos para Pantallas de Celular */
+@media (max-width: 480px) {
+    .lobby {
+        padding: 16px 12px 24px;
+    }
+
+    .lobby__tarjeta {
+        padding: 18px 14px;
+        border-radius: 20px;
+    }
+
+    .lobby__ranking-card {
+        padding: 12px 16px;
+    }
+
+    .lobby__ranking-posicion {
+        font-size: 26px;
+    }
+
+    .lobby__ranking-puntos-valor {
+        font-size: 20px;
+    }
+
+    .lobby__boton {
+        font-size: 14px;
+        padding: 10px 14px;
+    }
+}

@@ -66,4 +66,12 @@ class MyDatabase
         $stmt->execute($params);
         return $stmt->rowCount();
     }
+
+    public function queryParams(string $sql, array $params)
+    {
+        Log::info($sql);
+        $stmt = $this->conexion->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

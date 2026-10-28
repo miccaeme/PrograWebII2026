@@ -81,7 +81,7 @@
                     </p>
                 </div>
 
-                <!-- Campos ocultos que viajarán a PHP -->
+
                 <input type="hidden" name="latitud" id="latitud">
                 <input type="hidden" name="longitud" id="longitud">
                 <input type="hidden" name="pais" id="pais">
@@ -105,38 +105,38 @@
         </div>
     </section>
 </main>
-<!-- Leaflet JS -->
+
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script>
     const map = L.map('map').setView([-34.6037, -58.3816], 4);
 
-    // 2. Cargar los mosaicos de OpenStreetMap
+
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 18,
         attribution: '© OpenStreetMap'
     }).addTo(map);
 
-    // Forzar recalculo de dimensiones para evitar cortes de imagen
+
     setTimeout(() => {
         map.invalidateSize();
     }, 250);
 
     let marcador;
 
-    // 3. Capturar el evento clic en el mapa
+
     map.on('click', function(e) {
         const lat = e.latlng.lat;
         const lng = e.latlng.lng;
 
-        // Mover o crear el marcador
+
         if (marcador) {
             marcador.setLatLng(e.latlng);
         } else {
             marcador = L.marker(e.latlng).addTo(map);
         }
 
-        // Guardar latitud y longitud en los inputs ocultos
+        // Guarda latitud y longitud en los inputs
         document.getElementById('latitud').value = lat;
         document.getElementById('longitud').value = lng;
 

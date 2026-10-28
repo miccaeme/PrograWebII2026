@@ -1,0 +1,116 @@
+<link rel="stylesheet" href="{{baseUrl}}/public/css/lobby.css">
+{{> header}}
+
+<main class="lobby">
+    <div class="lobby__contenedor">
+
+
+        <section class="lobby__presentacion">
+
+            <h1 class="lobby__bienvenida">¡Hola, {{nombre_usuario}}!</h1>
+            <p class="lobby__descripcion">Demostrá cuánto sabés, desafiá a otros cerebritos y alcanzá la cima del ranking.</p>
+        </section>
+
+
+        <section class="lobby__panel">
+            <div class="lobby__tarjeta">
+
+                <header class="lobby__encabezado">
+                    <h2 class="lobby__titulo">Tu Panel de Juego</h2>
+                    <p class="lobby__subtitulo">Revisá tus estadísticas e iniciá una nueva partida.</p>
+                </header>
+
+
+                <div class="lobby__ranking-card">
+                    <div class="lobby__ranking-info">
+                        <span class="lobby__ranking-etiqueta">Posición en el Ranking</span>
+                        <strong class="lobby__ranking-posicion">{{posicion_ranking}}</strong>
+                    </div>
+                    <div class="lobby__ranking-puntos-box">
+                        <span class="lobby__ranking-puntos-valor">{{puntos_ranking}}</span>
+                        <span class="lobby__ranking-puntos-label">PTS</span>
+                    </div>
+                </div>
+
+
+                <div class="lobby__acciones">
+                    <a href="{{baseUrl}}/partida/nueva" class="lobby__boton lobby__boton--primario">
+                        <span class="lobby__icono-btn">🎮</span> Jugar
+                    </a>
+                    <a href="{{baseUrl}}/ranking/show" class="lobby__boton lobby__boton--secundario">
+                        <span class="lobby__icono-btn">🏆</span> Ver Ranking Global
+                    </a>
+                </div>
+
+
+                <div class="lobby__historial">
+                    <h3 class="lobby__historial-titulo">Últimas partidas</h3>
+
+                    {{#sin_partidas}}
+                        <div class="lobby__sin-partidas">
+                            <p class="lobby__sin-partidas-texto">Todavía no jugaste ninguna partida.</p>
+                            <small class="lobby__sin-partidas-subtexto">¡Hacé clic en "Jugar Partida" para empezar a sumar puntos!</small>
+                        </div>
+                    {{/sin_partidas}}
+
+                    {{^sin_partidas}}
+                        <div class="lobby__partidas-lista">
+                            {{#partidas_recientes}}
+                                <div class="lobby__partida-item" style="border-left-color: {{color}};">
+                                    <div class="lobby__partida-datos">
+                                        <strong class="lobby__partida-categoria">{{categoria}}</strong>
+                                        <span class="lobby__partida-fecha">{{fecha_formateada}}</span>
+                                    </div>
+                                    <div class="lobby__partida-score">
+                                        <span class="lobby__partida-puntos">Puntos {{puntaje}}</span>
+                                        <span class="lobby__partida-badge">Completada</span>
+                                    </div>
+                                </div>
+                            {{/partidas_recientes}}
+
+                            {{#tiene_mas_partidas}}
+                                <div id="partidas-ocultas" class="lobby__partidas-ocultas">
+                                    {{#partidas_restantes}}
+                                        <div class="lobby__partida-item" style="border-left-color: {{color}};">
+                                            <div class="lobby__partida-datos">
+                                                <strong class="lobby__partida-categoria">{{categoria}}</strong>
+                                                <span class="lobby__partida-fecha">{{fecha_formateada}}</span>
+                                            </div>
+                                            <div class="lobby__partida-score">
+                                                <span class="lobby__partida-puntos">Puntos {{puntaje}}</span>
+                                                <span class="lobby__partida-badge">Completada</span>
+                                            </div>
+                                        </div>
+                                    {{/partidas_restantes}}
+                                </div>
+
+                                <button id="btn-ver-mas" type="button" class="lobby__ver-mas-btn" onclick="alternarPartidas()">
+                                    Ver más partidas ({{partidas_restantes.length}}) ▼
+                                </button>
+                            {{/tiene_mas_partidas}}
+                        </div>
+                    {{/sin_partidas}}
+                </div>
+
+            </div>
+        </section>
+
+    </div>
+</main>
+
+<script>
+    function alternarPartidas() {
+        const contenedor = document.getElementById('partidas-ocultas');
+        const boton = document.getElementById('btn-ver-mas');
+
+        if (contenedor.style.display === 'flex') {
+            contenedor.style.display = 'none';
+            boton.textContent = 'Ver más partidas ▼';
+        } else {
+            contenedor.style.display = 'flex';
+            boton.textContent = 'Ver menos ▲';
+        }
+    }
+</script>
+
+{{> footer}}

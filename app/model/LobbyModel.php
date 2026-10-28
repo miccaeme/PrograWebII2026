@@ -2,7 +2,7 @@
 
 namespace app\model;
 
-class IntegrantesModel
+class LobbyModel
 {
     private $database;
     public function __construct($database){
@@ -22,7 +22,16 @@ class IntegrantesModel
 
         $this->render->renderiza("integrantes", $data);
     }
-
+    public function getUltimasPartidas($idUsuario){
+        return $this->database->queryParams(
+            "SELECT p.id, p.puntaje, p.fecha_creacion, c.nombre AS categoria, c.color, c.icono
+            FROM partidas p
+            INNER JOIN categorias c ON p.id_categoria = c.id
+            WHERE p.id_usuario=?
+            ORDER BY p.fecha_creacion DESC",
+            [$idUsuario]
+        );
+    }
 
 
 

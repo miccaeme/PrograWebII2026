@@ -2,6 +2,7 @@
 
 namespace app\controller;
 
+use Auth;
 use Redirect;
 use Request;
 use UrlHelper;
@@ -19,13 +20,13 @@ class PreguntaController
 
     public function crear()
     {
-        $this->requireLogin();
+        Auth::requiereLogin();
         $this->mostrarFormulario(["enviada" => Request::get("enviada") === "1"]);
     }
 
     public function guardar()
     {
-        $this->requireLogin();
+        Auth::requiereLogin();
 
         if($_SERVER["REQUEST_METHOD"] !== "POST") {
             Redirect::toController("pregunta", "crear");
@@ -60,7 +61,9 @@ class PreguntaController
                 return;
             }
 
-            $guardada = $this->model->guardar($enunciado, $idCategoria, $respuestas, $correcta, $_SESSION["usuario_id"], "pendiente");
+            $estado = in_array($_SESSION["rol"] ?? "jugador", ["editor", "admin"], true) ? "activa" : "pendiente";
+
+            $guardada = $this->model->guardar($enunciado, $idCategoria, $respuestas, $correcta, $_SESSION["usuario_id"], $estado);
 
             if(!$guardada){
                 $this->mostrarFormulario($datosIngresados + ["error_general" => "No se pudo guardar la pregunta. Probá de nuevo."]);
@@ -133,10 +136,4 @@ class PreguntaController
         ]);
     }
 
-    private function requireLogin()
-    {
-        if(empty($_SESSION["usuario_id"])) {
-            Redirect::toController("login", "show");
-        }
-    }
 }

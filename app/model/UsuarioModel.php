@@ -84,16 +84,18 @@ class UsuarioModel
     public function crear($datos, $password){
         $hash = password_hash($password, PASSWORD_DEFAULT);
         $token = bin2hex(random_bytes(32));
+        $tokenPerfil = bin2hex(random_bytes(32));
 
         $filas = $this->database->executeParams(
-            "INSERT INTO usuarios (nombre_completo, anio_nacimiento, sexo,  email, nombre_usuario, password,  pais, latitud, longitud, token_validacion)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?,?)",
+            "INSERT INTO usuarios (nombre_completo, anio_nacimiento, sexo, email, nombre_usuario, token_perfil, password, pais, latitud, longitud, token_validacion)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
             [
                 $datos["nombre_completo"],
                 $datos["anio_nacimiento"],
                 $datos["sexo"],
                 $datos["email"],
                 $datos["nombre_usuario"],
+                $tokenPerfil,
                 $hash,
                 $datos["pais"],
                 $datos["latitud"],
@@ -118,7 +120,7 @@ class UsuarioModel
     public function buscarPorId($id)
     {
         $usuario = $this->database->queryOneParams(
-            "SELECT id, nombre_completo, anio_nacimiento, sexo, pais, ciudad, email, nombre_usuario, foto_perfil, fecha_registro
+            "SELECT id, nombre_completo, anio_nacimiento, sexo, pais, ciudad, email, nombre_usuario, foto_perfil, fecha_registro, token_perfil
             FROM usuarios WHERE id = ?", [$id]
         );
 
@@ -130,6 +132,19 @@ class UsuarioModel
         $usuario["sexo_texto"] = $sexos[$usuario["sexo"]] ?? "";
         
         return $usuario;
+    }
+
+    public function buscarPerfilCompartidoPorToken($token)
+    {
+        if (!is_string($token) || !preg_match('/\\A[a-f0-9]{64}\\z/i', $token)) {
+            return null;
+        }
+
+        return $this->database->queryOneParams(
+            "SELECT nombre_completo, nombre_usuario, foto_perfil, pais
+            FROM usuarios WHERE token_perfil = ?",
+            [$token]
+        );
     }
 
     private function actualizarFoto($id, $ruta)

@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS usuarios(
     longitud DECIMAL(10, 7) NOT NULL,
     email VARCHAR(150) NOT NULL UNIQUE,
     nombre_usuario VARCHAR(30) NOT NULL UNIQUE,
+    token_perfil CHAR(64) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     foto_perfil VARCHAR(255) NULL,
     rol ENUM('jugador', 'editor', 'admin') NOT NULL DEFAULT 'jugador',

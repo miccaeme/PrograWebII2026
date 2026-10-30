@@ -56,6 +56,7 @@ class LoginController
         $_SESSION["usuario_id"] = $usuarioLogueado["id"] ?? null;
         $_SESSION["nombre_usuario"] = $usuarioLogueado["nombre_usuario"] ?? "";
         $_SESSION["logueado"] = true;
+        $_SESSION["rol"] = $usuarioLogueado["rol"] ?? "jugador";
 
         // Redireccionamos a la pantalla principal o de inicio
         Redirect::toController("lobby", "show");

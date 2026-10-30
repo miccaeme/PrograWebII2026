@@ -31,7 +31,7 @@ class LobbyController
             $todasLasPartidas = $this->model->getUltimasPartidas($idUsuario);
 
             foreach ($todasLasPartidas as &$p){
-                $p['fecha_formateada'] = date("d/m/Y H:1", strtotime($p['fecha_creacion']));
+                $p['fecha_formateada'] = date("d/m/Y H:i", strtotime($p['fecha_creacion']));
             }
             $partidasRecientes = array_slice($todasLasPartidas, 0, 5);
             $partidasRestantes = array_slice($todasLasPartidas, 5);

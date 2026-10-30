@@ -1,0 +1,53 @@
+USE PrograWebII;
+
+CREATE TABLE IF NOT EXISTS respuestas(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_pregunta INT NOT NULL,
+    texto VARCHAR(150) NOT NULL,
+    es_correcta TINYINT(1) NOT NULL DEFAULT 0,
+    INDEX idx_pregunta (id_pregunta),
+    FOREIGN KEY (id_pregunta) REFERENCES preguntas(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Respuestas de las preguntas de ejemplo (id = número de pregunta + posición)
+INSERT IGNORE INTO respuestas (id, id_pregunta, texto, es_correcta) VALUES
+    (11, 1, 'Cascading Style Sheets', 1),
+    (12, 1, 'Computer System Syntax', 0),
+    (13, 1, 'Creative Styling System', 0),
+    (14, 1, 'Central Sheet Server', 0),
+    (21, 2, 'PHP', 1),
+    (22, 2, 'HTML', 0),
+    (23, 2, 'CSS', 0),
+    (24, 2, 'XML', 0),
+    (31, 3, 'Au', 1),
+    (32, 3, 'Ag', 0),
+    (33, 3, 'Fe', 0),
+    (34, 3, 'Cu', 0),
+    (41, 4, 'Júpiter', 1),
+    (42, 4, 'Saturno', 0),
+    (43, 4, 'Marte', 0),
+    (44, 4, 'Neptuno', 0),
+    (51, 5, 'Canberra', 1),
+    (52, 5, 'Sídney', 0),
+    (53, 5, 'Melbourne', 0),
+    (54, 5, 'Brisbane', 0),
+    (61, 6, 'Italia', 1),
+    (62, 6, 'España', 0),
+    (63, 6, 'Grecia', 0),
+    (64, 6, 'Portugal', 0),
+    (71, 7, 'Vincent van Gogh', 1),
+    (72, 7, 'Pablo Picasso', 0),
+    (73, 7, 'Claude Monet', 0),
+    (74, 7, 'Salvador Dalí', 0),
+    (81, 8, '1969', 1),
+    (82, 8, '1955', 0),
+    (83, 8, '1972', 0),
+    (84, 8, '1961', 0),
+    (91, 9, '11', 1),
+    (92, 9, '10', 0),
+    (93, 9, '12', 0),
+    (94, 9, '9', 0),
+    (101, 10, 'Argentina', 1),
+    (102, 10, 'Francia', 0),
+    (103, 10, 'Croacia', 0),
+    (104, 10, 'Brasil', 0);

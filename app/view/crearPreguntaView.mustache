@@ -1,0 +1,56 @@
+{{> header}}
+<main class="pregunta">
+    <section class="pregunta__tarjeta">
+        <h1 class="pregunta__titulo">Crear pregunta</h1>
+        <p class="pregunta__subtitulo">Sugerí una pregunta. Un editor la va a revisar antes de que aparezca en el juego.</p>
+
+        {{# enviada}}
+        <p class="pregunta__exito" role="status">¡Gracias! Tu pregunta fue enviada para revisión.</p>
+        {{/enviada}}
+
+        {{#error_general}}
+        <p class="pregunta__error-general" role="alert">{{error_general}}</p>
+        {{/error_general}}
+
+        <form class="pregunta__formulario" method="POST" action="{{baseUrl}}/pregunta/guardar">
+            <div class="pregunta__campo">
+                <label class="pregunta__etiqueta" for="enunciado">Pregunta</label>
+                <textarea class="pregunta__entrada" id="enunciado" name="enunciado" maxlength="255" required>{{enunciado}}</textarea>
+                <small class="pregunta__error" role="alert">{{errores.enunciado}}</small>
+            </div>
+
+            <div class="pregunta__campo">
+                <label class="pregunta__etiqueta" for="id_categoria">Categoría</label>
+                <select class="pregunta__entrada" id="id_categoria" name="id_categoria" required>
+                    <option value="">Elegí una categoría</option>
+                    {{#categorias}}
+                        <option value="{{id}}" {{#seleccionada}}selected{{/seleccionada}}>{{nombre}}</option>
+                    {{/categorias}}
+                </select>
+                <small class="pregunta__error" role="alert">{{errores.categoria}}</small>
+            </div>
+
+            <fieldset class="pregunta__respuestas">
+                <legend class="pregunta__etiqueta">Respuestas (marcá la correcta)</legend>
+
+                {{#opciones}}
+                    <div class="pregunta__opcion">
+                        <input class="pregunta__radio" type="radio" id="correcta-{{posicion}}" name="correcta" value="{{posicion}}" {{#es_correcta}}checked{{/es_correcta}} required>
+                            <label class="pregunta__letra" for="correcta-{{posicion}}">{{letra}}</label>
+                            <input class="pregunta__entrada" type="text" name="respuestas[]" value="{{texto}}" maxlength="150" placeholder="Respuesta{{letra}}" required>
+                    </div>
+                {{/opciones}}
+
+                <small class="pregunta__error" role="alert">{{errores.respuestas}}</small>
+                
+                <small class="pregunta__error" role="alert">{{errores.correcta}}</small>
+
+            </fieldset>
+
+            <button class="pregunta__boton" type="submit">Enviar pregunta</button>
+        
+        </form>
+    </section>
+</main>
+
+{{> footer}}

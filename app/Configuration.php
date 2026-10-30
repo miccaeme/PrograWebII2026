@@ -2,6 +2,7 @@
 
 namespace app;
 
+use app\controller\AdminController;
 use app\controller\LoginController;
 use app\model\UsuarioModel;
 use MustacheRender;
@@ -75,5 +76,9 @@ class Configuration
     public function getRouter()
     {
         return new Router($this, "lobby", "show");
+    }
+
+    public function getAdminController(){
+        return new AdminController($this->getUsuarioModel(), $this->getRender());
     }
 }

@@ -1,0 +1,41 @@
+{{> header}}
+<link rel="stylesheet" href="{{baseUrl}}/public/css/partida.css">
+<main class="partida-contenedor">
+    <div class="partida-card">
+
+        <!-- Resultado -->
+        <div class="resultado-fase">
+            <header class="partida-encabezado">
+
+                    <img src="{{baseUrl}}/public/img/cerebrito-triste.png" alt="Cerebrito triste" class="resultado-personaje">
+                    <h2 class="partida-titulo" style="color: #ef4444;">¡Fin de la partida!</h2>
+                    <p class="partida-subtitulo">Respuesta incorrecta. Tu racha terminó en esta ronda.</p>
+
+            </header>
+
+            <!-- Puntaje -->
+            <div class="resultado-marcador">
+                <div class="resultado-marcador-info">
+                    <span class="resultado-marcador-etiqueta">Puntaje obtenido</span>
+                    <strong class="resultado-marcador-puntos">{{puntaje}} <span class="resultado-maximo">/ 5</span></strong>
+                </div>
+                <div class="resultado-marcador-estado">
+                        <span class="resultado-marcador-badge" style="background: rgba(239, 68, 68, 0.2); color: #ef4444;">Racha rota ❌</span>
+                </div>
+            </div>
+
+            <!-- Botones-->
+            <div class="partida-respuestas-lista" style="margin-top: 10px;">
+                <a href="{{baseUrl}}/partida/nueva" class="partida-btn-respuesta" style="background: #6655d9; color: #fff; border: 0; text-decoration: none;">
+                    Jugar otra partida
+                </a>
+                <a href="{{baseUrl}}/lobby/show" class="partida-btn-respuesta" style="text-decoration: none;">
+                    Volver al Lobby
+                </a>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+{{> footer}}

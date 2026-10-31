@@ -58,8 +58,14 @@ class LoginController
         $_SESSION["logueado"] = true;
         $_SESSION["rol"] = $usuarioLogueado["rol"] ?? "jugador";
 
-        // Redireccionamos a la pantalla principal o de inicio
-        Redirect::toController("lobby", "show");
+        if ($_SESSION["rol"] === "admin") {
+            Redirect::toController("admin", "show");
+        } elseif ($_SESSION["rol"] === "editor") {
+            Redirect::toController("editor", "show");
+        } else {
+            Redirect::toController("lobby", "show");
+        }
+
     }
 
     public function logout()

@@ -2,6 +2,7 @@
 
 namespace app;
 
+use app\controller\AdminController;
 use app\controller\LoginController;
 use app\model\UsuarioModel;
 use MustacheRender;
@@ -12,17 +13,21 @@ use app\model\LoginModel;
 use app\controller\LobbyController;
 use app\controller\RegistroController;
 use app\controller\PerfilController;
+use app\model\PreguntaModel;
+use app\controller\PreguntaController;
 
 require_once("helper/Autoloader.php");
 require_once("helper/Router.php");
 include_once("model/LobbyModel.php");
 include_once("model/UsuarioModel.php");
 include_once("model/PartidaModel.php");
+include_once("model/PreguntaModel.php");
 include_once("controller/LobbyController.php");
 include_once("controller/RegistroController.php");
 include_once("controller/LoginController.php");
 include_once("controller/PerfilController.php");
 include_once("controller/PartidaController.php");
+include_once("controller/PreguntaController.php");
 
 class Configuration
 {
@@ -55,6 +60,16 @@ class Configuration
 
     public function getPerfilController(){
         return new PerfilController($this->getUsuarioModel(), $this->getRender());
+    }
+
+    public function getPreguntaModel()
+    {
+        return new PreguntaModel($this->getDatabase());
+    }
+
+    public function getPreguntaController()
+    {
+        return new PreguntaController($this->getPreguntaModel(), $this->getRender());
     }
 
     private function getDatabase()
@@ -91,5 +106,7 @@ class Configuration
             $this->getPartidaModel(),
             $this->getRender()
         );
+    public function getAdminController(){
+        return new AdminController($this->getUsuarioModel(), $this->getRender());
     }
 }

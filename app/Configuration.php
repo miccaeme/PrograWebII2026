@@ -106,6 +106,8 @@ class Configuration
             $this->getPartidaModel(),
             $this->getRender()
         );
+
+    }
     public function getAdminController(){
         return new AdminController($this->getUsuarioModel(), $this->getRender());
     }

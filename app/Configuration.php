@@ -17,6 +17,7 @@ use app\model\PreguntaModel;
 use app\controller\PreguntaController;
 
 require_once("helper/Autoloader.php");
+require_once __DIR__ . "/../vendor/autoload.php";
 require_once("helper/Router.php");
 include_once("model/LobbyModel.php");
 include_once("model/UsuarioModel.php");

@@ -90,6 +90,34 @@
     gap: 8px 14px;
 }
 
+.registro__ubicacion {
+    min-width: 0;
+    margin-top: 1rem;
+    grid-column: 1 / -1;
+}
+
+.registro__mapa {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: 280px;
+    margin-top: .5rem;
+    overflow: hidden;
+    border-radius: 8px;
+}
+
+.registro__pais-seleccionado {
+    margin: .5rem 0 0;
+    color: #2b2d42;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+
+.registro__ubicacion-etiqueta {
+    display: block;
+    margin-bottom: 0;
+}
+
 .registro__foto-perfil {
     position: relative;
     display: grid;
@@ -320,7 +348,7 @@
 
 @media (max-width: 800px) {
     .registro {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
         align-content: start;
         gap: 10px;
         min-height: 0;
@@ -340,12 +368,17 @@
     .registro__titulo-presentacion {
         order: -1;
         width: 100%;
-        margin: 22px 20px 0;
+        max-width: 100%;
+        min-width: 0;
+        margin: 22px 0 0;
+        padding: 0 16px;
+        box-sizing: border-box;
         font-size: clamp(25px, 6vw, 32px);
     }
 
     .registro__panel {
         width: 100%;
+        min-width: 0;
         padding: 8px 16px 24px;
     }
 }
@@ -383,5 +416,27 @@
 
     .registro__titulo {
         font-size: 26px;
+    }
+}
+
+@media (max-width: 380px) {
+    .registro__titulo-presentacion {
+        margin-top: 18px;
+        padding-right: 12px;
+        padding-left: 12px;
+        font-size: clamp(23px, 7vw, 27px);
+    }
+
+    .registro__panel {
+        padding-right: 10px;
+        padding-left: 10px;
+    }
+
+    .registro__tarjeta {
+        padding: 18px 14px;
+    }
+
+    .registro__mapa {
+        height: 240px;
     }
 }

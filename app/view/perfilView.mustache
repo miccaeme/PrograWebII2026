@@ -63,6 +63,13 @@
             </div>
             <span class="perfil__accionVisual">Cambiar contraseña</span>
         </section>-->
+        <section class="perfil__seccion codigoQr" aria-labelledby="codigoQrTitulo">
+            <div class="codigoQrContenido">
+                <h2 class="perfil__subtitulo" id="codigoQrTitulo">Compartí tu perfil</h2>
+                <p class="codigoQrTexto">Escaneá este código para que otro usuario pueda consultar tu perfil.</p>
+            </div>
+            <img class="codigoQrImagen" src="{{codigo_qr_data_uri}}" alt="Código QR para abrir el perfil compartido de {{nombre_usuario}}">
+        </section>
         {{/usuario}}
     </section>
 </main>

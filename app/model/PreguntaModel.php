@@ -117,6 +117,14 @@ class PreguntaModel
         );
     }
 
+    public function obtenerRespuestas($idPregunta)
+    {
+        return $this->database->queryParams(
+            "SELECT texto, es_correcta FROM respuestas WHERE id_pregunta = ? ORDER BY id",
+            [$idPregunta]
+        );
+    }
+
 
 
 

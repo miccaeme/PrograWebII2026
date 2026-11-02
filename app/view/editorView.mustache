@@ -4,6 +4,8 @@
         <h1 class="pregunta__titulo">Panel del editor</h1>
         <p class="pregunta__subtitulo">Preguntas sugeridas por jugadores, pendientes de revisión.</p>
 
+        <a class="pregunta__boton pregunta__boton--enlace" href="{{baseUrl}}/pregunta/crear">Crear pregunta</a>
+
         {{#sin_pendientes}}
             <p class="pregunta__exito" role="status">No hay preguntas pendientes. ¡Todo al día!</p>
         {{/sin_pendientes}}
@@ -14,6 +16,15 @@
                 <p class="revision__datos">
                     Categoría: {{categoria}} · Sugerida por {{creador}} · {{fecha_creacion}}
                 </p>
+
+                <ul class="revision__respuestas">
+                    {{#respuestas}}
+                        <li class="revision__respuesta {{#es_correcta}}revision__respuesta--correcta{{/es_correcta}}">
+                            {{texto}} {{#es_correcta}}✅{{/es_correcta}}
+                        </li>
+                    {{/respuestas}}
+                </ul>
+
                 <div class="revision__acciones">
                     <form method="POST" action="{{baseUrl}}/editor/aprobar">
                         <input type="hidden" name="id" value="{{id}}">

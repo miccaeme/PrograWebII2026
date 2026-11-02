@@ -82,4 +82,42 @@ class PreguntaModel
         } 
     }
 
+    public function obtenerPendientes(){
+        return $this->database->queryAll("SELECT p.id, p.enunciado, p.fecha_creacion,
+        c.nombre AS categoria, c.color, c.icono,
+        u.nombre_usuario AS creador
+        FROM preguntas p
+        INNER JOIN categorias c ON p.id_categoria = c.id
+        LEFT JOIN usuarios u ON p.id_usuario_creador = u.id
+        WHERE p.estado = 'pendiente'
+        ORDER BY p.fecha_creacion ASC");
+    }
+
+    public function cambiarEstado($idPregunta, $estado)
+    {
+        if(!in_array($estado, ["activa", "rechazada"], true)){
+            return false;
+        }
+
+        return $this->database->executeParams(
+            "UPDATE preguntas SET estado = ? WHERE id = ? AND estado = 'pendiente'",
+            [$estado, $idPregunta]
+        );
+    }
+
+    public function obtenerPorCreador($idUsuario)
+    {
+        return $this->database->queryParams(
+            "SELECT p.id, p.enunciado, p.estado, p.fecha_creacion, c.nombre AS categoria
+        FROM preguntas p
+        INNER JOIN categorias c ON p.id_categoria = c.id
+        WHERE p.id_usuario_creador = ?
+        ORDER BY p.fecha_creacion DESC",
+            [$idUsuario]
+        );
+    }
+
+
+
+
 }

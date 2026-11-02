@@ -23,7 +23,7 @@ class PartidaModel
 
     public function obtenerPreguntaAleatoriaPorCategoria($idCategoria, $preguntasRespondidas = [])
     {
-        $sql = "SELECT id, enunciado FROM preguntas WHERE id_categoria = ?";
+        $sql = "SELECT id, enunciado FROM preguntas WHERE id_categoria = ? AND estado = 'activa'";
         $params = [$idCategoria];
 
         if (!empty($preguntasRespondidas)) {
@@ -39,7 +39,7 @@ class PartidaModel
         // Si ya respondió todas las de esta categoría, tomamos cualquiera de la categoría
         if (!$pregunta) {
             $pregunta = $this->database->queryOneParams(
-                "SELECT id, enunciado FROM preguntas WHERE id_categoria = ? ORDER BY RAND() LIMIT 1",
+                "SELECT id, enunciado FROM preguntas WHERE id_categoria = ? AND estado = 'activa' ORDER BY RAND() LIMIT 1",
                 [$idCategoria]
             );
         }

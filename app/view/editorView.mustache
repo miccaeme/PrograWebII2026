@@ -1,0 +1,32 @@
+{{> header}}
+<main class="pregunta">
+    <section class="pregunta__tarjeta">
+        <h1 class="pregunta__titulo">Panel del editor</h1>
+        <p class="pregunta__subtitulo">Preguntas sugeridas por jugadores, pendientes de revisión.</p>
+
+        {{#sin_pendientes}}
+            <p class="pregunta__exito" role="status">No hay preguntas pendientes. ¡Todo al día!</p>
+        {{/sin_pendientes}}
+
+        {{#preguntas}}
+            <article class="revision">
+                <p class="revision__enunciado">{{enunciado}}</p>
+                <p class="revision__datos">
+                    Categoría: {{categoria}} · Sugerida por {{creador}} · {{fecha_creacion}}
+                </p>
+                <div class="revision__acciones">
+                    <form method="POST" action="{{baseUrl}}/editor/aprobar">
+                        <input type="hidden" name="id" value="{{id}}">
+                        <button class="pregunta__boton" type="submit">Aprobar</button>
+                    </form>
+                    <form method="POST" action="{{baseUrl}}/editor/rechazar">
+                        <input type="hidden" name="id" value="{{id}}">
+                        <button class="pregunta__boton revision__rechazar" type="submit">Rechazar</button>
+                    </form>
+                </div>
+            </article>
+        {{/preguntas}}
+    </section>
+</main>
+
+{{> footer}}

@@ -168,7 +168,39 @@ textarea.pregunta__entrada {
     background: #5443c4;
     transform: translateY(-1px);
 }
+.revision {
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 16px;
+}
 
+.revision__enunciado {
+    font-weight: 700;
+    margin: 0 0 6px;
+}
+
+.revision__datos {
+    color: #6b7280;
+    font-size: 0.9rem;
+    margin: 0 0 12px;
+}
+
+.revision__acciones {
+    display: flex;
+    gap: 12px;
+}
+
+.revision__rechazar {
+    background: #dc2626;
+}
+
+.pregunta__boton--enlace {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+}
 @media (min-width: 600px) {
     .pregunta__boton {
         align-self: flex-end;

@@ -1,0 +1,27 @@
+{{> header}}
+<main class="pregunta">
+    <section class="pregunta__tarjeta">
+        <h1 class="pregunta__titulo">Mis preguntas</h1>
+        <p class="pregunta__subtitulo">Acá ves qué pasó con las preguntas que sugeriste.</p>
+
+        {{#sin_preguntas}}
+            <p class="pregunta__subtitulo">Todavía no sugeriste ninguna pregunta.</p>
+        {{/sin_preguntas}}
+
+        {{#preguntas}}
+            <article class="revision">
+                <p class="revision__enunciado">{{enunciado}}</p>
+                <p class="revision__datos">
+                    Categoría: {{categoria}} · {{fecha_creacion}} ·
+                    {{#es_pendiente}}⏳ Pendiente de revisión{{/es_pendiente}}
+                    {{#es_activa}}✅ Aprobada{{/es_activa}}
+                    {{#es_rechazada}}❌ Rechazada{{/es_rechazada}}
+                </p>
+            </article>
+        {{/preguntas}}
+
+        <a class="pregunta__boton pregunta__boton--enlace" href="{{baseUrl}}/pregunta/crear">Sugerir otra pregunta</a>
+    </section>
+</main>
+
+{{> footer}}

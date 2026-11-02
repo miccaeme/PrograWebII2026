@@ -2,6 +2,7 @@
 
 namespace app\controller;
 use Request;
+use Auth;
 
 class PartidaController
 {
@@ -16,10 +17,7 @@ class PartidaController
 
     private function autenticar()
     {
-        if (empty($_SESSION["logueado"])) {
-            header("Location: " . ($_ENV['BASE_URL'] ?? '') . "/login/show");
-            exit();
-        }
+        Auth::requiereRol(["jugador"]);
     }
 
     //nueva partida

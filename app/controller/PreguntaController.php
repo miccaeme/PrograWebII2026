@@ -136,4 +136,25 @@ class PreguntaController
         ]);
     }
 
+    public function mias()
+    {
+        Auth::requiereLogin();
+
+        $preguntas = $this->model->obtenerPorCreador($_SESSION["usuario_id"]);
+
+        foreach ($preguntas as &$p) {
+            $p["es_pendiente"] = $p["estado"] === "pendiente";
+            $p["es_activa"] = $p["estado"] === "activa";
+            $p["es_rechazada"] = $p["estado"] === "rechazada";
+        }
+        unset($p);
+
+        $this->render->renderiza("misPreguntas", [
+            "logueado" => true,
+            "nombre_usuario" => $_SESSION["nombre_usuario"] ?? "",
+            "preguntas" => $preguntas,
+            "sin_preguntas" => empty($preguntas)
+        ]);
+    }
+
 }

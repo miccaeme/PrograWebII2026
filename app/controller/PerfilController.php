@@ -4,6 +4,9 @@ namespace app\controller;
 
 use Request;
 use Redirect;
+use UrlHelper;
+use Endroid\QrCode\Builder\Builder;
+use Endroid\QrCode\Writer\SvgWriter;
 
 class PerfilController
 {
@@ -20,6 +23,25 @@ class PerfilController
     {
         $this->requiereLogin();
         $this->mostrarPerfil([]);
+    }
+
+    public function compartido()
+    {
+        $this->requiereLogin();
+
+        $token = Request::get("token", "");
+        $usuario = $this->model->buscarPerfilCompartidoPorToken($token);
+
+        if (!$usuario) {
+            http_response_code(404);
+        }
+
+        $this->render->renderiza("perfilCompartido", [
+            "usuario" => $usuario,
+            "noEncontrado" => !$usuario,
+            "logueado" => !empty($_SESSION["logueado"]),
+            "nombre_usuario" => $_SESSION["nombre_usuario"] ?? ""
+        ]);
     }
 
     public function subirFoto()
@@ -59,7 +81,35 @@ class PerfilController
     private function mostrarPerfil($extra)
     {
         $usuario = $this->model->buscarPorId($_SESSION["usuario_id"]);
-        $this->render->renderiza("perfil", array_merge(["usuario" => $usuario, "logueado" => !empty($_SESSION["logueado"]), "nombre_usuario" => $_SESSION["nombre_usuario"] ?? ""], $extra));
+        $tokenPerfil = $usuario["token_perfil"] ?? "";
+        $urlCompartida = $this->urlPerfilCompartido($tokenPerfil);
+        $codigoQr = Builder::create()
+            ->writer(new SvgWriter())
+            ->data($urlCompartida)
+            ->size(240)
+            ->margin(10)
+            ->build();
+
+        $this->render->renderiza("perfil", array_merge([
+            "usuario" => $usuario,
+            "url_perfil_compartido" => $urlCompartida,
+            "codigo_qr_data_uri" => $codigoQr->getDataUri(),
+            "logueado" => !empty($_SESSION["logueado"]),
+            "nombre_usuario" => $_SESSION["nombre_usuario"] ?? ""
+        ], $extra));
+    }
+
+    private function urlPerfilCompartido($token)
+    {
+        $host = $_SERVER["HTTP_HOST"] ?? ($_SERVER["SERVER_NAME"] ?? "localhost");
+        if (!preg_match('/\\A(?:[a-z0-9.-]+|\\[[a-f0-9:]+\\])(?::[0-9]{1,5})?\\z/i', $host)) {
+            $host = $_SERVER["SERVER_NAME"] ?? "localhost";
+        }
+
+        $protocolo = (!empty($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] !== "off") ? "https" : "http";
+        return $protocolo . "://" . $host
+            . UrlHelper::controllerUrl("perfil", "compartido")
+            . "?token=" . rawurlencode($token);
     }
 
     private function requiereLogin()

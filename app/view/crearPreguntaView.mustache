@@ -1,39 +1,18 @@
 {{> header}}
 <main class="pregunta">
     <section class="pregunta__tarjeta">
-        <h1 class="pregunta__titulo">{{#modo_edicion}}Editar pregunta{{/modo_edicion}}{{^modo_edicion}}Crear pregunta{{/modo_edicion}}</h1>
+        <h1 class="pregunta__titulo">Crear pregunta</h1>
+        <p class="pregunta__subtitulo">Sugerí una pregunta. Un editor la va a revisar antes de que aparezca en el juego.</p>
 
-        {{^modo_edicion}}
-            {{#puede_publicar}}
-                <p class="pregunta__subtitulo">Como editor, la pregunta que cargues se publica directamente en el juego.</p>
-            {{/puede_publicar}}
-            {{^puede_publicar}}
-                <p class="pregunta__subtitulo">Sugerí una pregunta. Un editor la va a revisar antes de que aparezca en el juego.</p>
-            {{/puede_publicar}}
-        {{/modo_edicion}}
-
-        {{#enviada}}
-            {{#puede_publicar}}
-                <p class="pregunta__exito" role="status">¡Listo! La pregunta se publicó en el juego.</p>
-            {{/puede_publicar}}
-            {{^puede_publicar}}
-                <p class="pregunta__exito" role="status">¡Gracias! Tu pregunta fue enviada para revisión.</p>
-            {{/puede_publicar}}
+        {{# enviada}}
+        <p class="pregunta__exito" role="status">¡Gracias! Tu pregunta fue enviada para revisión.</p>
         {{/enviada}}
 
         {{#error_general}}
-            <p class="pregunta__error-general" role="alert">{{error_general}}</p>
+        <p class="pregunta__error-general" role="alert">{{error_general}}</p>
         {{/error_general}}
 
-        {{#puede_publicar}}
-            <a class="pregunta__boton pregunta__boton--enlace" href="{{baseUrl}}/editor/show">Volver al panel</a>
-        {{/puede_publicar}}
-
-        <form class="pregunta__formulario" method="POST" action="{{baseUrl}}/pregunta/{{#modo_edicion}}actualizar{{/modo_edicion}}{{^modo_edicion}}guardar{{/modo_edicion}}">
-            {{#modo_edicion}}
-                <input type="hidden" name="id_pregunta" value="{{id_pregunta}}">
-            {{/modo_edicion}}
-
+        <form class="pregunta__formulario" method="POST" action="{{baseUrl}}/pregunta/guardar">
             <div class="pregunta__campo">
                 <label class="pregunta__etiqueta" for="enunciado">Pregunta</label>
                 <textarea class="pregunta__entrada" id="enunciado" name="enunciado" maxlength="255" required>{{enunciado}}</textarea>
@@ -57,19 +36,19 @@
                 {{#opciones}}
                     <div class="pregunta__opcion">
                         <input class="pregunta__radio" type="radio" id="correcta-{{posicion}}" name="correcta" value="{{posicion}}" {{#es_correcta}}checked{{/es_correcta}} required>
-                        <label class="pregunta__letra" for="correcta-{{posicion}}">{{letra}}</label>
-                        <input class="pregunta__entrada" type="text" name="respuestas[]" value="{{texto}}" maxlength="150" placeholder="Respuesta{{letra}}" required>
+                            <label class="pregunta__letra" for="correcta-{{posicion}}">{{letra}}</label>
+                            <input class="pregunta__entrada" type="text" name="respuestas[]" value="{{texto}}" maxlength="150" placeholder="Respuesta{{letra}}" required>
                     </div>
                 {{/opciones}}
 
                 <small class="pregunta__error" role="alert">{{errores.respuestas}}</small>
-
+                
                 <small class="pregunta__error" role="alert">{{errores.correcta}}</small>
 
             </fieldset>
 
-            <button class="pregunta__boton" type="submit">{{#modo_edicion}}Guardar cambios{{/modo_edicion}}{{^modo_edicion}}Enviar pregunta{{/modo_edicion}}</button>
-
+            <button class="pregunta__boton" type="submit">Enviar pregunta</button>
+        
         </form>
     </section>
 </main>

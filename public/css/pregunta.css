@@ -231,18 +231,3 @@ textarea.pregunta__entrada {
     background: #dcfce7;
     font-weight: 700;
 }
-
-.revision__acciones .pregunta__boton--enlace {
-    margin-bottom: 0;
-}
-
-.revision__detalle {
-    margin: 0 0 12px;
-}
-
-.revision__detalle summary {
-    cursor: pointer;
-    font-weight: 700;
-    color: #6655d9;
-    margin-bottom: 8px;
-}

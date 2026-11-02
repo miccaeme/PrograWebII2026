@@ -132,7 +132,10 @@ class PreguntaController
             "enunciado" => $datos["enunciado"] ?? "",
             "errores" => $datos["errores"] ?? [],
             "error_general" => $datos["error_general"] ?? null,
-            "enviada" => $datos["enviada"] ?? false
+            "enviada" => $datos["enviada"] ?? false,
+            "id_pregunta" => $datos["id_pregunta"] ?? null,
+            "modo_edicion" => isset($datos["id_pregunta"]),
+            "puede_publicar" => in_array($_SESSION["rol"] ?? "jugador", ["editor", "admin"], true)
         ]);
     }
 
@@ -155,6 +158,76 @@ class PreguntaController
             "preguntas" => $preguntas,
             "sin_preguntas" => empty($preguntas)
         ]);
+    }
+
+    public function editar()
+    {
+        Auth::requiereRol(["editor", "admin"]);
+
+        $pregunta = $this->model->obtenerPorId(Request::get("id"));
+
+        if ($pregunta === null) {
+            Redirect::toController("editor", "activas");
+        }
+
+        $textos = array_column($pregunta["respuestas"], "texto");
+        $correcta = "";
+        foreach ($pregunta["respuestas"] as $posicion => $r) {
+            if ((int)$r["es_correcta"] === 1) {
+                $correcta = (string)$posicion;
+            }
+        }
+
+        $this->mostrarFormulario([
+            "id_pregunta" => $pregunta["id"],
+            "enunciado" => $pregunta["enunciado"],
+            "id_categoria" => (string)$pregunta["id_categoria"],
+            "respuestas" => $textos,
+            "correcta" => $correcta
+        ]);
+    }
+
+    public function actualizar()
+    {
+        Auth::requiereRol(["editor", "admin"]);
+
+        if ($_SERVER["REQUEST_METHOD"] !== "POST") {
+            Redirect::toController("editor", "activas");
+        }
+
+        $idPregunta = (int)Request::post("id_pregunta", 0);
+        $enunciado = trim(Request::post("enunciado", ""));
+        $idCategoria = Request::post("id_categoria", "");
+        $respuestas = Request::post("respuestas", []);
+        $correcta = Request::post("correcta", "");
+
+        if (!is_array($respuestas)) {
+            $respuestas = [];
+        }
+        $respuestas = array_values(array_map("trim", $respuestas));
+
+        $errores = $this->validarFormulario($enunciado, $idCategoria, $respuestas, $correcta)
+            + $this->model->validar($enunciado, $idCategoria, $respuestas, $idPregunta);
+
+        $datos = [
+            "id_pregunta" => $idPregunta,
+            "enunciado" => $enunciado,
+            "id_categoria" => $idCategoria,
+            "respuestas" => $respuestas,
+            "correcta" => $correcta
+        ];
+
+        if (!empty($errores)) {
+            $this->mostrarFormulario($datos + ["errores" => $errores]);
+            return;
+        }
+
+        if (!$this->model->actualizar($idPregunta, $enunciado, $idCategoria, $respuestas, $correcta)) {
+            $this->mostrarFormulario($datos + ["error_general" => "No se pudo guardar los cambios. Probá de nuevo."]);
+            return;
+        }
+
+        Redirect::toController("editor", "activas");
     }
 
 }

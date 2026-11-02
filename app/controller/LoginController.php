@@ -6,6 +6,7 @@ use Mailer;
 use Request;
 use Redirect;
 use UrlHelper;
+use Auth;
 
 
 class LoginController
@@ -58,13 +59,7 @@ class LoginController
         $_SESSION["logueado"] = true;
         $_SESSION["rol"] = $usuarioLogueado["rol"] ?? "jugador";
 
-        if ($_SESSION["rol"] === "admin") {
-            Redirect::toController("admin", "show");
-        } elseif ($_SESSION["rol"] === "editor") {
-            Redirect::toController("editor", "show");
-        } else {
-            Redirect::toController("lobby", "show");
-        }
+        Auth::irAlInicio();
 
     }
 

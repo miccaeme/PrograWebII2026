@@ -2,6 +2,7 @@
 
 namespace app\controller;
 use Redirect;
+use Auth;
 
 class LobbyController
 {
@@ -16,11 +17,7 @@ class LobbyController
     public function show(){
 
 
-        if(empty($_SESSION["logueado"])){
-            header("Location: login");
-            exit();
-
-        }
+        Auth::requiereRol(["jugador"]);
 
         $idUsuario = $_SESSION["usuario_id"]?? null;
         $partidasRecientes = [];

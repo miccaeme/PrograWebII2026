@@ -23,9 +23,15 @@ class EditorController
 
         $preguntas = $this->model->obtenerPendientes();
 
-        foreach ($preguntas as $i => $p) {
-            $preguntas[$i]["respuestas"] = $this->model->obtenerRespuestas($p["id"]);
+        foreach ($preguntas as &$p) {
+            $p["respuestas"] = $this->model->obtenerRespuestas($p["id"]);
+
+            foreach ($p["respuestas"] as &$r) {
+                $r["es_correcta"] = (int)$r["es_correcta"] === 1;
+            }
+            unset($r);
         }
+        unset($p);
 
         $this->render->renderiza("editor", [
             "logueado" => true,
@@ -61,36 +67,5 @@ class EditorController
         $this->model->cambiarEstado($id, "rechazada");
 
         Redirect::toController("editor", "show");
-    }
-
-    public function activas()
-    {
-        Auth::requiereRol(["editor", "admin"]);
-
-        $preguntas = $this->model->obtenerActivas();
-
-        foreach ($preguntas as $i => $p) {
-            $preguntas[$i]["respuestas"] = $this->model->obtenerRespuestas($p["id"]);
-        }
-
-        $this->render->renderiza("editorActivas", [
-            "logueado" => true,
-            "nombre_usuario" => $_SESSION["nombre_usuario"] ?? "",
-            "preguntas" => $preguntas,
-            "sin_activas" => empty($preguntas)
-        ]);
-    }
-
-    public function baja()
-    {
-        Auth::requiereRol(["editor", "admin"]);
-
-        if ($_SERVER["REQUEST_METHOD"] !== "POST") {
-            Redirect::toController("editor", "activas");
-        }
-
-        $this->model->cambiarEstado(Request::post("id"), "inactiva");
-
-        Redirect::toController("editor", "activas");
     }
 }

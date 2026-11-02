@@ -168,6 +168,12 @@ textarea.pregunta__entrada {
     background: #5443c4;
     transform: translateY(-1px);
 }
+
+@media (min-width: 600px) {
+    .pregunta__boton {
+        align-self: flex-end;
+    }
+}
 .revision {
     border: 1px solid #e5e7eb;
     border-radius: 12px;
@@ -195,14 +201,33 @@ textarea.pregunta__entrada {
     background: #dc2626;
 }
 
+.revision__rechazar:hover {
+    background: #b91c1c;
+}
+
 .pregunta__boton--enlace {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     text-decoration: none;
+    align-self: flex-start;
+    margin-bottom: 20px;
 }
-@media (min-width: 600px) {
-    .pregunta__boton {
-        align-self: flex-end;
-    }
+
+.revision__respuestas {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 12px;
+}
+
+.revision__respuesta {
+    padding: 6px 10px;
+    border-radius: 8px;
+    background: #f3f4f6;
+    margin-bottom: 6px;
+}
+
+.revision__respuesta--correcta {
+    background: #dcfce7;
+    font-weight: 700;
 }

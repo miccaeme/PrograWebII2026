@@ -23,6 +23,16 @@ class EditorController
 
         $preguntas = $this->model->obtenerPendientes();
 
+        foreach ($preguntas as &$p) {
+            $p["respuestas"] = $this->model->obtenerRespuestas($p["id"]);
+
+            foreach ($p["respuestas"] as &$r) {
+                $r["es_correcta"] = (int)$r["es_correcta"] === 1;
+            }
+            unset($r);
+        }
+        unset($p);
+
         $this->render->renderiza("editor", [
             "logueado" => true,
             "nombre_usuario" => $_SESSION["nombre_usuario"] ?? "",

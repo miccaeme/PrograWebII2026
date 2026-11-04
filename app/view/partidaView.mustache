@@ -1,0 +1,100 @@
+{{> header}}
+<link rel="stylesheet" href="{{baseUrl}}/public/css/partida.css">
+
+<main class="partida-contenedor">
+    <div class="partida-card" id="partida-tarjeta-principal" data-color="{{categoria_color}}">
+
+
+        <div id="fase-sorteo" class="partida-fase-sorteo">
+            <header class="partida-encabezado">
+                <h2 class="partida-titulo">Girando la ruleta...</h2>
+                <p class="partida-subtitulo">Eligiendo la categoría para tu próxima pregunta</p>
+            </header>
+
+            <div class="carrusel-marco">
+                <div id="carrusel-tira" class="carrusel-tira">
+                    {{#categorias_carrusel}}
+                        <div class="categoria-tarjeta-item" style="border-left: 6px solid {{color}};" data-color="{{color}}">
+                            <span class="categoria-tarjeta-icono">🧠</span>
+                            <span class="categoria-tarjeta-nombre">{{nombre}}</span>
+                        </div>
+                    {{/categorias_carrusel}}
+                </div>
+            </div>
+        </div>
+
+        <!--  Pregunta y Respuestas  -->
+        <div id="fase-pregunta" class="partida-fase-pregunta" style="display: none;">
+
+
+            <div id="banner-categoria" class="partida-banner" style="background: {{categoria_color}};">
+                <div class="partida-banner__info">
+                    <span class="partida-banner__label">Categoría asignada</span>
+                    <strong class="partida-banner__nombre">{{categoria_nombre}}</strong>
+                </div>
+                <div class="partida-banner__puntos">
+                    <span class="partida-banner__valor">{{puntaje_actual}}</span>
+                    <span class="partida-banner__sub">PUNTOS</span>
+                </div>
+            </div>
+
+            <!-- Pregunta -->
+            <div class="partida-pregunta-box">
+                <h2 class="partida-enunciado">{{enunciado}}</h2>
+            </div>
+
+            <!-- Respuestas  -->
+            <form method="POST" action="{{baseUrl}}/partida/responder" class="partida-respuestas-lista">
+                {{#respuestas}}
+                    <button type="submit" name="id_respuesta" value="{{id}}" class="partida-btn-respuesta">
+                        {{texto}}
+                    </button>
+                {{/respuestas}}
+            </form>
+
+        </div>
+
+    </div>
+</main>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const tira = document.getElementById("carrusel-tira");
+        const faseSorteo = document.getElementById("fase-sorteo");
+        const fasePregunta = document.getElementById("fase-pregunta");
+        const tarjetaPrincipal = document.getElementById("partida-tarjeta-principal");
+        const colorFinal = tarjetaPrincipal.getAttribute("data-color");
+
+        const items = tira.querySelectorAll(".categoria-tarjeta-item");
+        let ciclos = 0;
+        const maxCiclos = 16;
+        let indice = 0;
+        let velocidad = 80;
+
+        function girarRuleta() {
+            items.forEach(el => el.classList.remove("activa"));
+            items[indice].classList.add("activa");
+
+            indice = (indice + 1) % items.length;
+            ciclos++;
+
+            if (ciclos < maxCiclos) {
+                velocidad += 15;
+                setTimeout(girarRuleta, velocidad);
+            } else {
+                setTimeout(() => {
+                    faseSorteo.style.display = "none";
+                    fasePregunta.style.display = "flex";
+
+                    // la tarjeta se pinta con el color asignado
+                    tarjetaPrincipal.style.borderTop = `6px solid ${colorFinal}`;
+                    tarjetaPrincipal.style.boxShadow = `0 16px 42px ${colorFinal}33`;
+                }, 500);
+            }
+        }
+
+        girarRuleta();
+    });
+</script>
+
+{{> footer}}

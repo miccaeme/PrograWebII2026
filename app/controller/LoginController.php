@@ -6,6 +6,7 @@ use Mailer;
 use Request;
 use Redirect;
 use UrlHelper;
+use Auth;
 
 
 class LoginController
@@ -58,8 +59,8 @@ class LoginController
         $_SESSION["logueado"] = true;
         $_SESSION["rol"] = $usuarioLogueado["rol"] ?? "jugador";
 
-        // Redireccionamos a la pantalla principal o de inicio
-        Redirect::toController("lobby", "show");
+        Auth::irAlInicio();
+
     }
 
     public function logout()

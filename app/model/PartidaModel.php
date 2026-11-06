@@ -7,6 +7,12 @@ use Log;
 
 class PartidaModel
 {
+
+    const MINIMO_RESPUESTAS = 5;
+    const PORCENTAJE_FACIL = 0.7;
+    const PORCENTAJE_DIFICIL = 0.3;
+
+
     private $database;
 
     public function __construct($database)
@@ -104,5 +110,32 @@ class PartidaModel
 
             return false;
         }
+    }
+
+    public function obtenerDificultadParaUsuario($idUsuario) 
+    {
+        $usuario = $this->database->queryOneParams(
+            "SELECT preguntas_respondidas, preguntas_acertadas
+            FROM usuarios WHERE id = ?", [$idUsuario]
+        );
+
+        $respondidas = $usuario ? (int)$usuario['preguntas_respondidas'] : 0;
+        $acertadas = $usuario ? (int)$usuario['preguntas_acertadas'] : 0;
+
+        if ($respondidas < self::MINIMO_RESPUESTAS) {
+            return 'media';
+        }
+
+        $porcentaje = $acertadas / $respondidas;
+
+        if ($porcentaje > self::PORCENTAJE_FACIL) {
+            return 'dificil';
+        }
+
+        if($porcentaje < self::PORCENTAJE_DIFICIL){
+            return 'facil';
+        }
+
+        return 'media';
     }
 }

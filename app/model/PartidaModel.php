@@ -30,7 +30,7 @@ class PartidaModel
         return $this->database->queryOne("SELECT id, nombre, color, icono FROM categorias ORDER BY RAND() LIMIT 1");
     }
 
-    public function obtenerPreguntaAleatoriaPorCategoria($idCategoria, $preguntasRespondidas = [], $dificultad == null)
+    public function obtenerPreguntaAleatoriaPorCategoria($idCategoria, $preguntasRespondidas = [], $dificultad = null)
     {
         $sql = "SELECT id, enunciado FROM preguntas WHERE id_categoria = ? AND estado = 'activa'";
         $params = [$idCategoria];
@@ -41,14 +41,10 @@ class PartidaModel
             $params = array_merge($params, $preguntasRespondidas);
         }
 
-        // $sql .= " ORDER BY RAND() LIMIT 1";
-
-        // $pregunta = $this->database->queryOneParams($sql, $params);
-
         $pregunta = null;
 
         if($dificultad) {
-            [$condicion, $paramsDificultad] = $this->condicionDificultar($dificultad);
+            [$condicion, $paramsDificultad] = $this->condicionDificultad($dificultad);
 
             $pregunta = $this->database->queryOneParams($sql . " AND $condicion ORDER BY RAND() LIMIT 1", array_merge($params, $paramsDificultad));
         }
@@ -151,7 +147,7 @@ class PartidaModel
         return 'media';
     }
 
-    private function condicionDificultar($dificultad)
+    private function condicionDificultad($dificultad)
     {
         $porcentaje = "veces_acertada / veces_respondida";
 

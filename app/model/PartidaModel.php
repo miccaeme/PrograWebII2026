@@ -30,7 +30,7 @@ class PartidaModel
         return $this->database->queryOne("SELECT id, nombre, color, icono FROM categorias ORDER BY RAND() LIMIT 1");
     }
 
-    public function obtenerPreguntaAleatoriaPorCategoria($idCategoria, $preguntasRespondidas = [])
+    public function obtenerPreguntaAleatoriaPorCategoria($idCategoria, $preguntasRespondidas = [], $dificultad == null)
     {
         $sql = "SELECT id, enunciado FROM preguntas WHERE id_categoria = ? AND estado = 'activa'";
         $params = [$idCategoria];
@@ -41,9 +41,21 @@ class PartidaModel
             $params = array_merge($params, $preguntasRespondidas);
         }
 
-        $sql .= " ORDER BY RAND() LIMIT 1";
+        // $sql .= " ORDER BY RAND() LIMIT 1";
 
-        $pregunta = $this->database->queryOneParams($sql, $params);
+        // $pregunta = $this->database->queryOneParams($sql, $params);
+
+        $pregunta = null;
+
+        if($dificultad) {
+            [$condicion, $paramsDificultad] = $this->condicionDificultar($dificultad);
+
+            $pregunta = $this->database->queryOneParams($sql . " AND $condicion ORDER BY RAND() LIMIT 1", array_merge($params, $paramsDificultad));
+        }
+
+        if(!$pregunta) {
+            $pregunta = $this->database->queryOneParams($sql . " ORDER BY RAND() LIMIT 1", $params);
+        }
 
         // Si ya respondió todas las de esta categoría, tomamos cualquiera de la categoría
         if (!$pregunta) {
@@ -137,5 +149,20 @@ class PartidaModel
         }
 
         return 'media';
+    }
+
+    private function condicionDificultar($dificultad)
+    {
+        $porcentaje = "veces_acertada / veces_respondida";
+
+        if($dificultad === "facil") {
+            return["veces_respondida >= ? AND $porcentaje > ?", [self::MINIMO_RESPUESTAS, self::PORCENTAJE_FACIL]];
+            }
+
+        if($dificultad === "dificil") {
+            return ["veces_respondida >= ? AND $porcentaje < ?", [self::MINIMO_RESPUESTAS, self::PORCENTAJE_DIFICIL]];
+        }
+
+        return["(veces_respondida < ? OR $porcentaje BETWEEN ? AND ?)", [self::MINIMO_RESPUESTAS, self::PORCENTAJE_DIFICIL, self::PORCENTAJE_FACIL]];
     }
 }

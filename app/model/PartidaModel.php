@@ -2,6 +2,9 @@
 
 namespace app\model;
 
+use Exception;
+use Log;
+
 class PartidaModel
 {
     private $database;
@@ -72,5 +75,34 @@ class PartidaModel
             "INSERT INTO partidas (id_usuario, id_categoria, puntaje) VALUES (?, ?, ?)",
             [$idUsuario, $idCategoriaUltima, $puntaje]
         );
+    }
+
+    public function registrarRespuesta($idUsuario, $idPregunta, $acerto) 
+    { 
+        $suma = $acerto ? 1 : 0;
+
+        $this->database->beginTransaction();
+
+        try{
+            $this->database->executeParams(
+                "UPDATE preguntas SET veces_respondida = veces_respondida + 1,
+                veces_acertada = veces_acertada + ? WHERE id = ?",
+                [$suma, $idPregunta]
+            );
+
+            $this->database->executeParams(
+                "UPDATE usuarios SET preguntas_respondidas = preguntas_respondidas + 1,
+                preguntas_acertadas = preguntas_acertadas + ? WHERE id = ?",
+                [$suma, $idUsuario]
+            );
+
+            $this->database->commit();
+            return true;
+        } catch (Exception $error) {
+            $this->database->rollback();
+            Log::error("Error al registrar respuesta: " . $error->getMessage());
+
+            return false;
+        }
     }
 }

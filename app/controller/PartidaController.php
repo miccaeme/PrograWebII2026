@@ -50,10 +50,10 @@ class PartidaController
         $todasCategorias = $this->model->obtenerCategorias();
         $categoriaSeleccionada = $this->model->obtenerCategoriaAleatoria();
 
-        $pregunta = $this->model->obtenerPreguntaAleatoriaPorCategoria(
-            $categoriaSeleccionada['id'],
-            $_SESSION['partida_activa']['preguntas_usadas']
-        );
+
+        $dificultad = $this->model->obtenerDificultadParaUsuario($_SESSION['usuario_id'] ?? 0);
+
+        $pregunta = $this->model->obtenerPreguntaAleatoriaPorCategoria($categoriaSeleccionada['id'], $_SESSION['partida_activa']['preguntas_usadas'], $dificultad);
 
         if (!$pregunta) {
             die("Error: No hay preguntas suficientes cargadas en la categoría: " . $categoriaSeleccionada['nombre']);
@@ -91,6 +91,12 @@ class PartidaController
 
         $idRespuesta = Request::post("id_respuesta", null);
         $esCorrecta = $idRespuesta && $this->model->esRespuestaCorrecta($idRespuesta);
+        $idUsuario = $_SESSION['usuario_id'] ?? 0;
+        $idPregunta = $_SESSION['partida_activa']['pregunta_actual']['id'] ?? null;
+
+        if($idPregunta) {
+            $this->model->registrarRespuesta($idUsuario, $idPregunta, $esCorrecta);
+        }
 
         if ($esCorrecta) {
             $_SESSION['partida_activa']['puntaje']++;
@@ -100,7 +106,6 @@ class PartidaController
             exit();
         } else {
             // Respuesta incorrecta: termina la partida
-            $idUsuario = $_SESSION['usuario_id'] ?? 0;
             $idCategoria = $_SESSION['partida_activa']['categoria_actual']['id'] ?? 1;
             $puntajeFinal = $_SESSION['partida_activa']['puntaje'];
 

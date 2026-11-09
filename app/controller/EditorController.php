@@ -81,6 +81,24 @@ class EditorController
         ]);
     }
 
+    public function inactivas()
+    {
+        Auth::requiereRol(["editor", "admin"]);
+
+        $preguntas = $this->model->obtenerInactivas();
+
+        foreach ($preguntas as $i => $p) {
+            $preguntas[$i]["respuestas"] = $this->model->obtenerRespuestas($p["id"]);
+        }
+
+        $this->render->renderiza("editorInactivas", [
+            "logueado" => true,
+            "nombre_usuario" => $_SESSION["nombre_usuario"] ?? "",
+            "preguntas" => $preguntas,
+            "sin_inactivas" => empty($preguntas)
+        ]);
+    }
+
     public function baja()
     {
         Auth::requiereRol(["editor", "admin"]);
@@ -92,5 +110,18 @@ class EditorController
         $this->model->cambiarEstado(Request::post("id"), "inactiva");
 
         Redirect::toController("editor", "activas");
+    }
+
+    public function reactivar()
+    {
+        Auth::requiereRol(["editor", "admin"]);
+
+        if ($_SERVER["REQUEST_METHOD"] !== "POST") {
+            Redirect::toController("editor", "inactivas");
+        }
+
+        $this->model->cambiarEstado(Request::post("id"), "activa");
+
+        Redirect::toController("editor", "inactivas");
     }
 }

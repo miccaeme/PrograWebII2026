@@ -96,18 +96,21 @@ class PreguntaModel
     public function cambiarEstado($idPregunta, $estadoNuevo)
     {
         $estadoRequerido = [
-            "activa"    => "pendiente",
-            "rechazada" => "pendiente",
-            "inactiva"  => "activa"
+            "activa"    => ["pendiente", "inactiva"],
+            "rechazada" => ["pendiente"],
+            "inactiva"  => ["activa"]
         ];
 
         if (!isset($estadoRequerido[$estadoNuevo])) {
             return false;
         }
 
+        $origenes = $estadoRequerido[$estadoNuevo];
+        $placeholders = implode(',', array_fill(0, count($origenes), '?'));
+
         return $this->database->executeParams(
-            "UPDATE preguntas SET estado = ? WHERE id = ? AND estado = ?",
-            [$estadoNuevo, $idPregunta, $estadoRequerido[$estadoNuevo]]
+            "UPDATE preguntas SET estado = ? WHERE id = ? AND estado IN ($placeholders)",
+            array_merge([$estadoNuevo, $idPregunta], $origenes)
         );
     }
 
@@ -198,6 +201,18 @@ class PreguntaModel
 
             return false;
         }
+    }
+
+    public function obtenerInactivas()
+    {
+        return $this->database->queryAll("SELECT p.id, p.enunciado, p.fecha_creacion,
+        c.nombre AS categoria,
+        u.nombre_usuario AS creador
+        FROM preguntas p
+        INNER JOIN categorias c ON p.id_categoria = c.id
+        LEFT JOIN usuarios u ON p.id_usuario_creador = u.id
+        WHERE p.estado = 'inactiva'
+        ORDER BY p.fecha_creacion DESC");
     }
 
 

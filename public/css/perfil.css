@@ -4,6 +4,7 @@
     display: flex;
     justify-content: center;
     padding: clamp(32px, 5vh, 64px) clamp(24px, 5vw, 80px);
+    padding-top: var(--contenido-padding-top);
     background: url("../img/Cielo%20m%C3%A1gico%20para%20aprender%20y%20jugar.png") center 45% / cover fixed no-repeat;
 }
 
@@ -335,7 +336,7 @@
 .perfil__accionVisual { border-color: var(--cerebrito-purple); }
 
 @media (max-width: 800px) {
-    .perfil { padding: 24px 20px 32px; }
+    .perfil { padding: var(--contenido-padding-top) 20px 32px; }
 
     .perfil__tarjeta {
         gap: 16px;
@@ -412,5 +413,5 @@
 }
 
 @media (max-width: 600px) {
-    .perfil { padding: 28px 16px 32px; }
+    .perfil { padding: var(--contenido-padding-top) 16px 32px; }
 }

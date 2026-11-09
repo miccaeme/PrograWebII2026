@@ -5,7 +5,7 @@
     justify-content: center;
     align-items: flex-start;
     box-sizing: border-box;
-    padding-top: clamp(5px, 14vh, 100px);
+    padding-top: var(--contenido-padding-top);
     padding-bottom: 90px; /* Margen inferior para que la tarjeta no toque el footer */
     padding-left: clamp(16px, 4vw, 32px);
     padding-right: clamp(16px, 4vw, 32px);
@@ -310,7 +310,7 @@
 /* Ajustes Específicos para Pantallas de Celular */
 @media (max-width: 480px) {
     .lobby {
-        padding: 16px 12px 24px;
+        padding: var(--contenido-padding-top) 12px 24px;
     }
 
     .lobby__tarjeta {

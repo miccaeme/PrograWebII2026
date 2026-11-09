@@ -83,14 +83,50 @@ class PartidaModel
         );
         return $resultado && (int)$resultado['es_correcta'] === 1;
     }
-
-    public function guardarPartida($idUsuario, $idCategoriaUltima, $puntaje)
+// Busca si el usuario tiene una partida en curso en la BD
+    public function obtenerPartidaActiva($idUsuario)
     {
-        return $this->database->executeParams(
-            "INSERT INTO partidas (id_usuario, id_categoria, puntaje) VALUES (?, ?, ?)",
-            [$idUsuario, $idCategoriaUltima, $puntaje]
+        return $this->database->queryOneParams(
+            "SELECT * FROM partidas WHERE id_usuario = ? AND estado = 'en_curso' LIMIT 1",
+            [(int)$idUsuario]
         );
     }
+
+    // Registra una nueva partida en estado 'en_curso'
+    public function crearPartida($idUsuario)
+    {
+        $this->database->executeParams(
+            "INSERT INTO partidas (id_usuario, id_categoria, puntaje, estado) VALUES (?, 1, 0, 'en_curso')",
+            [(int)$idUsuario]
+        );
+
+        return $this->database->queryOneParams(
+            "SELECT id FROM partidas WHERE id_usuario = ? AND estado = 'en_curso' ORDER BY id DESC LIMIT 1",
+            [(int)$idUsuario]
+        )['id'] ?? null;
+    }
+
+    // Actualiza el puntaje de la partida activa
+    public function actualizarPuntajePartida($idPartida, $puntaje)
+    {
+        return $this->database->executeParams(
+            "UPDATE partidas SET puntaje = ? WHERE id = ?",
+            [(int)$puntaje, (int)$idPartida]
+        );
+    }
+
+    // Cierra la partida activa marcándola como finalizada
+    public function finalizarPartida($idPartida, $idCategoriaUltima, $puntaje)
+    {
+        return $this->database->executeParams(
+            "UPDATE partidas SET id_categoria = ?, puntaje = ?, estado = 'finalizada' WHERE id = ?",
+            [(int)$idCategoriaUltima, (int)$puntaje, (int)$idPartida]
+        );
+    }
+    //public function guardarPartida($idUsuario, $idCategoriaUltima, $puntaje)
+    //{
+      //  return $this->finalizarPartida($idPartida, $idCategoriaUltima, $puntaje);
+    //}
 
     public function registrarRespuesta($idUsuario, $idPregunta, $acerto) 
     { 
@@ -182,5 +218,15 @@ class PartidaModel
         );
 
         return array_column($filas, 'id_pregunta');
+    }
+
+    public function obtenerRespuestaCorrecta($idPregunta)
+    {
+        $resultado = $this->database->queryOneParams(
+            "SELECT texto FROM respuestas WHERE id_pregunta = ? AND es_correcta = 1 LIMIT 1",
+            [(int)$idPregunta]
+        );
+
+        return $resultado['texto'] ?? null;
     }
 }

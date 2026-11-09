@@ -1,5 +1,6 @@
 {{> header}}
 <link rel="stylesheet" href="{{baseUrl}}/public/css/partida.css">
+<link rel="stylesheet" href="{{baseUrl}}/public/css/resultado.css?v=1">
 <main class="partida-contenedor">
     <div class="partida-card">
 
@@ -23,6 +24,22 @@
                         <span class="resultado-marcador-badge" style="background: rgba(239, 68, 68, 0.2); color: #ef4444;">Racha rota ❌</span>
                 </div>
             </div>
+
+            {{#respuesta_correcta}}
+                <div class="resultado-solucion-box">
+                    <div class="resultado-solucion-header">
+                        <span class="solucion-badge-cat" style="background-color: {{categoria_color}};">{{categoria_nombre}}</span>
+                        <span class="solucion-label">La respuesta correcta era:</span>
+                    </div>
+
+                    <p class="solucion-enunciado">"{{enunciado}}"</p>
+
+                    <div class="solucion-respuesta-correcta">
+                        <span class="solucion-icono">✓</span>
+                        <strong>{{respuesta_correcta}}</strong>
+                    </div>
+                </div>
+            {{/respuesta_correcta}}
 
             <!-- Botones-->
             <div class="partida-respuestas-lista" style="margin-top: 10px;">

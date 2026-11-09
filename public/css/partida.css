@@ -9,7 +9,7 @@
     padding-bottom: 90px;
     padding-left: clamp(16px, 4vw, 32px);
     padding-right: clamp(16px, 4vw, 32px);
-    background: url("../img/Cielo%20m%C3%A1gico%20para%20aprender%20y%20jugar.png") center 45% / cover fixed no-repeat;
+    background: url("../img/Cielo mágico para aprender y jugar.png") center 45% / cover fixed no-repeat;
 }
 
 /* Tarjeta Madre (Misma estructura, borde redondeado y sombra que en el Lobby) */
@@ -268,6 +268,172 @@
     border-radius: 20px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+}
+
+.btn-reportar-link {
+    background: transparent;
+    border: none;
+    color: #8c85a3;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    padding: 8px 12px;
+    display: block;
+    margin: 4px auto 0;
+    transition: color 0.2s ease, transform 0.15s ease;
+}
+
+.btn-reportar-link:hover {
+    color: #ef4444;
+    text-decoration: underline;
+    transform: translateY(-1px);
+}
+
+/* Caja del formulario de reporte */
+.form-reporte-box {
+    margin-top: 12px;
+    padding: 14px 16px;
+    background: #fbfbfe;
+    border: 1px solid #e4e0ef;
+    border-radius: 14px;
+    text-align: left;
+    box-sizing: border-box;
+}
+
+.form-reporte-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    color: #302653;
+    margin-bottom: 8px;
+}
+
+.form-reporte-select {
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1.5px solid #ded9f0;
+    background: #fff;
+    color: #302653;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.form-reporte-select:focus {
+    border-color: #6655d9;
+}
+
+.btn-confirmar-reporte {
+    flex: 1;
+    padding: 9px 14px;
+    background: #ef4444;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font: inherit;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.btn-confirmar-reporte:hover {
+    background: #dc2626;
+}
+
+.btn-cancelar-reporte {
+    padding: 9px 14px;
+    background: #f1f5f9;
+    color: #64748b;
+    border: none;
+    border-radius: 10px;
+    font: inherit;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.btn-cancelar-reporte:hover {
+    background: #e2e8f0;
+}
+
+
+/* Tarjeta contenedora de la respuesta correcta */
+.resultado-solucion-box {
+    width: 100%;
+    background: #f8fafc;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 16px 20px;
+    box-sizing: border-box;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 8px 0;
+}
+
+.resultado-solucion-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.solucion-badge-cat {
+    font-size: 11px;
+    font-weight: 800;
+    color: #fff;
+    padding: 4px 12px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: inline-block;
+}
+
+.solucion-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.solucion-enunciado {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 700;
+    color: #302653;
+    line-height: 1.4;
+}
+
+/* Caja verde destacada para la opción que era correcta */
+.solucion-respuesta-correcta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #ecfdf5;
+    border: 1.5px solid #a7f3d0;
+    color: #065f46;
+    padding: 12px 16px;
+    border-radius: 12px;
+    font-size: 15px;
+}
+
+.solucion-icono {
+    background: #10b981;
+    color: #fff;
+    font-size: 12px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-weight: 900;
 }
 
 /* Responsividad para móviles de resultados */

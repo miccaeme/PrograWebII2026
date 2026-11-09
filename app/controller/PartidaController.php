@@ -20,22 +20,49 @@ class PartidaController
         Auth::requiereRol(["jugador"]);
     }
 
+    public function show()
+    {
+        $this->autenticar();
+        header("Location: " . ($_ENV['BASE_URL'] ?? '') . "/partida/nueva");
+        exit();
+    }
 
     public function nueva()
     {
         $this->autenticar();
+        $idUsuario = $_SESSION['usuario_id'] ?? 0;
+
+        // 1. Verificamos si el usuario ya tiene una partida 'en_curso' en la base de datos
+        $partidaActivaBD = $this->model->obtenerPartidaActiva($idUsuario);
+
+        if ($partidaActivaBD) {
+            // Reconstruimos la sesión con la partida existente y lo mandamos a continuar
+            $_SESSION['partida_activa'] = [
+                'id_partida'       => (int)$partidaActivaBD['id'],
+                'puntaje'          => (int)$partidaActivaBD['puntaje'],
+                'preguntas_usadas' => $_SESSION['partida_activa']['preguntas_usadas'] ?? [],
+                'categoria_actual' => $_SESSION['partida_activa']['categoria_actual'] ?? null,
+                'pregunta_actual'  => $_SESSION['partida_activa']['pregunta_actual'] ?? null
+            ];
+
+            header("Location: " . ($_ENV['BASE_URL'] ?? '') . "/partida/jugar");
+            exit();
+        }
+
+        // 2. Si no tiene ninguna activa, la creamos en la base de datos en estado 'en_curso'
+        $idNuevaPartida = $this->model->crearPartida($idUsuario);
 
         $_SESSION['partida_activa'] = [
-            'puntaje' => 0,
+            'id_partida'       => $idNuevaPartida,
+            'puntaje'          => 0,
             'preguntas_usadas' => [],
             'categoria_actual' => null,
-            'pregunta_actual' => null
+            'pregunta_actual'  => null
         ];
 
         header("Location: " . ($_ENV['BASE_URL'] ?? '') . "/partida/jugar");
         exit();
     }
-
 
     public function jugar()
     {
@@ -46,8 +73,33 @@ class PartidaController
             exit();
         }
 
-
         $todasCategorias = $this->model->obtenerCategorias();
+        //Check si hay pregunat en la sesion
+
+        if (!empty($_SESSION['partida_activa']['pregunta_actual'])) {
+            $categoriaActual = $_SESSION['partida_activa']['categoria_actual'];
+            $preguntaActual = $_SESSION['partida_activa']['pregunta_actual'];
+
+            $data = [
+                "logueado"              => true,
+                "nombre_usuario"        => $_SESSION["nombre_usuario"] ?? "Jugador",
+                "puntaje_actual"        => $_SESSION['partida_activa']['puntaje'],
+                "numero_pregunta"       => $_SESSION['partida_activa']['puntaje'] + 1,
+                "categoria_id"          => $categoriaActual['id'],
+                "categoria_nombre"      => $categoriaActual['nombre'],
+                "categoria_color"       => $categoriaActual['color'],
+                "enunciado"             => $preguntaActual['enunciado'],
+                "respuestas"            => $preguntaActual['respuestas'],
+                "categorias_carrusel"   => $todasCategorias,
+                "es_recarga"            => true // Bandera para omitir la animación
+            ];
+
+            $this->render->renderiza("partida", $data);
+            return;
+        }
+
+        //partida desde cero
+
         $categoriaSeleccionada = $this->model->obtenerCategoriaAleatoria();
 
         $idUsuario = $_SESSION['usuario_id'] ?? 0;
@@ -97,36 +149,71 @@ class PartidaController
 
         $idRespuesta = Request::post("id_respuesta", null);
         $esCorrecta = $idRespuesta && $this->model->esRespuestaCorrecta($idRespuesta);
-        $idUsuario = $_SESSION['usuario_id'] ?? 0;
-        $idPregunta = $_SESSION['partida_activa']['pregunta_actual']['id'] ?? null;
-
-        if($idPregunta) {
-            $this->model->registrarRespuesta($idUsuario, $idPregunta, $esCorrecta);
-            $this->model->marcarPreguntaComoVista($idUsuario ,$idPregunta);
-        }
+        $idPartida = $_SESSION['partida_activa']['id_partida'] ?? null;
 
         if ($esCorrecta) {
             $_SESSION['partida_activa']['puntaje']++;
 
 
-            header("Location: " . ($_ENV['BASE_URL'] ?? '') . "/partida/jugar");
+            if ($idPartida) {
+                $this->model->actualizarPuntajePartida($idPartida, $_SESSION['partida_activa']['puntaje']);
+            }
+            //limpiamos la pregunta de la sesion.
+            $_SESSION['partida_activa']['pregunta_actual'] = null;
+            $_SESSION['partida_activa']['categoria_actual'] = null;
+
+            header("Location: " . ($_ENV['BASE_URL'] ?? '') . "/partida/respuestaCorrecta");
             exit();
         } else {
-            // Respuesta incorrecta: termina la partida
             $idCategoria = $_SESSION['partida_activa']['categoria_actual']['id'] ?? 1;
             $puntajeFinal = $_SESSION['partida_activa']['puntaje'];
 
-            $this->model->guardarPartida($idUsuario, $idCategoria, $puntajeFinal);
+            $preguntaActual = $_SESSION['partida_activa']['pregunta_actual'] ?? null;
+            $respuestaCorrectaTexto = null;
+
+            if ($preguntaActual) {
+                $respuestaCorrectaTexto = $this->model->obtenerRespuestaCorrecta($preguntaActual['id']);
+            }
+
+            // Cerramos la partida en la base de datos cambiando el estado a 'finalizada'
+            if ($idPartida) {
+                $this->model->finalizarPartida($idPartida, $idCategoria, $puntajeFinal);
+            }
 
             $_SESSION['partida_finalizada'] = [
-                'puntaje' => $puntajeFinal,
-                'motivo' => 'incorrecta'
+                'puntaje'            => $puntajeFinal,
+                'enunciado'          => $preguntaActual['enunciado'] ?? '',
+                'respuesta_correcta' => $respuestaCorrectaTexto,
+                'categoria_nombre'   => $_SESSION['partida_activa']['categoria_actual']['nombre'] ?? '',
+                'categoria_color'    => $_SESSION['partida_activa']['categoria_actual']['color'] ?? '#ef4444'
             ];
+
             unset($_SESSION['partida_activa']);
 
             header("Location: " . ($_ENV['BASE_URL'] ?? '') . "/partida/resultado");
             exit();
         }
+    }
+
+    public function respuestaCorrecta()
+    {
+        $this->autenticar();
+
+        if (!isset($_SESSION['partida_activa'])) {
+            header("Location: " . ($_ENV['BASE_URL'] ?? '') . "/partida/jugar");
+            exit();
+        }
+
+        $data = [
+            "logueado"         => true,
+            "nombre_usuario"   => $_SESSION["nombre_usuario"] ?? "Jugador",
+            "puntaje_actual"   => $_SESSION['partida_activa']['puntaje'],
+            "enunciado"        => $_SESSION['partida_activa']['pregunta_actual']['enunciado'] ?? '',
+            "categoria_nombre" => $_SESSION['partida_activa']['categoria_actual']['nombre'] ?? 'Trivia',
+            "categoria_color"  => $_SESSION['partida_activa']['categoria_actual']['color'] ?? '#10b981'
+        ];
+
+        $this->render->renderiza("respuestaCorrecta", $data);
     }
 
     // resultados
@@ -139,9 +226,13 @@ class PartidaController
 
 
         $data = [
-            "logueado"        => true,
-            "nombre_usuario"  => $_SESSION["nombre_usuario"] ?? "Jugador",
-            "puntaje"         => $puntaje
+            "logueado"           => true,
+            "nombre_usuario"     => $_SESSION["nombre_usuario"] ?? "Jugador",
+            "puntaje"            => $puntaje,
+            "enunciado"          => $info['enunciado'] ?? null,
+            "respuesta_correcta" => $info['respuesta_correcta'] ?? null,
+            "categoria_nombre"   => $info['categoria_nombre'] ?? null,
+            "categoria_color"    => $info['categoria_color'] ?? '#ef4444'
 
         ];
 

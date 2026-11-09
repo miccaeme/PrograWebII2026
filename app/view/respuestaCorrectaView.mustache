@@ -1,0 +1,74 @@
+<link rel="stylesheet" href="{{baseUrl}}/public/css/partida.css">
+
+{{> header}}
+
+<main class="partida-contenedor">
+    <div class="partida-card" style="border-top: 6px solid #10b981; box-shadow: 0 16px 42px rgba(16, 185, 129, 0.2);">
+
+        <div class="resultado-fase">
+
+            <header class="partida-encabezado">
+                <img src="{{baseUrl}}/public/img/Cerebro kawaii graduado y triunfante.png" alt="¡Cerebrito contento!" class="resultado-personaje">
+                <h2 class="partida-titulo" style="color: #10b981;">¡Respuesta Correcta!</h2>
+                <p class="partida-subtitulo">¡Excelente! Sumaste un punto a tu racha.</p>
+            </header>
+
+
+            <div class="resultado-marcador" style="background: linear-gradient(135deg, #10b981 0%, #047857 100%);">
+                <div class="resultado-marcador-info">
+                    <span class="resultado-marcador-etiqueta">Racha actual</span>
+                    <strong class="resultado-marcador-puntos">{{puntaje_actual}} <span class="resultado-maximo">PTS</span></strong>
+                </div>
+                <div class="resultado-marcador-estado">
+                    <span class="resultado-marcador-badge" style="background: rgba(255, 255, 255, 0.25); color: #fff;">¡En racha! 🔥</span>
+                </div>
+            </div>
+
+            <div class="partida-respuestas-lista" style="width: 100%; margin-top: 8px;">
+
+                <a href="{{baseUrl}}/partida/jugar" class="partida-btn-respuesta" style="background: #6655d9; color: #fff; border: 0; text-decoration: none; font-size: 16px;">
+                    Continuar
+                </a>
+
+                <details class="partida-reportar">
+                    <summary class="partida-reportar__resumen">Reportar pregunta</summary>
+                    <form method="POST" action="{{baseUrl}}/pregunta/reportar" class="partida-reportar__form">
+                        <select name="motivo" class="partida-reportar__select" required>
+                            <option value="">¿Qué problema tiene?</option>
+                            <option value="La respuesta correcta es otra">La respuesta correcta es otra</option>
+                            <option value="La pregunta está mal escrita">La pregunta está mal escrita</option>
+                            <option value="Contenido inapropiado">Contenido inapropiado</option>
+                            <option value="Pregunta repetida o confusa">Pregunta repetida o confusa</option>
+                            <option value="Otro">Otro</option>
+                        </select>
+                        <button type="submit" class="partida-reportar__boton">Enviar reporte</button>
+                    </form>
+                </details>
+            </div>
+
+        </div>
+
+    </div>
+</main>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const btnToggle = document.getElementById("btn-toggle-reporte");
+        const formReporte = document.getElementById("form-reporte-pregunta");
+        const btnCancelar = document.getElementById("btn-cancelar-reporte");
+
+        if (btnToggle && formReporte) {
+            btnToggle.addEventListener("click", () => {
+                btnToggle.style.display = "none";
+                formReporte.style.display = "block";
+            });
+
+            btnCancelar.addEventListener("click", () => {
+                formReporte.style.display = "none";
+                btnToggle.style.display = "block";
+            });
+        }
+    });
+</script>
+
+{{> footer}}

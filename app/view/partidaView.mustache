@@ -4,7 +4,12 @@
 <main class="partida-contenedor">
     <div class="partida-card" id="partida-tarjeta-principal"
          data-color="{{categoria_color}}"
-         data-categoria-id="{{categoria_id}}">
+         data-categoria-id="{{categoria_id}}"
+         data-partida-id="{{id_partida}}"
+         data-habilitada="{{pregunta_habilitada}}"
+         data-tiempo-agotado="{{tiempo_agotado}}"
+         data-restante-ms="{{tiempo_restante_ms}}"
+         data-tiempo-url="{{baseUrl}}/partida/tiempo">
 
 
         <div id="fase-sorteo" class="partida-fase-sorteo">
@@ -47,6 +52,9 @@
 
             <!-- Respuestas  -->
             <form method="POST" action="{{baseUrl}}/partida/responder" class="partida-respuestas-lista">
+                <input type="hidden" name="id_partida" value="{{id_partida}}">
+                <input type="hidden" name="id_pregunta" value="{{id_pregunta}}">
+                <input type="hidden" name="pregunta_vence_en" value="{{pregunta_vence_en}}">
                 {{#respuestas}}
                     <button type="submit" name="id_respuesta" value="{{id}}" class="partida-btn-respuesta">
                         {{texto}}
@@ -54,15 +62,13 @@
                 {{/respuestas}}
             </form>
 
-            <section id="temporizador" class="temporizador" aria-label="Tiempo para responder">
-                <div class="temporizador__encabezado">
-                    <span>Tiempo restante</span>
-                    <output id="temporizador-segundos" aria-live="off">15</output>
-                </div>
-                <div id="temporizador-progreso" class="temporizador__pista" role="progressbar" aria-label="Tiempo restante" aria-valuemin="0" aria-valuemax="15" aria-valuenow="15">
-                    <span id="temporizador-barra" class="temporizador__barra"></span>
-                </div>
-            </section>
+            <div id="temporizador" class="temporizador" role="progressbar" aria-label="Tiempo restante" aria-valuemin="0" aria-valuemax="15" aria-valuenow="15">
+                <svg class="temporizador__anillo" viewBox="0 0 100 100" aria-hidden="true">
+                    <circle class="temporizador__anillo-fondo" cx="50" cy="50" r="43"></circle>
+                    <circle id="temporizador-progreso" class="temporizador__anillo-progreso" cx="50" cy="50" r="43" stroke-dasharray="270.18" stroke-dashoffset="0" transform="rotate(-90 50 50)"></circle>
+                </svg>
+                <output id="temporizador-segundos" class="temporizador__segundos" aria-live="off">{{segundos_restantes}}</output>
+            </div>
 
 
         </div>
@@ -89,20 +95,20 @@
         const tarjetaPrincipal = document.getElementById("partida-tarjeta-principal");
         const segundosTemporizador = document.getElementById("temporizador-segundos");
         const progresoTemporizador = document.getElementById("temporizador-progreso");
-        const barraTemporizador = document.getElementById("temporizador-barra");
         const temporizador = document.getElementById("temporizador");
         const modalTiempo = document.getElementById("modal-tiempo");
         const accionJugarOtraVez = document.getElementById("accion-jugar-otra-vez");
         const formularioRespuestas = fasePregunta.querySelector("form");
+        const longitudAnillo = 2 * Math.PI * 43;
 
         const colorFinal = tarjetaPrincipal.getAttribute("data-color");
         const idGanador = tarjetaPrincipal.getAttribute("data-categoria-id");
 
         const items = Array.from(tira.querySelectorAll(".categoria-tarjeta-item"));
-        if (items.length === 0) return;
 
 
-        let indiceDestino = items.findIndex(el => el.getAttribute("data-id") == idGanador);
+        /*let indiceDestino = items.findIndex(el => el.getAttribute("data-id") == idGanador);*/
+        let indiceDestino = items.findIndex(el => el.getAttribute("data-id") === String(idGanador));
         if (indiceDestino === -1) indiceDestino = 0;
 
         // Da 3 vueltas completas (vueltas * items.length) y frena en el índice exacto
@@ -115,6 +121,95 @@
         let intervaloTemporizador = null;
         let temporizadorFinalizado = false;
         let instanteFinalTemporizador = 0;
+        let consultaEnCurso = false;
+        let reintento = null;
+        let paginaActiva = true;
+
+        function bloquearRespuestas(bloquear) {
+            formularioRespuestas.querySelectorAll("button").forEach(boton => {
+                boton.disabled = bloquear;
+            });
+        }
+
+        function mostrarPregunta() {
+            faseSorteo.style.display = "none";
+            fasePregunta.style.display = "flex";
+            tarjetaPrincipal.style.borderTop = `6px solid ${colorFinal}`;
+            tarjetaPrincipal.style.boxShadow = `0 16px 42px ${colorFinal}33`;
+        }
+
+        function mostrarTiempoAgotado() {
+            detenerTemporizador();
+            temporizadorFinalizado = true;
+            bloquearRespuestas(true);
+            mostrarPregunta();
+            segundosTemporizador.value = 0;
+            progresoTemporizador.setAttribute("stroke-dashoffset", String(longitudAnillo));
+            temporizador.setAttribute("aria-valuenow", "0");
+            temporizador.classList.add("temporizador--urgente");
+            modalTiempo.hidden = false;
+            accionJugarOtraVez.focus();
+        }
+
+        async function sincronizarTiempo(habilitar = false) {
+            if (consultaEnCurso || !paginaActiva) return;
+            consultaEnCurso = true;
+            const salida = performance.now();
+            const datos = new URLSearchParams({
+                id_partida: tarjetaPrincipal.dataset.partidaId,
+                habilitar: habilitar ? "1" : "0"
+            });
+            try {
+                const respuesta = await fetch(tarjetaPrincipal.dataset.tiempoUrl, {
+                    method: "POST", credentials: "same-origin", cache: "no-store", body: datos
+                });
+                if (!respuesta.ok) throw new Error("No se pudo verificar el tiempo");
+                const estado = await respuesta.json();
+                if (!paginaActiva) return;
+                if (estado.estado === "finalizada") {
+                    if (estado.motivo === "tiempo") mostrarTiempoAgotado();
+                    else window.location.replace(formularioRespuestas.action.replace(/responder$/, "resultado"));
+                    return;
+                }
+                if (!estado.pregunta || !estado.pregunta_vence_en) {
+                    window.location.reload();
+                    return;
+                }
+                const pregunta = estado.pregunta;
+                // Una pestaña vieja no debe convertir su formulario en el de otra pregunta.
+                if (String(pregunta.categoria_id) !== String(idGanador)
+                    || (formularioRespuestas.elements.id_pregunta.value
+                        && (String(estado.id_pregunta) !== formularioRespuestas.elements.id_pregunta.value
+                            || estado.pregunta_vence_en !== formularioRespuestas.elements.pregunta_vence_en.value))) {
+                    window.location.reload();
+                    return;
+                }
+                formularioRespuestas.elements.id_pregunta.value = estado.id_pregunta;
+                formularioRespuestas.elements.pregunta_vence_en.value = estado.pregunta_vence_en;
+                document.querySelector(".partida-enunciado").textContent = pregunta.enunciado;
+                formularioRespuestas.querySelectorAll("button").forEach(boton => boton.remove());
+                pregunta.respuestas.forEach(opcion => {
+                    const boton = document.createElement("button");
+                    boton.type = "submit";
+                    boton.name = "id_respuesta";
+                    boton.value = opcion.id;
+                    boton.className = "partida-btn-respuesta";
+                    boton.textContent = opcion.texto;
+                    formularioRespuestas.appendChild(boton);
+                });
+                // Descontar el viaje completo es conservador: la latencia nunca regala tiempo.
+                const restante = Math.max(0, Number(estado.tiempo_restante_ms) - (performance.now() - salida));
+                mostrarPregunta();
+                iniciarTemporizador(restante);
+            } catch (error) {
+                if (paginaActiva) {
+                    bloquearRespuestas(true);
+                    reintento = window.setTimeout(() => sincronizarTiempo(habilitar), 1000);
+                }
+            } finally {
+                consultaEnCurso = false;
+            }
+        }
 
         function detenerTemporizador() {
             if (intervaloTemporizador !== null) {
@@ -125,30 +220,28 @@
 
         function finalizarTemporizador() {
             detenerTemporizador();
-            if (temporizadorFinalizado) return;
-
             temporizadorFinalizado = true;
-            formularioRespuestas.querySelectorAll("button").forEach(boton => {
-                boton.disabled = true;
-            });
-            modalTiempo.hidden = false;
-            accionJugarOtraVez.focus();
+            bloquearRespuestas(true);
+            // El popup definitivo depende de la confirmación del servidor.
+            reintento = window.setTimeout(() => sincronizarTiempo(), 50);
         }
 
-        function iniciarTemporizador() {
+        function iniciarTemporizador(restanteMs) {
             detenerTemporizador();
+            window.clearTimeout(reintento);
             temporizadorFinalizado = false;
+            bloquearRespuestas(false);
             const duracionTemporizador = 15;
-            instanteFinalTemporizador = Date.now() + duracionTemporizador * 1000;
+            instanteFinalTemporizador = performance.now() + Math.min(15000, restanteMs);
 
             function actualizarTemporizador() {
-                const milisegundosRestantes = Math.max(0, instanteFinalTemporizador - Date.now());
+                const milisegundosRestantes = Math.max(0, instanteFinalTemporizador - performance.now());
                 const segundosRestantes = Math.ceil(milisegundosRestantes / 1000);
                 const porcentajeRestante = (milisegundosRestantes / (duracionTemporizador * 1000)) * 100;
 
                 segundosTemporizador.value = segundosRestantes;
-                barraTemporizador.style.width = `${porcentajeRestante}%`;
-                progresoTemporizador.setAttribute("aria-valuenow", String(segundosRestantes));
+                progresoTemporizador.setAttribute("stroke-dashoffset", String(longitudAnillo * (1 - porcentajeRestante / 100)));
+                temporizador.setAttribute("aria-valuenow", String(segundosRestantes));
                 temporizador.classList.toggle("temporizador--urgente", segundosRestantes <= 5);
 
                 if (milisegundosRestantes <= 0) {
@@ -157,11 +250,11 @@
             }
 
             actualizarTemporizador();
-            intervaloTemporizador = window.setInterval(actualizarTemporizador, 100);
+            if (!temporizadorFinalizado) intervaloTemporizador = window.setInterval(actualizarTemporizador, 100);
         }
 
         formularioRespuestas.addEventListener("submit", evento => {
-            if (Date.now() >= instanteFinalTemporizador) {
+            if (performance.now() >= instanteFinalTemporizador) {
                 finalizarTemporizador();
             }
             if (temporizadorFinalizado) {
@@ -176,12 +269,41 @@
         });
 
         document.addEventListener("keydown", evento => {
-            if (!modalTiempo.hidden && evento.key === "Escape") {
+            if (modalTiempo.hidden) return;
+
+            if (evento.key === "Escape") {
                 evento.preventDefault();
+                return;
+            }
+
+            if (evento.key === "Tab") {
+                const accionesModal = Array.from(modalTiempo.querySelectorAll("a[href], button:not(:disabled)"));
+                const primeraAccion = accionesModal[0];
+                const ultimaAccion = accionesModal[accionesModal.length - 1];
+
+                if (evento.shiftKey && document.activeElement === primeraAccion) {
+                    evento.preventDefault();
+                    ultimaAccion.focus();
+                } else if (!evento.shiftKey && document.activeElement === ultimaAccion) {
+                    evento.preventDefault();
+                    primeraAccion.focus();
+                }
             }
         });
 
-        window.addEventListener("pagehide", detenerTemporizador, { once: true });
+        window.addEventListener("pagehide", () => {
+            paginaActiva = false;
+            detenerTemporizador();
+            window.clearTimeout(reintento);
+        }, { once: true });
+        window.addEventListener("pageshow", evento => {
+            if (evento.persisted) window.location.reload();
+        });
+        document.addEventListener("visibilitychange", () => {
+            if (!document.hidden && modalTiempo.hidden && formularioRespuestas.elements.pregunta_vence_en.value) {
+                sincronizarTiempo();
+            }
+        });
 
         function girarRuleta() {
             items.forEach(el => el.classList.remove("activa"));
@@ -202,16 +324,23 @@
             } else {
 
                 setTimeout(() => {
-                    faseSorteo.style.display = "none";
-                    fasePregunta.style.display = "flex";
-
-                    tarjetaPrincipal.style.borderTop = `6px solid ${colorFinal}`;
-                    tarjetaPrincipal.style.boxShadow = `0 16px 42px ${colorFinal}33`;
-                    iniciarTemporizador();
+                    sincronizarTiempo(true);
                 }, 600);
             }
         }
-        girarRuleta();
+        if (tarjetaPrincipal.dataset.tiempoAgotado === "1") {
+            mostrarTiempoAgotado();
+        } else if (tarjetaPrincipal.dataset.habilitada === "1") {
+            mostrarPregunta();
+            // performance.now incluye la navegación: no devolver 15 segundos al recibir el HTML tarde.
+            iniciarTemporizador(Math.max(0, Number(tarjetaPrincipal.dataset.restanteMs) - performance.now()));
+            sincronizarTiempo();
+        } else if (items.length) {
+            bloquearRespuestas(true);
+            girarRuleta();
+        } else {
+            sincronizarTiempo(true);
+        }
     });
 </script>
 

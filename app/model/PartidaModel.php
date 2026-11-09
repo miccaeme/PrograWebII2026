@@ -100,10 +100,7 @@ class PartidaModel
             [(int)$idUsuario]
         );
 
-        return $this->database->queryOneParams(
-            "SELECT id FROM partidas WHERE id_usuario = ? AND estado = 'en_curso' ORDER BY id DESC LIMIT 1",
-            [(int)$idUsuario]
-        )['id'] ?? null;
+        return (int)$this->database->lastInsertId();
     }
 
     // Actualiza el puntaje de la partida activa
@@ -116,12 +113,154 @@ class PartidaModel
     }
 
     // Cierra la partida activa marcándola como finalizada
-    public function finalizarPartida($idPartida, $idCategoriaUltima, $puntaje)
+    public function finalizarPartida($idPartida, $idCategoriaUltima, $puntaje, $idUsuario, $motivo = 'respuesta_incorrecta')
     {
         return $this->database->executeParams(
-            "UPDATE partidas SET id_categoria = ?, puntaje = ?, estado = 'finalizada' WHERE id = ?",
-            [(int)$idCategoriaUltima, (int)$puntaje, (int)$idPartida]
+            "UPDATE partidas SET id_categoria = ?, puntaje = ?, estado = 'finalizada',
+             motivo_finalizacion = ? WHERE id = ? AND id_usuario = ? AND estado = 'en_curso'",
+            [(int)$idCategoriaUltima, (int)$puntaje, $motivo, (int)$idPartida, (int)$idUsuario]
         );
+    }
+
+    // Todas las operaciones del temporizador y las respuestas bloquean la misma fila.
+    private function operarPartida($idPartida, $idUsuario, callable $operacion)
+    {
+        $this->database->beginTransaction();
+        try {
+            $partida = $this->database->queryOneParams(
+                "SELECT * FROM partidas WHERE id = ? AND id_usuario = ? FOR UPDATE",
+                [(int)$idPartida, (int)$idUsuario]
+            );
+            if ($partida) {
+                $partida = $this->comprobarVencimiento($partida);
+                $partida = $operacion($partida);
+                $partida = $this->comprobarVencimiento($partida);
+                $partida['pregunta'] = $this->obtenerPreguntaActual($partida['pregunta_actual_id']);
+            }
+            $this->database->commit();
+            return $partida;
+        } catch (\Throwable $error) {
+            $this->database->rollback();
+            throw $error;
+        }
+    }
+
+    private function comprobarVencimiento(array $partida)
+    {
+        // Consulta posterior al FOR UPDATE: el reloj no queda fijado antes de esperar el bloqueo.
+        $reloj = $this->database->queryOneParams(
+            "SELECT GREATEST(0, TIMESTAMPDIFF(MICROSECOND, NOW(6), ?) / 1000) AS restante",
+            [$partida['pregunta_vence_en']]
+        );
+        $partida['tiempo_restante_ms'] = (float)($reloj['restante'] ?? 0);
+        if ($partida['estado'] === 'en_curso' && $partida['pregunta_vence_en'] !== null
+            && $partida['tiempo_restante_ms'] <= 0) {
+            $this->finalizarPartida($partida['id'], $partida['id_categoria'], $partida['puntaje'],
+                $partida['id_usuario'], 'tiempo');
+            $partida['estado'] = 'finalizada';
+            $partida['motivo_finalizacion'] = 'tiempo';
+        }
+        return $partida;
+    }
+
+    private function obtenerPreguntaActual($idPregunta)
+    {
+        if (!$idPregunta) return null;
+        $pregunta = $this->database->queryOneParams(
+            "SELECT p.id, p.enunciado, c.id AS categoria_id, c.nombre AS categoria_nombre,
+                    c.color AS categoria_color
+             FROM preguntas p JOIN categorias c ON c.id = p.id_categoria WHERE p.id = ?",
+            [(int)$idPregunta]
+        );
+        if ($pregunta) {
+            $pregunta['respuestas'] = $this->database->queryParams(
+                "SELECT id, texto FROM respuestas WHERE id_pregunta = ? ORDER BY RAND()",
+                [(int)$idPregunta]
+            );
+        }
+        return $pregunta;
+    }
+
+    public function consultarPartida($idPartida, $idUsuario)
+    {
+        return $this->operarPartida($idPartida, $idUsuario, function ($partida) { return $partida; });
+    }
+
+    public function prepararPregunta($idPartida, $idUsuario, array $usadas = [])
+    {
+        return $this->operarPartida($idPartida, $idUsuario, function ($partida) use ($idUsuario, $usadas) {
+            if ($partida['estado'] !== 'en_curso' || $partida['pregunta_actual_id']) return $partida;
+            $categoria = $this->obtenerCategoriaAleatoria();
+            $pregunta = $this->obtenerPreguntaAleatoriaPorCategoria($categoria['id'],
+                array_merge($usadas, $this->obtenerIdVistos($idUsuario)),
+                $this->obtenerDificultadParaUsuario($idUsuario));
+            if (!$pregunta) throw new \RuntimeException('No hay preguntas disponibles en la categoría.');
+            // Preparar la ruleta no habilita ni entrega el contenido de la pregunta.
+            $this->database->executeParams(
+                "UPDATE partidas SET pregunta_actual_id = ?, id_categoria = ? WHERE id = ?",
+                [$pregunta['id'], $categoria['id'], $partida['id']]
+            );
+            $partida['pregunta_actual_id'] = $pregunta['id'];
+            $partida['id_categoria'] = $categoria['id'];
+            return $partida;
+        });
+    }
+
+    public function habilitarPregunta($idPartida, $idUsuario)
+    {
+        return $this->operarPartida($idPartida, $idUsuario, function ($partida) {
+            if ($partida['estado'] === 'en_curso' && $partida['pregunta_actual_id']
+                && $partida['pregunta_vence_en'] === null) {
+                $this->database->executeParams(
+                    "UPDATE partidas SET pregunta_vence_en = DATE_ADD(NOW(6), INTERVAL 15 SECOND) WHERE id = ?",
+                    [$partida['id']]
+                );
+                $partida['pregunta_vence_en'] = $this->database->queryOneParams(
+                    "SELECT pregunta_vence_en FROM partidas WHERE id = ?", [$partida['id']]
+                )['pregunta_vence_en'];
+            }
+            return $partida;
+        });
+    }
+
+    public function responderConTiempo($idPartida, $idUsuario, $idRespuesta, $idPregunta, $vencimiento)
+    {
+        return $this->operarPartida($idPartida, $idUsuario,
+            function ($partida) use ($idRespuesta, $idPregunta, $vencimiento) {
+                $partida['respuesta_aceptada'] = false;
+                if ($partida['estado'] !== 'en_curso' || !$partida['pregunta_actual_id']
+                    || !$partida['pregunta_vence_en']
+                    || (int)$idPregunta !== (int)$partida['pregunta_actual_id']
+                    || $vencimiento !== $partida['pregunta_vence_en']) return $partida;
+
+                $respuesta = $this->database->queryOneParams(
+                    "SELECT es_correcta FROM respuestas WHERE id = ? AND id_pregunta = ?",
+                    [$idRespuesta, $partida['pregunta_actual_id']]
+                );
+                if (!$respuesta) return $partida;
+                $partida = $this->comprobarVencimiento($partida);
+                if ($partida['estado'] !== 'en_curso') return $partida;
+
+                if ((int)$respuesta['es_correcta'] === 1) {
+                    // El propio UPDATE impide sumar si se cruza el límite durante la consulta anterior.
+                    $actualizadas = $this->database->executeParams(
+                        "UPDATE partidas SET puntaje = puntaje + 1, pregunta_actual_id = NULL,
+                         pregunta_vence_en = NULL WHERE id = ? AND estado = 'en_curso'
+                         AND pregunta_vence_en > NOW(6)", [$partida['id']]
+                    );
+                    if (!$actualizadas) return $this->comprobarVencimiento($partida);
+                    $partida['puntaje']++;
+                    $partida['pregunta_actual_id'] = null;
+                    $partida['pregunta_vence_en'] = null;
+                } else {
+                    $this->finalizarPartida($partida['id'], $partida['id_categoria'], $partida['puntaje'],
+                        $partida['id_usuario']);
+                    $partida['estado'] = 'finalizada';
+                    $partida['motivo_finalizacion'] = 'respuesta_incorrecta';
+                }
+                $partida['respuesta_aceptada'] = true;
+                return $partida;
+            });
     }
     //public function guardarPartida($idUsuario, $idCategoriaUltima, $puntaje)
     //{

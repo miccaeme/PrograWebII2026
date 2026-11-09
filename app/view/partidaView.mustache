@@ -54,15 +54,13 @@
                 {{/respuestas}}
             </form>
 
-            <section id="temporizador" class="temporizador" aria-label="Tiempo para responder">
-                <div class="temporizador__encabezado">
-                    <span>Tiempo restante</span>
-                    <output id="temporizador-segundos" aria-live="off">15</output>
-                </div>
-                <div id="temporizador-progreso" class="temporizador__pista" role="progressbar" aria-label="Tiempo restante" aria-valuemin="0" aria-valuemax="15" aria-valuenow="15">
-                    <span id="temporizador-barra" class="temporizador__barra"></span>
-                </div>
-            </section>
+            <div id="temporizador" class="temporizador" role="progressbar" aria-label="Tiempo restante" aria-valuemin="0" aria-valuemax="15" aria-valuenow="15">
+                <svg class="temporizador__anillo" viewBox="0 0 100 100" aria-hidden="true">
+                    <circle class="temporizador__anillo-fondo" cx="50" cy="50" r="43"></circle>
+                    <circle id="temporizador-progreso" class="temporizador__anillo-progreso" cx="50" cy="50" r="43" stroke-dasharray="270.18" stroke-dashoffset="0" transform="rotate(-90 50 50)"></circle>
+                </svg>
+                <output id="temporizador-segundos" class="temporizador__segundos" aria-live="off">15</output>
+            </div>
 
 
         </div>
@@ -89,11 +87,11 @@
         const tarjetaPrincipal = document.getElementById("partida-tarjeta-principal");
         const segundosTemporizador = document.getElementById("temporizador-segundos");
         const progresoTemporizador = document.getElementById("temporizador-progreso");
-        const barraTemporizador = document.getElementById("temporizador-barra");
         const temporizador = document.getElementById("temporizador");
         const modalTiempo = document.getElementById("modal-tiempo");
         const accionJugarOtraVez = document.getElementById("accion-jugar-otra-vez");
         const formularioRespuestas = fasePregunta.querySelector("form");
+        const longitudAnillo = 2 * Math.PI * 43;
 
         const colorFinal = tarjetaPrincipal.getAttribute("data-color");
         const idGanador = tarjetaPrincipal.getAttribute("data-categoria-id");
@@ -147,8 +145,8 @@
                 const porcentajeRestante = (milisegundosRestantes / (duracionTemporizador * 1000)) * 100;
 
                 segundosTemporizador.value = segundosRestantes;
-                barraTemporizador.style.width = `${porcentajeRestante}%`;
-                progresoTemporizador.setAttribute("aria-valuenow", String(segundosRestantes));
+                progresoTemporizador.setAttribute("stroke-dashoffset", String(longitudAnillo * (1 - porcentajeRestante / 100)));
+                temporizador.setAttribute("aria-valuenow", String(segundosRestantes));
                 temporizador.classList.toggle("temporizador--urgente", segundosRestantes <= 5);
 
                 if (milisegundosRestantes <= 0) {
@@ -176,8 +174,25 @@
         });
 
         document.addEventListener("keydown", evento => {
-            if (!modalTiempo.hidden && evento.key === "Escape") {
+            if (modalTiempo.hidden) return;
+
+            if (evento.key === "Escape") {
                 evento.preventDefault();
+                return;
+            }
+
+            if (evento.key === "Tab") {
+                const accionesModal = Array.from(modalTiempo.querySelectorAll("a[href], button:not(:disabled)"));
+                const primeraAccion = accionesModal[0];
+                const ultimaAccion = accionesModal[accionesModal.length - 1];
+
+                if (evento.shiftKey && document.activeElement === primeraAccion) {
+                    evento.preventDefault();
+                    ultimaAccion.focus();
+                } else if (!evento.shiftKey && document.activeElement === ultimaAccion) {
+                    evento.preventDefault();
+                    primeraAccion.focus();
+                }
             }
         });
 

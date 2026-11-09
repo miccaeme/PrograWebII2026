@@ -14,6 +14,8 @@
 
 /* Tarjeta Madre (Misma estructura, borde redondeado y sombra que en el Lobby) */
 .partida-card {
+    position: relative;
+    overflow: visible;
     width: 100%;
     max-width: 580px;
     background: #fff;
@@ -96,6 +98,7 @@
     display: flex;
     flex-direction: column;
     gap: 18px;
+    padding-top: 32px;
 }
 
 /* Banner de Categoría y Marcador (Estilo banner de Ranking) */
@@ -199,51 +202,103 @@
 }
 
 .temporizador {
-    display: flex;
-    flex-direction: column;
-    gap: 7px;
-    margin-top: -8px;
+    position: absolute;
+    z-index: 3;
+    top: -29px;
+    right: -18px;
+    display: grid;
+    width: 85px;
+    height: 85px;
+    place-items: center;
+    box-sizing: border-box;
+    padding: 5px;
+    border: 5px solid #fff;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 4px 16px rgba(65, 35, 130, 0.18);
 }
 
-.temporizador__encabezado {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: #716b83;
-    font-size: 13px;
-    font-weight: 700;
+.temporizador__anillo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
 }
 
-.temporizador__encabezado output {
-    color: #6655d9;
-    font-size: 13px;
+.temporizador__anillo-fondo,
+.temporizador__anillo-progreso {
+    fill: none;
+    stroke-width: 6;
+}
+
+.temporizador__anillo-fondo {
+    stroke: #E9DDFC;
+}
+
+.temporizador__anillo-progreso {
+    stroke: #7028E8;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 0.1s linear, stroke 0.2s ease;
+}
+
+.temporizador__segundos {
+    position: relative;
+    z-index: 1;
+    color: #7028E8;
+    font-family: inherit;
+    font-size: 24px;
     font-variant-numeric: tabular-nums;
+    font-weight: 700;
+    line-height: 1;
     transition: color 0.2s ease;
 }
 
-.temporizador__pista {
-    width: 100%;
-    height: 7px;
-    overflow: hidden;
-    background: #e9e6f5;
-    border-radius: 999px;
+.temporizador--urgente {
+    animation: temporizador-pulso 1s ease-in-out infinite;
+    transform-origin: center;
 }
 
-.temporizador__barra {
-    display: block;
-    width: 100%;
-    height: 100%;
-    background: #6655d9;
-    border-radius: inherit;
-    transition: width 0.1s linear, background-color 0.2s ease;
+.temporizador--urgente .temporizador__anillo-fondo {
+    stroke: #FEE2E2;
 }
 
-.temporizador--urgente .temporizador__encabezado output {
+.temporizador--urgente .temporizador__anillo-progreso,
+.temporizador--urgente .temporizador__segundos {
     color: #EF4444;
+    stroke: #EF4444;
 }
 
-.temporizador--urgente .temporizador__barra {
-    background: #EF4444;
+@keyframes temporizador-pulso {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.04); }
+}
+
+@keyframes modal-tiempo-aparecer {
+    from { opacity: 0; transform: scale(0.97); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes modal-tiempo-fondo {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@media (max-width: 480px) {
+    .partida-fase-pregunta {
+        padding-top: 32px;
+    }
+
+    .temporizador {
+        top: -24px;
+        right: -8px;
+        width: 76px;
+        height: 76px;
+    }
+
+    .temporizador__segundos {
+        font-size: 22px;
+    }
 }
 
 .modal-tiempo {
@@ -254,7 +309,8 @@
     align-items: center;
     justify-content: center;
     padding: 20px;
-    background: rgba(24, 20, 43, 0.62);
+    background: rgba(25, 15, 65, 0.65);
+    animation: modal-tiempo-fondo 0.18s ease-out both;
 }
 
 .modal-tiempo[hidden] {
@@ -263,24 +319,25 @@
 
 .modal-tiempo__contenido {
     width: min(100%, 420px);
-    padding: clamp(24px, 6vw, 34px);
+    padding: 30px;
     box-sizing: border-box;
     text-align: center;
     background: #fff;
-    border-radius: 22px;
+    border-radius: 20px;
     box-shadow: 0 24px 70px rgba(20, 16, 45, 0.3);
+    animation: modal-tiempo-aparecer 0.2s ease-out both;
 }
 
 .modal-tiempo__contenido h2 {
     margin: 0 0 10px;
-    color: #302653;
+    color: #241052;
     font-size: clamp(22px, 5vw, 28px);
-    font-weight: 900;
+    font-weight: 700;
 }
 
 .modal-tiempo__contenido p {
     margin: 0;
-    color: #716b83;
+    color: #4b4658;
     font-size: 15px;
     line-height: 1.5;
 }
@@ -313,11 +370,11 @@
 
 .modal-tiempo__boton--principal {
     color: #fff;
-    background: #6655d9;
+    background: #7028E8;
 }
 
 .modal-tiempo__boton--principal:hover {
-    background: #5846c7;
+    background: #5E1CCB;
 }
 
 .modal-tiempo__boton--secundario {
@@ -335,9 +392,13 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .temporizador__barra,
-    .temporizador__encabezado output,
+    .temporizador,
+    .temporizador__anillo-progreso,
+    .temporizador__segundos,
+    .modal-tiempo,
+    .modal-tiempo__contenido,
     .modal-tiempo__boton {
+        animation: none;
         transition: none;
     }
 }

@@ -20,11 +20,16 @@ class PartidaController
         Auth::requiereRol(["jugador"]);
     }
 
+    private function redirigir($metodo)
+    {
+        header('Location: ' . \UrlHelper::controllerUrl('partida', $metodo));
+        exit();
+    }
+
     public function show()
     {
         $this->autenticar();
-        header("Location: " . ($_ENV['BASE_URL'] ?? '') . "/partida/nueva");
-        exit();
+        $this->redirigir('nueva');
     }
 
     private function sincronizarPartida($partida)
@@ -137,8 +142,7 @@ class PartidaController
         $partida = $this->model->consultarPartida($idPartida, $idUsuario);
         $this->sincronizarPartida($partida);
         if ($partida['estado'] === 'en_curso') unset($_SESSION['partida_tiempo_agotado']);
-        header("Location: " . ($_ENV['BASE_URL'] ?? '') . "/partida/jugar");
-        exit();
+        $this->redirigir('jugar');
     }
 
     /* utiliza la pregunta y el vencimiento persistidos.
@@ -227,20 +231,17 @@ class PartidaController
             $activa = $this->model->obtenerPartidaActiva($idUsuario);
             $idPartida = $activa['id'] ?? $_SESSION['partida_tiempo_agotado'] ?? null;
             if (!$idPartida) {
-                header("Location: " . ($_ENV['BASE_URL'] ?? '') . "/partida/nueva");
-                exit();
+                $this->redirigir('nueva');
             }
         }
         $partida = $this->model->prepararPregunta($idPartida, $idUsuario,
             $_SESSION['partida_activa']['preguntas_usadas'] ?? []);
         if (!$partida) {
-            header("Location: " . ($_ENV['BASE_URL'] ?? '') . "/partida/nueva");
-            exit();
+            $this->redirigir('nueva');
         }
         $this->sincronizarPartida($partida);
         if ($partida['estado'] === 'finalizada' && $partida['motivo_finalizacion'] !== 'tiempo') {
-            header("Location: " . ($_ENV['BASE_URL'] ?? '') . "/partida/resultado");
-            exit();
+            $this->redirigir('resultado');
         }
         $this->mostrarPartida($partida);
     }
@@ -364,8 +365,7 @@ utiliza la pregunta y el vencimiento persistidos.
         $this->sincronizarPartida($partida);
         if ($partida['estado'] === 'finalizada') {
             if ($partida['motivo_finalizacion'] === 'tiempo') {
-                header("Location: " . ($_ENV['BASE_URL'] ?? '') . "/partida/jugar");
-                exit();
+                $this->redirigir('jugar');
             }
             $pregunta = $partida['pregunta'];
             $_SESSION['partida_finalizada'] = [
@@ -374,13 +374,12 @@ utiliza la pregunta y el vencimiento persistidos.
                 'categoria_nombre' => $pregunta['categoria_nombre'] ?? '',
                 'categoria_color' => $pregunta['categoria_color'] ?? '#ef4444'
             ];
-            header("Location: " . ($_ENV['BASE_URL'] ?? '') . "/partida/resultado");
-            exit();
+            $this->redirigir('resultado');
         }
         if (!empty($partida['respuesta_aceptada'])) {
-            header("Location: " . ($_ENV['BASE_URL'] ?? '') . "/partida/respuestaCorrecta");
+            $this->redirigir('respuestaCorrecta');
         } else {
-            header("Location: " . ($_ENV['BASE_URL'] ?? '') . "/partida/jugar");
+            $this->redirigir('jugar');
         }
         exit();
     }
@@ -393,14 +392,12 @@ utiliza la pregunta y el vencimiento persistidos.
             $partida = $this->model->consultarPartida($_SESSION['partida_activa']['id_partida'], $_SESSION['usuario_id']);
             $this->sincronizarPartida($partida);
             if (!$partida || $partida['estado'] !== 'en_curso') {
-                header("Location: " . ($_ENV['BASE_URL'] ?? '') . "/partida/jugar");
-                exit();
+                $this->redirigir('jugar');
             }
         }
 
         if (!isset($_SESSION['partida_activa'])) {
-            header("Location: " . ($_ENV['BASE_URL'] ?? '') . "/partida/jugar");
-            exit();
+            $this->redirigir('jugar');
         }
 
         $data = [

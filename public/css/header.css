@@ -3,8 +3,6 @@
 :root {
     --cerebrito-ink: #302653;
     --cerebrito-purple: #6655d9;
-    --cerebrito-yellow: #ffd66b;
-    --cerebrito-coral: #ff846e;
     --cerebrito-paper: #fffaf0;
 }
 
@@ -83,15 +81,6 @@ body {
 
 .header__logo:hover img { transform: rotate(-6deg) scale(1.06); }
 
-.header__brand {
-    color: var(--cerebrito-ink);
-    font-size: 29px;
-    font-weight: 900;
-    letter-spacing: -1px;
-}
-
-.header__exclamacion { color: var(--cerebrito-coral); }
-
 .header__nav {
     display: flex;
     align-items: center;
@@ -162,7 +151,6 @@ body {
     .header__container { min-height: 0; padding: 10px 16px; }
     .header__logo { gap: 8px; }
     .header__logo img { width: 70px; height: 70px; }
-    .header__brand { font-size: 22px; }
     .header__actions { gap: 11px; }
     .header__login { font-size: 13px; }
     .header__play { padding: 11px 14px; font-size: 12px; }

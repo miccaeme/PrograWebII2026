@@ -131,11 +131,6 @@
     font-size: 14px;
 }
 
-.inicio-sesion__mensaje--error {
-    background: #fff0ed;
-    color: #b42318;
-}
-
 .inicio-sesion__mensaje--exito {
     background: #eaf8ef;
     color: #236b3c;

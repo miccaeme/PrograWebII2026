@@ -54,10 +54,30 @@
                 {{/respuestas}}
             </form>
 
+            <section id="temporizador" class="temporizador" aria-label="Tiempo para responder">
+                <div class="temporizador__encabezado">
+                    <span>Tiempo restante</span>
+                    <output id="temporizador-segundos" aria-live="off">15</output>
+                </div>
+                <div id="temporizador-progreso" class="temporizador__pista" role="progressbar" aria-label="Tiempo restante" aria-valuemin="0" aria-valuemax="15" aria-valuenow="15">
+                    <span id="temporizador-barra" class="temporizador__barra"></span>
+                </div>
+            </section>
 
 
         </div>
 
+    </div>
+
+    <div id="modal-tiempo" class="modal-tiempo" role="dialog" aria-modal="true" aria-labelledby="modal-tiempo-titulo" aria-describedby="modal-tiempo-mensaje" hidden>
+        <div class="modal-tiempo__contenido">
+            <h2 id="modal-tiempo-titulo">¡Tiempo finalizado!</h2>
+            <p id="modal-tiempo-mensaje">Se terminó el tiempo para responder.</p>
+            <div class="modal-tiempo__acciones">
+                <a id="accion-jugar-otra-vez" class="modal-tiempo__boton modal-tiempo__boton--principal" href="{{baseUrl}}/partida/nueva">Jugar otra vez</a>
+                <a class="modal-tiempo__boton modal-tiempo__boton--secundario" href="{{baseUrl}}/lobby/show">Ir al inicio</a>
+            </div>
+        </div>
     </div>
 </main>
 
@@ -67,6 +87,13 @@
         const faseSorteo = document.getElementById("fase-sorteo");
         const fasePregunta = document.getElementById("fase-pregunta");
         const tarjetaPrincipal = document.getElementById("partida-tarjeta-principal");
+        const segundosTemporizador = document.getElementById("temporizador-segundos");
+        const progresoTemporizador = document.getElementById("temporizador-progreso");
+        const barraTemporizador = document.getElementById("temporizador-barra");
+        const temporizador = document.getElementById("temporizador");
+        const modalTiempo = document.getElementById("modal-tiempo");
+        const accionJugarOtraVez = document.getElementById("accion-jugar-otra-vez");
+        const formularioRespuestas = fasePregunta.querySelector("form");
 
         const colorFinal = tarjetaPrincipal.getAttribute("data-color");
         const idGanador = tarjetaPrincipal.getAttribute("data-categoria-id");
@@ -85,6 +112,76 @@
         let pasoActual = 0;
         let indice = 0;
         let velocidad = 60;
+        let intervaloTemporizador = null;
+        let temporizadorFinalizado = false;
+        let instanteFinalTemporizador = 0;
+
+        function detenerTemporizador() {
+            if (intervaloTemporizador !== null) {
+                window.clearInterval(intervaloTemporizador);
+                intervaloTemporizador = null;
+            }
+        }
+
+        function finalizarTemporizador() {
+            detenerTemporizador();
+            if (temporizadorFinalizado) return;
+
+            temporizadorFinalizado = true;
+            formularioRespuestas.querySelectorAll("button").forEach(boton => {
+                boton.disabled = true;
+            });
+            modalTiempo.hidden = false;
+            accionJugarOtraVez.focus();
+        }
+
+        function iniciarTemporizador() {
+            detenerTemporizador();
+            temporizadorFinalizado = false;
+            const duracionTemporizador = 15;
+            instanteFinalTemporizador = Date.now() + duracionTemporizador * 1000;
+
+            function actualizarTemporizador() {
+                const milisegundosRestantes = Math.max(0, instanteFinalTemporizador - Date.now());
+                const segundosRestantes = Math.ceil(milisegundosRestantes / 1000);
+                const porcentajeRestante = (milisegundosRestantes / (duracionTemporizador * 1000)) * 100;
+
+                segundosTemporizador.value = segundosRestantes;
+                barraTemporizador.style.width = `${porcentajeRestante}%`;
+                progresoTemporizador.setAttribute("aria-valuenow", String(segundosRestantes));
+                temporizador.classList.toggle("temporizador--urgente", segundosRestantes <= 5);
+
+                if (milisegundosRestantes <= 0) {
+                    finalizarTemporizador();
+                }
+            }
+
+            actualizarTemporizador();
+            intervaloTemporizador = window.setInterval(actualizarTemporizador, 100);
+        }
+
+        formularioRespuestas.addEventListener("submit", evento => {
+            if (Date.now() >= instanteFinalTemporizador) {
+                finalizarTemporizador();
+            }
+            if (temporizadorFinalizado) {
+                evento.preventDefault();
+                return;
+            }
+            detenerTemporizador();
+        });
+
+        modalTiempo.addEventListener("click", evento => {
+            if (evento.target === modalTiempo) evento.preventDefault();
+        });
+
+        document.addEventListener("keydown", evento => {
+            if (!modalTiempo.hidden && evento.key === "Escape") {
+                evento.preventDefault();
+            }
+        });
+
+        window.addEventListener("pagehide", detenerTemporizador, { once: true });
 
         function girarRuleta() {
             items.forEach(el => el.classList.remove("activa"));
@@ -110,6 +207,7 @@
 
                     tarjetaPrincipal.style.borderTop = `6px solid ${colorFinal}`;
                     tarjetaPrincipal.style.boxShadow = `0 16px 42px ${colorFinal}33`;
+                    iniciarTemporizador();
                 }, 600);
             }
         }

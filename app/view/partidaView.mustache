@@ -2,7 +2,9 @@
 <link rel="stylesheet" href="{{baseUrl}}/public/css/partida.css">
 
 <main class="partida-contenedor">
-    <div class="partida-card" id="partida-tarjeta-principal" data-color="{{categoria_color}}">
+    <div class="partida-card" id="partida-tarjeta-principal"
+         data-color="{{categoria_color}}"
+         data-categoria-id="{{categoria_id}}">
 
 
         <div id="fase-sorteo" class="partida-fase-sorteo">
@@ -14,7 +16,7 @@
             <div class="carrusel-marco">
                 <div id="carrusel-tira" class="carrusel-tira">
                     {{#categorias_carrusel}}
-                        <div class="categoria-tarjeta-item" style="border-left: 6px solid {{color}};" data-color="{{color}}">
+                        <div class="categoria-tarjeta-item" style="border-left: 6px solid {{color}};" data-color="{{color}}" data-id="{{id}}">
                             <span class="categoria-tarjeta-icono">🧠</span>
                             <span class="categoria-tarjeta-nombre">{{nombre}}</span>
                         </div>
@@ -78,36 +80,52 @@
         const faseSorteo = document.getElementById("fase-sorteo");
         const fasePregunta = document.getElementById("fase-pregunta");
         const tarjetaPrincipal = document.getElementById("partida-tarjeta-principal");
-        const colorFinal = tarjetaPrincipal.getAttribute("data-color");
 
-        const items = tira.querySelectorAll(".categoria-tarjeta-item");
-        let ciclos = 0;
-        const maxCiclos = 16;
+        const colorFinal = tarjetaPrincipal.getAttribute("data-color");
+        const idGanador = tarjetaPrincipal.getAttribute("data-categoria-id");
+
+        const items = Array.from(tira.querySelectorAll(".categoria-tarjeta-item"));
+        if (items.length === 0) return;
+
+
+        let indiceDestino = items.findIndex(el => el.getAttribute("data-id") == idGanador);
+        if (indiceDestino === -1) indiceDestino = 0;
+
+        // Da 3 vueltas completas (vueltas * items.length) y frena en el índice exacto
+        const vueltasCompletas = 3;
+        const totalPasos = (vueltasCompletas * items.length) + indiceDestino;
+
+        let pasoActual = 0;
         let indice = 0;
-        let velocidad = 80;
+        let velocidad = 60;
 
         function girarRuleta() {
             items.forEach(el => el.classList.remove("activa"));
             items[indice].classList.add("activa");
 
-            indice = (indice + 1) % items.length;
-            ciclos++;
+            pasoActual++;
 
-            if (ciclos < maxCiclos) {
-                velocidad += 15;
+            if (pasoActual <= totalPasos) {
+                indice = (indice + 1) % items.length;
+
+                if (pasoActual > totalPasos - 6) {
+                    velocidad += 45;
+                } else if (pasoActual > totalPasos - 12) {
+                    velocidad += 15;
+                }
+
                 setTimeout(girarRuleta, velocidad);
             } else {
+
                 setTimeout(() => {
                     faseSorteo.style.display = "none";
                     fasePregunta.style.display = "flex";
 
-                    // la tarjeta se pinta con el color asignado
                     tarjetaPrincipal.style.borderTop = `6px solid ${colorFinal}`;
                     tarjetaPrincipal.style.boxShadow = `0 16px 42px ${colorFinal}33`;
-                }, 500);
+                }, 600);
             }
         }
-
         girarRuleta();
     });
 </script>

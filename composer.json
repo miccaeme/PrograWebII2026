@@ -1,7 +1,9 @@
 {
   "require": {
     "php": ">=8.0",
-    "endroid/qr-code": "4.8.2"
+    "endroid/qr-code": "4.8",
+    "bacon/bacon-qr-code": "^2.0.8",
+    "mustache/mustache": "^2.14"
   },
   "config": {
     "platform": {

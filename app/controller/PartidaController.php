@@ -22,7 +22,7 @@ class PartidaController
         }
     }
 
-    //nueva partida
+
     public function nueva()
     {
         $this->autenticar();
@@ -38,7 +38,7 @@ class PartidaController
         exit();
     }
 
-    // Vista de juego con selección y ruleta de cartas
+
     public function jugar()
     {
         $this->autenticar();
@@ -81,7 +81,6 @@ class PartidaController
         $this->render->renderiza("partida", $data);
     }
 
-    // Procesar respuesta
     public function responder()
     {
         $this->autenticar();
@@ -97,7 +96,7 @@ class PartidaController
         if ($esCorrecta) {
             $_SESSION['partida_activa']['puntaje']++;
 
-            // Sigue jugando: pide otra categoría y pregunta
+
             header("Location: " . ($_ENV['BASE_URL'] ?? '') . "/partida/jugar");
             exit();
         } else {
@@ -119,7 +118,7 @@ class PartidaController
         }
     }
 
-    // vista resultados
+    // resultados
     public function resultado()
     {
         $this->autenticar();

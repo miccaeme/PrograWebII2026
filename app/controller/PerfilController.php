@@ -1,11 +1,11 @@
 <?php
 
 namespace app\controller;
+use Endroid\QrCode\Builder\Builder;
 
 use Request;
 use Redirect;
 use UrlHelper;
-use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\Writer\SvgWriter;
 
 class PerfilController

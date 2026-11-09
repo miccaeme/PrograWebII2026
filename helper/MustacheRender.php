@@ -1,7 +1,7 @@
 <?php
 
-require_once __DIR__ . "/../vendor/mustache/Mustache/Autoloader.php";
-Mustache_Autoloader::register(__DIR__ . "/../vendor/mustache");
+// require_once __DIR__ . '/../vendor/mustache/Mustache/Autoloader.php';
+//Mustache_Autoloader::register(__DIR__ . "/../vendor/mustache");
 
 class MustacheRender
 {

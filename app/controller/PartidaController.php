@@ -32,11 +32,10 @@ class PartidaController
         $this->autenticar();
         $idUsuario = $_SESSION['usuario_id'] ?? 0;
 
-        // 1. Verificamos si el usuario ya tiene una partida 'en_curso' en la base de datos
         $partidaActivaBD = $this->model->obtenerPartidaActiva($idUsuario);
 
         if ($partidaActivaBD) {
-            // Reconstruimos la sesión con la partida existente y lo mandamos a continuar
+            // continua partida si hay una en curso en la sesion
             $_SESSION['partida_activa'] = [
                 'id_partida'       => (int)$partidaActivaBD['id'],
                 'puntaje'          => (int)$partidaActivaBD['puntaje'],
@@ -49,7 +48,7 @@ class PartidaController
             exit();
         }
 
-        // 2. Si no tiene ninguna activa, la creamos en la base de datos en estado 'en_curso'
+
         $idNuevaPartida = $this->model->crearPartida($idUsuario);
 
         $_SESSION['partida_activa'] = [
@@ -74,7 +73,7 @@ class PartidaController
         }
 
         $todasCategorias = $this->model->obtenerCategorias();
-        //Check si hay pregunat en la sesion
+        //Check si hay pregunta en la sesion
 
         if (!empty($_SESSION['partida_activa']['pregunta_actual'])) {
             $categoriaActual = $_SESSION['partida_activa']['categoria_actual'];
@@ -175,7 +174,7 @@ class PartidaController
                 $respuestaCorrectaTexto = $this->model->obtenerRespuestaCorrecta($preguntaActual['id']);
             }
 
-            // Cerramos la partida en la base de datos cambiando el estado a 'finalizada'
+            // finaliza la partida
             if ($idPartida) {
                 $this->model->finalizarPartida($idPartida, $idCategoria, $puntajeFinal);
             }

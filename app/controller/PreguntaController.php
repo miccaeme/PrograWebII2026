@@ -230,4 +230,31 @@ class PreguntaController
         Redirect::toController("editor", "activas");
     }
 
+    private const MOTIVOS_REPORTE = [
+        "La respuesta correcta es otra",
+        "La pregunta está mal escrita",
+        "Contenido inapropiado",
+        "Pregunta repetida o confusa",
+        "Otro"
+    ];
+
+    public function reportar()
+    {
+        Auth::requiereRol(["jugador"]);
+
+        if ($_SERVER["REQUEST_METHOD"] !== "POST") {
+            Redirect::toController("lobby", "show");
+        }
+
+        $idPregunta = $_SESSION['partida_activa']['pregunta_actual']['id'] ?? null;
+        $motivo = Request::post("motivo", "");
+
+
+        if ($idPregunta && in_array($motivo, self::MOTIVOS_REPORTE, true)) {
+            $this->model->reportar($_SESSION['usuario_id'] ?? 0, $idPregunta, $motivo);
+        }
+
+        Redirect::toController("partida", "jugar");
+    }
+
 }

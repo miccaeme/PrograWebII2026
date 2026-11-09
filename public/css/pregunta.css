@@ -246,3 +246,48 @@ textarea.pregunta__entrada {
     color: #6655d9;
     margin-bottom: 8px;
 }
+
+.partida-reportar {
+    margin-top: 16px;
+    text-align: center;
+}
+
+.partida-reportar__resumen {
+    cursor: pointer;
+    color: #6b7280;
+    font-size: 0.85rem;
+    text-decoration: underline;
+}
+
+.partida-reportar__resumen:hover {
+    color: #b91c1c;
+}
+
+.partida-reportar__form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 320px;
+    margin: 12px auto 0;
+}
+
+.partida-reportar__select {
+    padding: 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    font-size: 0.9rem;
+}
+
+.partida-reportar__boton {
+    background: #b91c1c;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.partida-reportar__boton:hover {
+    background: #991b1b;
+}

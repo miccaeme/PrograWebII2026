@@ -124,4 +124,52 @@ class EditorController
 
         Redirect::toController("editor", "inactivas");
     }
+
+    public function reportadas()
+    {
+        Auth::requiereRol(["editor", "admin"]);
+
+        $preguntas = $this->model->obtenerReportadas();
+
+        foreach ($preguntas as $i => $p) {
+            $preguntas[$i]["respuestas"] = $this->model->obtenerRespuestas($p["id"]);
+        }
+
+        $this->render->renderiza("editorReportadas", [
+            "logueado" => true,
+            "nombre_usuario" => $_SESSION["nombre_usuario"] ?? "",
+            "preguntas" => $preguntas,
+            "sin_reportadas" => empty($preguntas)
+        ]);
+    }
+
+    public function mantener()
+    {
+        Auth::requiereRol(["editor", "admin"]);
+
+        if ($_SERVER["REQUEST_METHOD"] !== "POST") {
+            Redirect::toController("editor", "reportadas");
+        }
+
+        $this->model->resolverReportes(Request::post("id"));
+
+        Redirect::toController("editor", "reportadas");
+    }
+
+    public function bajaReportada()
+    {
+        Auth::requiereRol(["editor", "admin"]);
+
+        if ($_SERVER["REQUEST_METHOD"] !== "POST") {
+            Redirect::toController("editor", "reportadas");
+        }
+
+        $id = Request::post("id");
+        $this->model->cambiarEstado($id, "inactiva");
+        $this->model->resolverReportes($id);
+
+        Redirect::toController("editor", "reportadas");
+    }
+
+
 }

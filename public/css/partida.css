@@ -5,7 +5,7 @@
     align-items: flex-start;
     min-height: calc(100vh - 80px);
     box-sizing: border-box;
-    padding-top: clamp(100px, 14vh, 130px);
+    padding-top: 5rem;
     padding-bottom: 90px;
     padding-left: clamp(16px, 4vw, 32px);
     padding-right: clamp(16px, 4vw, 32px);

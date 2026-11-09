@@ -23,6 +23,14 @@ class LobbyModel
         $this->render->renderiza("integrantes", $data);
     }
     public function getUltimasPartidas($idUsuario){
+        // Volver al inicio también reconcilia una pregunta vencida, aunque JS no haya avisado.
+        $activas = $this->database->queryParams(
+            "SELECT id FROM partidas WHERE id_usuario = ? AND estado = 'en_curso'", [$idUsuario]
+        );
+        $partidaModel = new PartidaModel($this->database);
+        foreach ($activas as $activa) {
+            $partidaModel->consultarPartida($activa['id'], $idUsuario);
+        }
         return $this->database->queryParams(
             "SELECT p.id, p.puntaje, p.fecha_creacion, c.nombre AS categoria, c.color, c.icono
             FROM partidas p

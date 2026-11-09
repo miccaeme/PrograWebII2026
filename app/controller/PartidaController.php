@@ -50,10 +50,17 @@ class PartidaController
         $todasCategorias = $this->model->obtenerCategorias();
         $categoriaSeleccionada = $this->model->obtenerCategoriaAleatoria();
 
+        $idUsuario = $_SESSION['usuario_id'] ?? 0;
+        $dificultad = $this->model->obtenerDificultadParaUsuario($idUsuario);
 
-        $dificultad = $this->model->obtenerDificultadParaUsuario($_SESSION['usuario_id'] ?? 0);
+        $vistas = $this->model->obtenerIdVistos($idUsuario);
+        $excluidas = array_merge($_SESSION['partida_activa']['preguntas_usadas'], $vistas);
 
-        $pregunta = $this->model->obtenerPreguntaAleatoriaPorCategoria($categoriaSeleccionada['id'], $_SESSION['partida_activa']['preguntas_usadas'], $dificultad);
+        $pregunta = $this->model->obtenerPreguntaAleatoriaPorCategoria(
+            $categoriaSeleccionada['id'],
+            $excluidas,
+            $dificultad
+        );
 
         if (!$pregunta) {
             die("Error: No hay preguntas suficientes cargadas en la categoría: " . $categoriaSeleccionada['nombre']);
@@ -96,6 +103,7 @@ class PartidaController
 
         if($idPregunta) {
             $this->model->registrarRespuesta($idUsuario, $idPregunta, $esCorrecta);
+            $this->model->marcarPreguntaComoVista($idUsuario ,$idPregunta);
         }
 
         if ($esCorrecta) {

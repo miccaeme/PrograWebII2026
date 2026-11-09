@@ -1,0 +1,42 @@
+{{> header}}
+<main class="pregunta">
+    <section class="pregunta__tarjeta">
+        <h1 class="pregunta__titulo">Preguntas inactivas</h1>
+        <p class="pregunta__subtitulo">Preguntas dadas de baja. Podés volver a activarlas.</p>
+
+        <a class="pregunta__boton pregunta__boton--enlace" href="{{baseUrl}}/editor/activas">Volver a preguntas activas</a>
+
+        {{#sin_inactivas}}
+            <p class="pregunta__subtitulo">No hay preguntas inactivas.</p>
+        {{/sin_inactivas}}
+
+        {{#preguntas}}
+            <article class="revision">
+                <p class="revision__enunciado">{{enunciado}}</p>
+                <p class="revision__datos">
+                    Categoría: {{categoria}} · Creada por {{creador}} · {{fecha_creacion}}
+                </p>
+
+                <details class="revision__detalle">
+                    <summary>Ver respuestas</summary>
+                    <ul class="revision__respuestas">
+                        {{#respuestas}}
+                            <li class="revision__respuesta {{#es_correcta}}revision__respuesta--correcta{{/es_correcta}}">
+                                {{texto}} {{#es_correcta}}✅{{/es_correcta}}
+                            </li>
+                        {{/respuestas}}
+                    </ul>
+                </details>
+
+                <div class="revision__acciones">
+                    <form method="POST" action="{{baseUrl}}/editor/reactivar">
+                        <input type="hidden" name="id" value="{{id}}">
+                        <button class="pregunta__boton" type="submit">Reactivar</button>
+                    </form>
+                </div>
+            </article>
+        {{/preguntas}}
+    </section>
+</main>
+
+{{> footer}}

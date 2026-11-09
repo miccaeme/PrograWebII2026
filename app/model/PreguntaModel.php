@@ -96,18 +96,21 @@ class PreguntaModel
     public function cambiarEstado($idPregunta, $estadoNuevo)
     {
         $estadoRequerido = [
-            "activa"    => "pendiente",
-            "rechazada" => "pendiente",
-            "inactiva"  => "activa"
+            "activa"    => ["pendiente", "inactiva"],
+            "rechazada" => ["pendiente"],
+            "inactiva"  => ["activa"]
         ];
 
         if (!isset($estadoRequerido[$estadoNuevo])) {
             return false;
         }
 
+        $origenes = $estadoRequerido[$estadoNuevo];
+        $placeholders = implode(',', array_fill(0, count($origenes), '?'));
+
         return $this->database->executeParams(
-            "UPDATE preguntas SET estado = ? WHERE id = ? AND estado = ?",
-            [$estadoNuevo, $idPregunta, $estadoRequerido[$estadoNuevo]]
+            "UPDATE preguntas SET estado = ? WHERE id = ? AND estado IN ($placeholders)",
+            array_merge([$estadoNuevo, $idPregunta], $origenes)
         );
     }
 
@@ -200,6 +203,50 @@ class PreguntaModel
         }
     }
 
+    public function obtenerInactivas()
+    {
+        return $this->database->queryAll("SELECT p.id, p.enunciado, p.fecha_creacion,
+        c.nombre AS categoria,
+        u.nombre_usuario AS creador
+        FROM preguntas p
+        INNER JOIN categorias c ON p.id_categoria = c.id
+        LEFT JOIN usuarios u ON p.id_usuario_creador = u.id
+        WHERE p.estado = 'inactiva'
+        ORDER BY p.fecha_creacion DESC");
+    }
+
+    public function reportar($idUsuario, $idPregunta, $motivo)
+    {
+        $this->database->executeParams(
+            "INSERT IGNORE INTO reportes_preguntas (id_pregunta, id_usuario, motivo) VALUES (?, ?, ?)",
+            [$idPregunta, $idUsuario, $motivo]
+        );
+    }
+
+    public function obtenerReportadas()
+    {
+        return $this->database->queryAll("SELECT p.id, p.enunciado, p.fecha_creacion,
+    c.nombre AS categoria,
+    u.nombre_usuario AS creador,
+    COUNT(r.id) AS cantidad_reportes,
+    GROUP_CONCAT(DISTINCT r.motivo SEPARATOR ' / ') AS motivos
+    FROM preguntas p
+    INNER JOIN reportes_preguntas r ON r.id_pregunta = p.id
+    INNER JOIN categorias c ON p.id_categoria = c.id
+    LEFT JOIN usuarios u ON p.id_usuario_creador = u.id
+    WHERE r.resuelto = 0 AND p.estado = 'activa'
+    GROUP BY p.id, p.enunciado, p.fecha_creacion, c.nombre, u.nombre_usuario
+    ORDER BY cantidad_reportes DESC");
+    }
+
+
+    public function resolverReportes($idPregunta)
+    {
+        return $this->database->executeParams(
+            "UPDATE reportes_preguntas SET resuelto = 1 WHERE id_pregunta = ?",
+            [$idPregunta]
+        );
+    }
 
 
 

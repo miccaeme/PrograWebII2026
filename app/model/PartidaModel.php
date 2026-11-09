@@ -11,6 +11,7 @@ class PartidaModel
     const MINIMO_RESPUESTAS = 5;
     const PORCENTAJE_FACIL = 0.7;
     const PORCENTAJE_DIFICIL = 0.3;
+    const DIAS_SIN_REPETIR = 10;
 
 
     private $database;
@@ -160,5 +161,26 @@ class PartidaModel
         }
 
         return["(veces_respondida < ? OR $porcentaje BETWEEN ? AND ?)", [self::MINIMO_RESPUESTAS, self::PORCENTAJE_DIFICIL, self::PORCENTAJE_FACIL]];
+    }
+
+
+    public function marcarPreguntaComoVista($idUsuario, $idPregunta)
+    {
+        $this->database->executeParams(
+            "INSERT INTO preguntas_vistas (id_usuario, id_pregunta) VALUES (?, ?)
+        ON DUPLICATE KEY UPDATE fecha_vista = NOW()",
+            [$idUsuario, $idPregunta]
+        );
+    }
+
+    public function obtenerIdVistos($idUsuario)
+    {
+        $filas = $this->database->queryParams(
+            "SELECT id_pregunta FROM preguntas_vistas
+        WHERE id_usuario = ? AND fecha_vista >= NOW() - INTERVAL ? DAY",
+            [$idUsuario, self::DIAS_SIN_REPETIR]
+        );
+
+        return array_column($filas, 'id_pregunta');
     }
 }

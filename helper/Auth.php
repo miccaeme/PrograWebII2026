@@ -12,7 +12,10 @@ class Auth
     public static function requiereRol($rolesPermitidos)
     {
         self::requiereLogin();
-        if (!in_array($_SESSION["rol"] ?? "jugador", $rolesPermitidos, true)) {
+
+        $rol = ($_SESSION["rol"] ?? "") ?: "jugador";
+
+        if (!in_array($rol, $rolesPermitidos, true)) {
             self::irAlInicio();
         }
     }

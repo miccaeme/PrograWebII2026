@@ -7,23 +7,6 @@
     background: url("../img/Cielo%20m%C3%A1gico%20para%20aprender%20y%20jugar.png") center 45% / cover fixed no-repeat;
 }
 
-.header:has(+ .perfil) {
-    background: url("../img/Cielo%20m%C3%A1gico%20para%20aprender%20y%20jugar.png") center 45% / cover fixed no-repeat;
-    border-bottom: 1px solid rgba(255, 255, 255, .2);
-}
-
-.header:has(+ .perfil) .header__link,
-.header:has(+ .perfil) .header__login,
-.header:has(+ .perfil) .usuario-badge,
-.header:has(+ .perfil) .header__menu-toggle {
-    color: #fff;
-}
-
-.header:has(+ .perfil) .header__link:hover {
-    color: #fff;
-    background: rgba(255, 255, 255, .16);
-}
-
 .perfil::before {
     position: absolute;
     z-index: -1;

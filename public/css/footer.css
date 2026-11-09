@@ -32,11 +32,14 @@
 /* Grilla de 2 columnas de 2 integrantes */
 .footer__integrantes {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px 32px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px 24px;
     width: 100%;
     max-width: 650px;
-    padding: 10px 16px;
+    margin: 0 auto;
+    padding: 16px;
+    box-sizing: border-box;
+    text-align: center;
     background: #fbfbfe;
     border: 1px solid #e9e6f5;
     border-radius: 12px;
@@ -50,7 +53,13 @@
 }
 
 .footer__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    min-width: 0;
     font-size: 13px;
+    line-height: 1.5;
     color: #51496b;
 }
 

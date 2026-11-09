@@ -6,6 +6,7 @@ use Mailer;
 use Request;
 use Redirect;
 use UrlHelper;
+use Auth;
 
 
 class LoginController
@@ -21,9 +22,8 @@ class LoginController
 
     public function show()
     {
-        if(!empty($_SESSION["logueado"])){
-            header("Location: lobby");
-            exit();
+        if (!empty($_SESSION["logueado"])) {
+            Auth::irAlInicio();
         }
         $this->render->renderiza("login", []);
     }
@@ -56,10 +56,10 @@ class LoginController
         $_SESSION["usuario_id"] = $usuarioLogueado["id"] ?? null;
         $_SESSION["nombre_usuario"] = $usuarioLogueado["nombre_usuario"] ?? "";
         $_SESSION["logueado"] = true;
-        $_SESSION["rol"] = $usuarioLogueado["rol"] ?? "jugador";
+        $_SESSION["rol"] = ($usuarioLogueado["rol"] ?? "") ?: "jugador";
 
-        // Redireccionamos a la pantalla principal o de inicio
-        Redirect::toController("lobby", "show");
+        Auth::irAlInicio();
+
     }
 
     public function logout()

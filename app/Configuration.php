@@ -15,6 +15,7 @@ use app\controller\RegistroController;
 use app\controller\PerfilController;
 use app\model\PreguntaModel;
 use app\controller\PreguntaController;
+use app\controller\EditorController;
 
 require_once("helper/Autoloader.php");
 require_once __DIR__ . "/../vendor/autoload.php";
@@ -29,6 +30,7 @@ include_once("controller/LoginController.php");
 include_once("controller/PerfilController.php");
 include_once("controller/PartidaController.php");
 include_once("controller/PreguntaController.php");
+include_once("controller/EditorController.php");
 
 class Configuration
 {
@@ -111,5 +113,9 @@ class Configuration
     }
     public function getAdminController(){
         return new AdminController($this->getUsuarioModel(), $this->getRender());
+    }
+
+    public function getEditorController(){
+        return new EditorController($this->getPreguntaModel(), $this->getRender());
     }
 }

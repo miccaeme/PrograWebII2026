@@ -23,6 +23,10 @@ class MustacheRender
     }
     public function renderiza($view, $data = [])
     {
+        $rol = $_SESSION["rol"] ?? "";
+        $data["es_admin"] = $rol === "admin";
+        $data["es_editor"] = $rol === "editor";
+
         echo $this->mustache->render($view . "View", $data);
     }
 

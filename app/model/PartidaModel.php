@@ -2,8 +2,18 @@
 
 namespace app\model;
 
+use Exception;
+use Log;
+
 class PartidaModel
 {
+
+    const MINIMO_RESPUESTAS = 5;
+    const PORCENTAJE_FACIL = 0.7;
+    const PORCENTAJE_DIFICIL = 0.3;
+    const DIAS_SIN_REPETIR = 10;
+
+
     private $database;
 
     public function __construct($database)
@@ -21,9 +31,9 @@ class PartidaModel
         return $this->database->queryOne("SELECT id, nombre, color, icono FROM categorias ORDER BY RAND() LIMIT 1");
     }
 
-    public function obtenerPreguntaAleatoriaPorCategoria($idCategoria, $preguntasRespondidas = [])
+    public function obtenerPreguntaAleatoriaPorCategoria($idCategoria, $preguntasRespondidas = [], $dificultad = null)
     {
-        $sql = "SELECT id, enunciado FROM preguntas WHERE id_categoria = ?";
+        $sql = "SELECT id, enunciado FROM preguntas WHERE id_categoria = ? AND estado = 'activa'";
         $params = [$idCategoria];
 
         if (!empty($preguntasRespondidas)) {
@@ -32,14 +42,22 @@ class PartidaModel
             $params = array_merge($params, $preguntasRespondidas);
         }
 
-        $sql .= " ORDER BY RAND() LIMIT 1";
+        $pregunta = null;
 
-        $pregunta = $this->database->queryOneParams($sql, $params);
+        if($dificultad) {
+            [$condicion, $paramsDificultad] = $this->condicionDificultad($dificultad);
+
+            $pregunta = $this->database->queryOneParams($sql . " AND $condicion ORDER BY RAND() LIMIT 1", array_merge($params, $paramsDificultad));
+        }
+
+        if(!$pregunta) {
+            $pregunta = $this->database->queryOneParams($sql . " ORDER BY RAND() LIMIT 1", $params);
+        }
 
         // Si ya respondió todas las de esta categoría, tomamos cualquiera de la categoría
         if (!$pregunta) {
             $pregunta = $this->database->queryOneParams(
-                "SELECT id, enunciado FROM preguntas WHERE id_categoria = ? ORDER BY RAND() LIMIT 1",
+                "SELECT id, enunciado FROM preguntas WHERE id_categoria = ? AND estado = 'activa' ORDER BY RAND() LIMIT 1",
                 [$idCategoria]
             );
         }
@@ -72,5 +90,97 @@ class PartidaModel
             "INSERT INTO partidas (id_usuario, id_categoria, puntaje) VALUES (?, ?, ?)",
             [$idUsuario, $idCategoriaUltima, $puntaje]
         );
+    }
+
+    public function registrarRespuesta($idUsuario, $idPregunta, $acerto) 
+    { 
+        $suma = $acerto ? 1 : 0;
+
+        $this->database->beginTransaction();
+
+        try{
+            $this->database->executeParams(
+                "UPDATE preguntas SET veces_respondida = veces_respondida + 1,
+                veces_acertada = veces_acertada + ? WHERE id = ?",
+                [$suma, $idPregunta]
+            );
+
+            $this->database->executeParams(
+                "UPDATE usuarios SET preguntas_respondidas = preguntas_respondidas + 1,
+                preguntas_acertadas = preguntas_acertadas + ? WHERE id = ?",
+                [$suma, $idUsuario]
+            );
+
+            $this->database->commit();
+            return true;
+        } catch (Exception $error) {
+            $this->database->rollback();
+            Log::error("Error al registrar respuesta: " . $error->getMessage());
+
+            return false;
+        }
+    }
+
+    public function obtenerDificultadParaUsuario($idUsuario) 
+    {
+        $usuario = $this->database->queryOneParams(
+            "SELECT preguntas_respondidas, preguntas_acertadas
+            FROM usuarios WHERE id = ?", [$idUsuario]
+        );
+
+        $respondidas = $usuario ? (int)$usuario['preguntas_respondidas'] : 0;
+        $acertadas = $usuario ? (int)$usuario['preguntas_acertadas'] : 0;
+
+        if ($respondidas < self::MINIMO_RESPUESTAS) {
+            return 'media';
+        }
+
+        $porcentaje = $acertadas / $respondidas;
+
+        if ($porcentaje > self::PORCENTAJE_FACIL) {
+            return 'dificil';
+        }
+
+        if($porcentaje < self::PORCENTAJE_DIFICIL){
+            return 'facil';
+        }
+
+        return 'media';
+    }
+
+    private function condicionDificultad($dificultad)
+    {
+        $porcentaje = "veces_acertada / veces_respondida";
+
+        if($dificultad === "facil") {
+            return["veces_respondida >= ? AND $porcentaje > ?", [self::MINIMO_RESPUESTAS, self::PORCENTAJE_FACIL]];
+            }
+
+        if($dificultad === "dificil") {
+            return ["veces_respondida >= ? AND $porcentaje < ?", [self::MINIMO_RESPUESTAS, self::PORCENTAJE_DIFICIL]];
+        }
+
+        return["(veces_respondida < ? OR $porcentaje BETWEEN ? AND ?)", [self::MINIMO_RESPUESTAS, self::PORCENTAJE_DIFICIL, self::PORCENTAJE_FACIL]];
+    }
+
+
+    public function marcarPreguntaComoVista($idUsuario, $idPregunta)
+    {
+        $this->database->executeParams(
+            "INSERT INTO preguntas_vistas (id_usuario, id_pregunta) VALUES (?, ?)
+        ON DUPLICATE KEY UPDATE fecha_vista = NOW()",
+            [$idUsuario, $idPregunta]
+        );
+    }
+
+    public function obtenerIdVistos($idUsuario)
+    {
+        $filas = $this->database->queryParams(
+            "SELECT id_pregunta FROM preguntas_vistas
+        WHERE id_usuario = ? AND fecha_vista >= NOW() - INTERVAL ? DAY",
+            [$idUsuario, self::DIAS_SIN_REPETIR]
+        );
+
+        return array_column($filas, 'id_pregunta');
     }
 }

@@ -1,0 +1,44 @@
+{{> header}}
+<main class="pregunta">
+    <section class="pregunta__tarjeta">
+        <h1 class="pregunta__titulo">Preguntas activas</h1>
+        <p class="pregunta__subtitulo">Preguntas que están hoy en el juego.</p>
+
+        <a class="pregunta__boton pregunta__boton--enlace" href="{{baseUrl}}/editor/show">Volver al panel</a>
+        <a class="pregunta__boton pregunta__boton--enlace" href="{{baseUrl}}/editor/inactivas">Ver preguntas inactivas</a>
+
+        {{#sin_activas}}
+            <p class="pregunta__subtitulo">No hay preguntas activas.</p>
+        {{/sin_activas}}
+
+        {{#preguntas}}
+            <article class="revision">
+                <p class="revision__enunciado">{{enunciado}}</p>
+                <p class="revision__datos">
+                    Categoría: {{categoria}} · Creada por {{creador}} · {{fecha_creacion}}
+                </p>
+
+                <details class="revision__detalle">
+                    <summary>Ver respuestas</summary>
+                    <ul class="revision__respuestas">
+                        {{#respuestas}}
+                            <li class="revision__respuesta {{#es_correcta}}revision__respuesta--correcta{{/es_correcta}}">
+                                {{texto}} {{#es_correcta}}✅{{/es_correcta}}
+                            </li>
+                        {{/respuestas}}
+                    </ul>
+                </details>
+
+                <div class="revision__acciones">
+                    <form method="POST" action="{{baseUrl}}/editor/baja">
+                        <input type="hidden" name="id" value="{{id}}">
+                        <button class="pregunta__boton revision__rechazar" type="submit">Dar de baja</button>
+                    </form>
+                    <a class="pregunta__boton pregunta__boton--enlace" href="{{baseUrl}}/pregunta/editar?id={{id}}">Editar</a>
+                </div>
+            </article>
+        {{/preguntas}}
+    </section>
+</main>
+
+{{> footer}}

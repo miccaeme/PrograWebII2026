@@ -19,5 +19,7 @@ CREATE TABLE IF NOT EXISTS usuarios(
     token_validacion VARCHAR(64) NULL UNIQUE,
     fecha_registro DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     token_recuperacion VARCHAR(64) NULL UNIQUE,
-    token_recuperacion_expira DATETIME NULL
+    token_recuperacion_expira DATETIME NULL,
+    preguntas_respondidas INT NOT NULL DEFAULT 0,
+    preguntas_acertadas INT NOT NULL DEFAULT 0
 );

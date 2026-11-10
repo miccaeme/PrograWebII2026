@@ -369,6 +369,7 @@ utiliza la pregunta y el vencimiento persistidos.
             $pregunta = $partida['pregunta'];
             $_SESSION['partida_finalizada'] = [
                 'puntaje' => $partida['puntaje'], 'enunciado' => $pregunta['enunciado'] ?? '',
+                'id_pregunta' => $pregunta['id'] ?? null,
                 'respuesta_correcta' => $pregunta ? $this->model->obtenerRespuestaCorrecta($pregunta['id']) : null,
                 'categoria_nombre' => $pregunta['categoria_nombre'] ?? '',
                 'categoria_color' => $pregunta['categoria_color'] ?? '#ef4444'
@@ -434,6 +435,7 @@ utiliza la pregunta y el vencimiento persistidos.
 
         ];
 
+        $_SESSION['ultima_pregunta_resultado'] = $info['id_pregunta'] ?? null;
         unset($_SESSION['partida_finalizada']);
         $this->render->renderiza("resultado", $data);
     }

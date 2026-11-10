@@ -7,7 +7,7 @@ use Redirect;
 use Request;
 use UrlHelper;
 
-class PreguntaController 
+class PreguntaController
 {
     private $model;
     private $render;
@@ -41,36 +41,36 @@ class PreguntaController
         $correcta = Request::post("correcta", "");
 
         if(!is_array($respuestas))
-            {
-                $respuestas = [];
-            }
+        {
+            $respuestas = [];
+        }
 
-            $respuestas = array_values(array_map("trim", $respuestas));
+        $respuestas = array_values(array_map("trim", $respuestas));
 
-            $errores = $this->validarFormulario($enunciado, $idCategoria, $respuestas, $correcta) + $this->model->validar($enunciado, $idCategoria, $respuestas);
+        $errores = $this->validarFormulario($enunciado, $idCategoria, $respuestas, $correcta) + $this->model->validar($enunciado, $idCategoria, $respuestas);
 
-            $datosIngresados = [
-                "enunciado" => $enunciado,
-                "id_categoria" => $idCategoria,
-                "respuestas" => $respuestas,
-                "correcta" => $correcta
-            ];
+        $datosIngresados = [
+            "enunciado" => $enunciado,
+            "id_categoria" => $idCategoria,
+            "respuestas" => $respuestas,
+            "correcta" => $correcta
+        ];
 
-            if(!empty($errores)) {
-                $this->mostrarFormulario($datosIngresados + ["errores" => $errores]);
-                return;
-            }
+        if(!empty($errores)) {
+            $this->mostrarFormulario($datosIngresados + ["errores" => $errores]);
+            return;
+        }
 
-            $estado = in_array($_SESSION["rol"] ?? "jugador", ["editor", "admin"], true) ? "activa" : "pendiente";
+        $estado = in_array($_SESSION["rol"] ?? "jugador", ["editor", "admin"], true) ? "activa" : "pendiente";
 
-            $guardada = $this->model->guardar($enunciado, $idCategoria, $respuestas, $correcta, $_SESSION["usuario_id"], $estado);
+        $guardada = $this->model->guardar($enunciado, $idCategoria, $respuestas, $correcta, $_SESSION["usuario_id"], $estado);
 
-            if(!$guardada){
-                $this->mostrarFormulario($datosIngresados + ["error_general" => "No se pudo guardar la pregunta. Probá de nuevo."]);
-                return;
-            }
+        if(!$guardada){
+            $this->mostrarFormulario($datosIngresados + ["error_general" => "No se pudo guardar la pregunta. Probá de nuevo."]);
+            return;
+        }
 
-            Redirect::to(UrlHelper::controllerUrl("pregunta", "crear") . "?enviada=1");
+        Redirect::to(UrlHelper::controllerUrl("pregunta", "crear") . "?enviada=1");
     }
 
     private function validarFormulario($enunciado, $idCategoria, $respuestas, $correcta)
@@ -246,15 +246,18 @@ class PreguntaController
             Redirect::toController("lobby", "show");
         }
 
-        $idPregunta = $_SESSION['partida_activa']['pregunta_actual']['id'] ?? null;
+        $idPregunta = $_SESSION['partida_activa']['pregunta_actual']['id']
+            ?? $_SESSION['ultima_pregunta_resultado'] ?? null;
         $motivo = Request::post("motivo", "");
-
 
         if ($idPregunta && in_array($motivo, self::MOTIVOS_REPORTE, true)) {
             $this->model->reportar($_SESSION['usuario_id'] ?? 0, $idPregunta, $motivo);
         }
 
-        Redirect::toController("partida", "jugar");
+        if (isset($_SESSION['partida_activa'])) {
+            Redirect::toController("partida", "jugar");
+        }
+        Redirect::toController("lobby", "show");
     }
 
 }

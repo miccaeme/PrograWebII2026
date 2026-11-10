@@ -238,6 +238,7 @@ class PartidaModel
                     [$idRespuesta, $partida['pregunta_actual_id']]
                 );
                 if (!$respuesta) return $partida;
+                $this->marcarPreguntaComoVista($partida['id_usuario'], $partida['pregunta_actual_id']);
                 $partida = $this->comprobarVencimiento($partida);
                 if ($partida['estado'] !== 'en_curso') return $partida;
 
@@ -264,11 +265,11 @@ class PartidaModel
     }
     //public function guardarPartida($idUsuario, $idCategoriaUltima, $puntaje)
     //{
-      //  return $this->finalizarPartida($idPartida, $idCategoriaUltima, $puntaje);
+    //  return $this->finalizarPartida($idPartida, $idCategoriaUltima, $puntaje);
     //}
 
-    public function registrarRespuesta($idUsuario, $idPregunta, $acerto) 
-    { 
+    public function registrarRespuesta($idUsuario, $idPregunta, $acerto)
+    {
         $suma = $acerto ? 1 : 0;
 
         $this->database->beginTransaction();
@@ -296,7 +297,7 @@ class PartidaModel
         }
     }
 
-    public function obtenerDificultadParaUsuario($idUsuario) 
+    public function obtenerDificultadParaUsuario($idUsuario)
     {
         $usuario = $this->database->queryOneParams(
             "SELECT preguntas_respondidas, preguntas_acertadas
@@ -329,7 +330,7 @@ class PartidaModel
 
         if($dificultad === "facil") {
             return["veces_respondida >= ? AND $porcentaje > ?", [self::MINIMO_RESPUESTAS, self::PORCENTAJE_FACIL]];
-            }
+        }
 
         if($dificultad === "dificil") {
             return ["veces_respondida >= ? AND $porcentaje < ?", [self::MINIMO_RESPUESTAS, self::PORCENTAJE_DIFICIL]];

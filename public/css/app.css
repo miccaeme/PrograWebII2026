@@ -1,2 +1,12 @@
+:root {
+    --contenido-padding-top: 48px;
+}
+
+@media (max-width: 600px) {
+    :root {
+        --contenido-padding-top: 32px;
+    }
+}
+
 .field-error { display: block; min-height: 1.2em; margin-top: 5px; color: #b42318; font-weight: 400; }
 

@@ -1,34 +1,3 @@
-.header:has(+ .lobby) {
-    background: url("../img/Cielo%20m%C3%A1gico%20para%20aprender%20y%20jugar.png") center 45% / cover fixed;
-    border-bottom: 1px solid rgba(255, 255, 255, .2);
-}
-
-.header:has(+ .lobby) .header__container {
-    max-width: 1500px;
-    min-height: 80px;
-    padding: 8px clamp(16px, 4vw, 64px);
-    gap: 16px;
-}
-
-.header:has(+ .lobby) .header__logo img {
-    width: 60px;
-    height: 60px;
-}
-
-.header:has(+ .lobby) .header__link,
-.header:has(+ .lobby) .header__login {
-    color: #fff;
-}
-
-.header:has(+ .lobby) .header__link:hover {
-    color: #fff;
-    background: rgba(255, 255, 255, .16);
-}
-
-.header:has(+ .lobby) .header__play {
-    background: #6655d9;
-}
-
 /* Contenedor Principal Centrado */
 .lobby {
     flex: 1 0 auto; /* Permite que el contenedor crezca todo lo necesario */
@@ -36,7 +5,7 @@
     justify-content: center;
     align-items: flex-start;
     box-sizing: border-box;
-    padding-top: clamp(5px, 14vh, 100px);
+    padding-top: var(--contenido-padding-top);
     padding-bottom: 90px; /* Margen inferior para que la tarjeta no toque el footer */
     padding-left: clamp(16px, 4vw, 32px);
     padding-right: clamp(16px, 4vw, 32px);
@@ -341,7 +310,7 @@
 /* Ajustes Específicos para Pantallas de Celular */
 @media (max-width: 480px) {
     .lobby {
-        padding: 16px 12px 24px;
+        padding: var(--contenido-padding-top) 12px 24px;
     }
 
     .lobby__tarjeta {

@@ -141,6 +141,33 @@ body {
 
 .header__play:active { transform: translateY(1px); }
 
+/* Mismo encabezado en lobby, perfil y partidas, aunque haya un link de CSS entre elementos. */
+.header:has(~ :is(.lobby, .perfil, .partida-contenedor)) {
+    background: url("../img/Cielo%20m%C3%A1gico%20para%20aprender%20y%20jugar.png") center 45% / cover fixed no-repeat;
+    border-bottom: 1px solid rgba(255, 255, 255, .2);
+}
+
+.header:has(~ :is(.lobby, .perfil, .partida-contenedor)) .header__container {
+    max-width: 1500px;
+    min-height: 80px;
+    padding: 8px clamp(16px, 4vw, 64px);
+    gap: 16px;
+}
+
+.header:has(~ :is(.lobby, .perfil, .partida-contenedor)) .header__logo img {
+    width: 60px;
+    height: 60px;
+}
+
+.header:has(~ :is(.lobby, .perfil, .partida-contenedor)) :is(.header__link, .header__login, .usuario-badge, .header__menu-toggle) {
+    color: #fff;
+}
+
+.header:has(~ :is(.lobby, .perfil, .partida-contenedor)) .header__link:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, .16);
+}
+
 @media (max-width: 950px) {
     .header__container { flex-wrap: wrap; justify-content: space-between; gap: 8px 18px; }
     .header__menu { order: 3; flex-basis: 100%; width: 100%; }
@@ -188,6 +215,7 @@ body {
     .header__link { color: var(--cerebrito-ink) !important; }
     .header__actions { width: 100%; align-items: stretch; flex-direction: column; gap: 8px; }
     .header__login { padding: 9px 15px; color: var(--cerebrito-ink) !important; }
+    .header:has(~ :is(.lobby, .perfil, .partida-contenedor)) .usuario-badge { color: var(--cerebrito-ink); }
     .header__play { align-self: flex-start; }
 }
 

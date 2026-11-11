@@ -4,24 +4,8 @@
     display: flex;
     justify-content: center;
     padding: clamp(32px, 5vh, 64px) clamp(24px, 5vw, 80px);
+    padding-top: var(--contenido-padding-top);
     background: url("../img/Cielo%20m%C3%A1gico%20para%20aprender%20y%20jugar.png") center 45% / cover fixed no-repeat;
-}
-
-.header:has(+ .perfil) {
-    background: url("../img/Cielo%20m%C3%A1gico%20para%20aprender%20y%20jugar.png") center 45% / cover fixed no-repeat;
-    border-bottom: 1px solid rgba(255, 255, 255, .2);
-}
-
-.header:has(+ .perfil) .header__link,
-.header:has(+ .perfil) .header__login,
-.header:has(+ .perfil) .usuario-badge,
-.header:has(+ .perfil) .header__menu-toggle {
-    color: #fff;
-}
-
-.header:has(+ .perfil) .header__link:hover {
-    color: #fff;
-    background: rgba(255, 255, 255, .16);
 }
 
 .perfil::before {
@@ -352,7 +336,7 @@
 .perfil__accionVisual { border-color: var(--cerebrito-purple); }
 
 @media (max-width: 800px) {
-    .perfil { padding: 24px 20px 32px; }
+    .perfil { padding: var(--contenido-padding-top) 20px 32px; }
 
     .perfil__tarjeta {
         gap: 16px;
@@ -429,5 +413,5 @@
 }
 
 @media (max-width: 600px) {
-    .perfil { padding: 28px 16px 32px; }
+    .perfil { padding: var(--contenido-padding-top) 16px 32px; }
 }

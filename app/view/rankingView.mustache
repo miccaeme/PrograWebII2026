@@ -1,0 +1,61 @@
+<link rel="stylesheet" href="{{baseUrl}}/public/css/ranking.css">
+{{> header}}
+
+<main class="ranking">
+    <div class="ranking__contenedor">
+        <header class="ranking__encabezado">
+            <h1 class="ranking__titulo">Ranking</h1>
+            <p class="ranking__subtitulo">¿Quién es el cerebrito más brillante?</p>
+        </header>
+
+        <nav class="ranking__pestanias">
+            <a href="{{baseUrl}}/ranking/show?periodo=historico"
+               class="ranking__pestania {{#es_historico}}ranking__pestania--activa{{/es_historico}}">Histórico</a>
+            <a href="{{baseUrl}}/ranking/show?periodo=mes"
+               class="ranking__pestania {{#es_mes}}ranking__pestania--activa{{/es_mes}}">Mes</a>
+            <a href="{{baseUrl}}/ranking/show?periodo=semana"
+               class="ranking__pestania {{#es_semana}}ranking__pestania--activa{{/es_semana}}">Semana</a>
+            <a href="{{baseUrl}}/ranking/show?periodo=dia"
+               class="ranking__pestania {{#es_dia}}ranking__pestania--activa{{/es_dia}}">Hoy</a>
+        </nav>
+
+        {{#sin_jugadores}}
+            <p class="ranking__vacio">Todavía no hay jugadores en el ranking.</p>
+        {{/sin_jugadores}}
+
+        <ol class="ranking__podio">
+            {{#podio}}
+                <li class="ranking__lugar ranking__lugar--{{posicion}} {{#es_yo}}ranking__lugar--yo{{/es_yo}}">
+                    <a href="{{baseUrl}}/perfil/compartido?token={{token_perfil}}" class="ranking__lugar-jugador">
+                        <span class="ranking__avatar ranking__avatar--grande">
+                            {{#foto_perfil}}<img src="{{baseUrl}}/{{foto_perfil}}" alt="">{{/foto_perfil}}
+                            {{^foto_perfil}}{{inicial}}{{/foto_perfil}}
+                        </span>
+                        <span class="ranking__lugar-nombre">{{nombre_usuario}}</span>
+                        <span class="ranking__lugar-puntos">{{puntaje_total}} pts</span>
+                    </a>
+                    <div class="ranking__pedestal">{{posicion}}</div>
+                </li>
+            {{/podio}}
+        </ol>
+
+        {{#hay_resto}}
+            <ol class="ranking__lista" start="4">
+                {{#resto}}
+                    <li class="ranking__fila {{#es_yo}}ranking__fila--yo{{/es_yo}}" style="--i: {{posicion}}">
+                        <span class="ranking__posicion">#{{posicion}}</span>
+                        <span class="ranking__avatar">
+                            {{#foto_perfil}}<img src="{{baseUrl}}/{{foto_perfil}}" alt="">{{/foto_perfil}}
+                            {{^foto_perfil}}{{inicial}}{{/foto_perfil}}
+                        </span>
+                        <a href="{{baseUrl}}/perfil/compartido?token={{token_perfil}}" class="ranking__jugador">{{nombre_usuario}}</a>
+                        <span class="ranking__partidas">{{partidas_jugadas}} partidas</span>
+                        <span class="ranking__puntos">{{puntaje_total}} pts</span>
+                    </li>
+                {{/resto}}
+            </ol>
+        {{/hay_resto}}
+    </div>
+</main>
+
+{{> footer}}

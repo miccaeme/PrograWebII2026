@@ -24,9 +24,27 @@
                 <img class="perfil__decoracion" src="{{baseUrl}}/public/img/Cerebro%20estudioso%20con%20idea%20brillante.png" alt="" aria-hidden="true">
             </section>
 
-            <section class="perfil__seccion perfilCompartidoPais" aria-labelledby="perfilCompartidoPaisTitulo">
-                <h2 class="perfil__subtitulo" id="perfilCompartidoPaisTitulo">País</h2>
-                <p class="perfil__valorDato">{{pais}}</p>
+                        <section class="perfil__seccion" aria-labelledby="perfilCompartidoDatosTitulo">
+                <h2 class="perfil__subtitulo" id="perfilCompartidoDatosTitulo">Datos del jugador</h2>
+                <dl class="perfil__datos">
+                    <div class="perfil__dato">
+                        <div class="perfil__detalle"><dt class="perfil__etiquetaDato">Puntaje total</dt><dd class="perfil__valorDato">{{puntaje_total}} pts</dd></div>
+                    </div>
+                    <div class="perfil__dato">
+                        <div class="perfil__detalle"><dt class="perfil__etiquetaDato">Partidas jugadas</dt><dd class="perfil__valorDato">{{partidas_jugadas}}</dd></div>
+                    </div>
+                    <div class="perfil__dato">
+                        <div class="perfil__detalle"><dt class="perfil__etiquetaDato">País</dt><dd class="perfil__valorDato">{{pais}}</dd></div>
+                    </div>
+                </dl>
+            </section>
+
+            <section class="perfil__seccion codigoQr" aria-labelledby="codigoQrTitulo">
+                <div class="codigoQrContenido">
+                    <h2 class="perfil__subtitulo" id="codigoQrTitulo">Perfil de {{nombre_usuario}}</h2>
+                    <p class="codigoQrTexto">Escaneá este código para abrir este perfil desde tu celular.</p>
+                </div>
+                <img class="codigoQrImagen" src="{{codigo_qr_data_uri}}" alt="Código QR para abrir el perfil de {{nombre_usuario}}">
             </section>
         {{/usuario}}
 

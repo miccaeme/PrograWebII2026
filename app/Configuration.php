@@ -24,6 +24,7 @@ include_once("model/LobbyModel.php");
 include_once("model/UsuarioModel.php");
 include_once("model/PartidaModel.php");
 include_once("model/PreguntaModel.php");
+include_once("model/RankingModel.php");
 include_once("controller/LobbyController.php");
 include_once("controller/RegistroController.php");
 include_once("controller/LoginController.php");
@@ -31,6 +32,7 @@ include_once("controller/PerfilController.php");
 include_once("controller/PartidaController.php");
 include_once("controller/PreguntaController.php");
 include_once("controller/EditorController.php");
+include_once("controller/RankingController.php");
 
 class Configuration
 {
@@ -111,6 +113,20 @@ class Configuration
         );
 
     }
+
+    public function getRankingModel()
+    {
+        return new \app\model\RankingModel($this->getDatabase());
+    }
+
+    public function getRankingController()
+    {
+        return new \app\controller\RankingController(
+            $this->getRankingModel(),
+            $this->getRender()
+        );
+    }
+
     public function getAdminController(){
         return new AdminController($this->getUsuarioModel(), $this->getRender());
     }

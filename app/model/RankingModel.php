@@ -39,4 +39,15 @@ class RankingModel
 
         return $jugadores;
     }
+
+    public function obtenerPosicionDe($idUsuario)
+    {
+        foreach($this->obtenerRanking() as $jugador){
+            if((int)$jugador["id"] === (int)$idUsuario){
+                return $jugador;
+            }
+        }
+
+        return null;
+    }
 }

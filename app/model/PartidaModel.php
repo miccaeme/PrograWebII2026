@@ -259,6 +259,8 @@ class PartidaModel
                     $partida['estado'] = 'finalizada';
                     $partida['motivo_finalizacion'] = 'respuesta_incorrecta';
                 }
+
+                $this->sumarContadores($partida['id_usuario'], $idPregunta, (int)$respuesta['es_correcta'] === 1);
                 $partida['respuesta_aceptada'] = true;
                 return $partida;
             });
@@ -268,24 +270,30 @@ class PartidaModel
     //  return $this->finalizarPartida($idPartida, $idCategoriaUltima, $puntaje);
     //}
 
-    public function registrarRespuesta($idUsuario, $idPregunta, $acerto)
+    private function sumarContadores($idUsuario, $idPregunta, $acerto)
     {
         $suma = $acerto ? 1 : 0;
+
+        $this->database->executeParams("UPDATE preguntas 
+        SET veces_respondida = veces_respondida + 1, 
+        veces_acertada = veces_acertada + ? 
+        WHERE id = ?", [$suma, $idPregunta]);
+
+        $this->database->executeParams("UPDATE usuarios
+        SET preguntas_respondidas = preguntas_respondidas + 1,
+        preguntas_acertadas = preguntas_acertadas + ?
+        WHERE id = ?", [$suma, $idUsuario]);
+    }
+
+    public function registrarRespuesta($idUsuario, $idPregunta, $acerto)
+    {
+       
 
         $this->database->beginTransaction();
 
         try{
-            $this->database->executeParams(
-                "UPDATE preguntas SET veces_respondida = veces_respondida + 1,
-                veces_acertada = veces_acertada + ? WHERE id = ?",
-                [$suma, $idPregunta]
-            );
 
-            $this->database->executeParams(
-                "UPDATE usuarios SET preguntas_respondidas = preguntas_respondidas + 1,
-                preguntas_acertadas = preguntas_acertadas + ? WHERE id = ?",
-                [$suma, $idUsuario]
-            );
+            $this->sumarContadores($idUsuario, $idPregunta, $acerto);
 
             $this->database->commit();
             return true;

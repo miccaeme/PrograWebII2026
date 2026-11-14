@@ -7,10 +7,12 @@ use Auth;
 class LobbyController
 {
     private $model;
+    private $rankingModel;
     private $render;
 
-    public function __construct($model, $render){
+    public function __construct($model, $rankingModel, $render){
         $this->model = $model;
+        $this->rankingModel = $rankingModel;
         $this->render = $render;
     }
 
@@ -35,12 +37,13 @@ class LobbyController
             $tieneMasPartidas = count ($partidasRestantes)>0;
         }
 
+        $miRanking = $idUsuario ? $this->rankingModel->obtenerPosicionDe($idUsuario) : null;
 
         $data = [
             "logueado"       => !empty($_SESSION["logueado"]),
             "nombre_usuario" => $_SESSION["nombre_usuario"] ?? "Jugador",
-            "puntos_ranking" => 1250,
-            "posicion_ranking"=> "#12",
+            "puntos_ranking" => $miRanking["puntaje_total"] ?? 0,
+            "posicion_ranking"=> $miRanking ? "#" . $miRanking["posicion"] : "-",
             "partidas_recientes"=> $partidasRecientes,
             "partidas_restantes" => $partidasRestantes,
             "tiene_mas_partidas" => $tieneMasPartidas,

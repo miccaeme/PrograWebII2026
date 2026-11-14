@@ -120,8 +120,13 @@ class UsuarioModel
     public function buscarPorId($id)
     {
         $usuario = $this->database->queryOneParams(
-            "SELECT id, nombre_completo, anio_nacimiento, sexo, pais, ciudad, email, nombre_usuario, foto_perfil, fecha_registro, token_perfil
-            FROM usuarios WHERE id = ?", [$id]
+            "SELECT u.id, u.nombre_completo, u.anio_nacimiento, u.sexo, u.pais, u.ciudad, u.email,
+                u.nombre_usuario, u.foto_perfil, u.fecha_registro, u.token_perfil,
+            (SELECT COALESCE(SUM(p.puntaje), 0) FROM partidas p
+            WHERE p.id_usuario = u.id AND p.estado = 'finalizada') AS puntaje_total,
+            (SELECT COUNT(*) FROM partidas p
+            WHERE p.id_usuario = u.id AND p.estado = 'finalizada') AS partidas_jugadas
+            FROM usuarios u WHERE u.id = ?", [$id]
         );
 
         if(!$usuario) {
@@ -141,8 +146,13 @@ class UsuarioModel
         }
 
         return $this->database->queryOneParams(
-            "SELECT nombre_completo, nombre_usuario, foto_perfil, pais
-            FROM usuarios WHERE token_perfil = ?",
+                        "SELECT u.nombre_completo, u.nombre_usuario, u.foto_perfil, u.pais,
+            COALESCE(SUM(p.puntaje), 0) AS puntaje_total,
+            COUNT(p.id) AS partidas_jugadas
+            FROM usuarios u
+            LEFT JOIN partidas p ON p.id_usuario = u.id AND p.estado = 'finalizada'
+            WHERE u.token_perfil = ?
+            GROUP BY u.id, u.nombre_completo, u.nombre_usuario, u.foto_perfil, u.pais",
             [$token]
         );
     }

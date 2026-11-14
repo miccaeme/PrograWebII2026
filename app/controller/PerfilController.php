@@ -39,6 +39,7 @@ class PerfilController
         $this->render->renderiza("perfilCompartido", [
             "usuario" => $usuario,
             "noEncontrado" => !$usuario,
+            "codigo_qr_data_uri" => $usuario ? $this->generarQr($this->urlPerfilCompartido($token)) : null,
             "logueado" => !empty($_SESSION["logueado"]),
             "nombre_usuario" => $_SESSION["nombre_usuario"] ?? ""
         ]);
@@ -93,10 +94,21 @@ class PerfilController
         $this->render->renderiza("perfil", array_merge([
             "usuario" => $usuario,
             "url_perfil_compartido" => $urlCompartida,
-            "codigo_qr_data_uri" => $codigoQr->getDataUri(),
+            "codigo_qr_data_uri" => $this->generarQr($urlCompartida),
             "logueado" => !empty($_SESSION["logueado"]),
             "nombre_usuario" => $_SESSION["nombre_usuario"] ?? ""
         ], $extra));
+    }
+
+    private function generarQr($url)
+    {
+        return Builder::create()
+        ->writer(new SvgWriter())
+        ->data($url)
+        ->size(240)
+        ->margin(10)
+        ->build()
+        ->getDataUri();
     }
 
     private function urlPerfilCompartido($token)

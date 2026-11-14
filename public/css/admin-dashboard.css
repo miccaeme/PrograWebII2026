@@ -1,0 +1,120 @@
+.admin-dashboard {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.admin-filtros {
+    background: #ffffff;
+    padding: 1.25rem 1.5rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 1.25rem;
+}
+
+.admin-filtros > div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.admin-filtros label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #4b5563;
+}
+
+.admin-filtros select,
+.admin-filtros input[type="date"] {
+    padding: 0.55rem 0.9rem;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    color: #1f2937;
+    background-color: #f9fafb;
+}
+
+.admin-filtros button {
+    padding: 0.6rem 1.3rem;
+    background-color: #6655d9;
+    color: #ffffff;
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.admin-filtros a {
+    padding: 0.6rem 1rem;
+    color: #6b7280;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.admin-kpis {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+}
+
+.kpi-card {
+    background: #ffffff;
+    padding: 1.5rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    border-top: 5px solid #6655d9;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.kpi-card:nth-child(2) { border-top-color: #10b981; }
+.kpi-card:nth-child(3) { border-top-color: #f59e0b; }
+
+.kpi-card span {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #6b7280;
+}
+
+.kpi-card strong {
+    font-size: 2.4rem;
+    font-weight: 800;
+    color: #1f2937;
+}
+
+.admin-graficos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 1.5rem;
+}
+
+.chart-box {
+    background: #ffffff;
+    padding: 1.5rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.chart-box h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: #1f2937;
+}
+
+.chart-container {
+    position: relative;
+    height: 280px;
+    width: 100%;
+    overflow: hidden;
+}

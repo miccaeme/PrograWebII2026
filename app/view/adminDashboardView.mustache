@@ -1,0 +1,82 @@
+{{> header}}
+
+<main class="admin-dashboard">
+    <form method="POST" action="{{baseUrl}}/admin/filtrar" class="admin-filtros">
+        <div>
+            <label for="periodo">Filtrar totales por:</label>
+            <select name="periodo" id="periodo">
+                <option value="todo" {{#es_todo}}selected{{/es_todo}}>Histórico completo</option>
+                <option value="dia" {{#es_dia}}selected{{/es_dia}}>Día</option>
+                <option value="mes" {{#es_mes}}selected{{/es_mes}}>Mes</option>
+                <option value="anio" {{#es_anio}}selected{{/es_anio}}>Año</option>
+            </select>
+        </div>
+
+        <div>
+            <label for="fecha">Fecha de referencia:</label>
+            <input type="date" name="fecha" id="fecha" value="{{fecha_actual}}">
+        </div>
+
+        <div>
+            <label for="agrupar">Evolución de gráficos:</label>
+            <select name="agrupar" id="agrupar">
+                <option value="dia" {{#agrupar_dia}}selected{{/agrupar_dia}}>Por Día</option>
+                <option value="mes" {{#agrupar_mes}}selected{{/agrupar_mes}}>Por Mes</option>
+                <option value="anio" {{#agrupar_anio}}selected{{/agrupar_anio}}>Por Año</option>
+            </select>
+        </div>
+
+        <button type="submit">Aplicar</button>
+        <a href="{{baseUrl}}/admin/limpiarFiltros">Limpiar</a>
+    </form>
+
+    <section class="admin-kpis">
+        <article class="kpi-card">
+            <span>Jugadores Registrados</span>
+            <strong>{{total_jugadores}}</strong>
+        </article>
+        <article class="kpi-card">
+            <span>Partidas Jugadas</span>
+            <strong>{{total_partidas}}</strong>
+        </article>
+        <article class="kpi-card">
+            <span>Preguntas Creadas</span>
+            <strong>{{total_preguntas}}</strong>
+        </article>
+    </section>
+
+    <section class="admin-graficos">
+        <div class="chart-box">
+            <h3>Partidas Jugadas</h3>
+            <div class="chart-container">
+                <canvas id="chartPartidas"
+                        data-labels='{{{partidas_labels}}}'
+                        data-values='{{{partidas_values}}}'></canvas>
+            </div>
+        </div>
+
+        <div class="chart-box">
+            <h3>Nuevos Jugadores</h3>
+            <div class="chart-container">
+                <canvas id="chartJugadores"
+                        data-labels='{{{jugadores_labels}}}'
+                        data-values='{{{jugadores_values}}}'></canvas>
+            </div>
+        </div>
+
+        <div class="chart-box">
+            <h3>Preguntas por Categoría</h3>
+            <div class="chart-container">
+                <canvas id="chartCategorias"
+                        data-labels='{{{categorias_labels}}}'
+                        data-values='{{{categorias_values}}}'
+                        data-colors='{{{categorias_colors}}}'></canvas>
+            </div>
+        </div>
+    </section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{baseUrl}}/public/javascript/admin-metricas.js"></script>
+
+{{> footer}}

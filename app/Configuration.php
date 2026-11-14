@@ -111,8 +111,12 @@ class Configuration
         );
 
     }
-    public function getAdminController(){
-        return new AdminController($this->getUsuarioModel(), $this->getRender());
+    public function getAdminController()
+    {
+        return new \app\controller\AdminController(
+            new \app\model\AdminModel($this->getDatabase()),
+            $this->getRender()
+        );
     }
 
     public function getEditorController(){

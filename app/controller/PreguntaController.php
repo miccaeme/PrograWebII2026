@@ -240,24 +240,61 @@ class PreguntaController
 
     public function reportar()
     {
-        Auth::requiereRol(["jugador"]);
+        header('Content-Type: application/json; charset=utf-8');
+        header('Cache-Control: no-store');
+
+        if (empty($_SESSION['logueado']) || empty($_SESSION['usuario_id'])) {
+            $this->responderReporte(401, false, 'Tu sesión venció. Volvé a iniciar sesión.');
+            return;
+        }
+        if ((($_SESSION['rol'] ?? '') ?: 'jugador') !== 'jugador') {
+            $this->responderReporte(403, false, 'Solo los jugadores pueden reportar preguntas.');
+            return;
+        }
 
         if ($_SERVER["REQUEST_METHOD"] !== "POST") {
-            Redirect::toController("lobby", "show");
+            header('Allow: POST');
+            $this->responderReporte(405, false, 'Método no permitido.');
+            return;
         }
 
-        $idPregunta = $_SESSION['partida_activa']['pregunta_actual']['id']
-            ?? $_SESSION['ultima_pregunta_resultado'] ?? null;
-        $motivo = Request::post("motivo", "");
-
-        if ($idPregunta && in_array($motivo, self::MOTIVOS_REPORTE, true)) {
-            $this->model->reportar($_SESSION['usuario_id'] ?? 0, $idPregunta, $motivo);
+        $datos = json_decode(file_get_contents('php://input'), true);
+        if (json_last_error() !== JSON_ERROR_NONE || !is_array($datos)) {
+            $this->responderReporte(400, false, 'La solicitud debe contener JSON válido.');
+            return;
+        }
+        $motivo = $datos['motivo'] ?? null;
+        $contexto = $datos['contexto'] ?? null;
+        if (!is_string($motivo) || !in_array($motivo, self::MOTIVOS_REPORTE, true)
+            || !in_array($contexto, ['correcta', 'resultado'], true)) {
+            $this->responderReporte(400, false, 'Los datos del reporte no son válidos.');
+            return;
         }
 
-        if (isset($_SESSION['partida_activa'])) {
-            Redirect::toController("partida", "jugar");
+        $idPregunta = $contexto === 'correcta'
+            ? ($_SESSION['ultima_pregunta_correcta'] ?? null)
+            : ($_SESSION['ultima_pregunta_resultado'] ?? null);
+        if (!$idPregunta) {
+            $this->responderReporte(400, false, 'No hay una pregunta disponible para reportar.');
+            return;
         }
-        Redirect::toController("lobby", "show");
+
+        try {
+            $insertadas = $this->model->reportar($_SESSION['usuario_id'], $idPregunta, $motivo);
+            if ($insertadas < 1) {
+                $this->responderReporte(409, false, 'No se registró el reporte. Es posible que ya hayas reportado esta pregunta.');
+                return;
+            }
+            $this->responderReporte(201, true, 'El reporte se registró correctamente.');
+        } catch (\Throwable $error) {
+            $this->responderReporte(500, false, 'No se pudo registrar el reporte. Intentá nuevamente.');
+        }
+    }
+
+    private function responderReporte($estado, $exito, $mensaje)
+    {
+        http_response_code($estado);
+        echo json_encode(['exito' => $exito, 'mensaje' => $mensaje], JSON_UNESCAPED_UNICODE);
     }
 
 }

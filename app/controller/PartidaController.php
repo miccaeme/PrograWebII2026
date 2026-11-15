@@ -206,6 +206,7 @@ class PartidaController
             $this->redirigir('resultado');
         }
         if (!empty($partida['respuesta_aceptada'])) {
+            $_SESSION['ultima_pregunta_correcta'] = $idPregunta;
             $this->redirigir('respuestaCorrecta');
         } else {
             $this->redirigir('jugar');

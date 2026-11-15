@@ -217,7 +217,7 @@ class PreguntaModel
 
     public function reportar($idUsuario, $idPregunta, $motivo)
     {
-        $this->database->executeParams(
+        return $this->database->executeParams(
             "INSERT IGNORE INTO reportes_preguntas (id_pregunta, id_usuario, motivo) VALUES (?, ?, ?)",
             [$idPregunta, $idUsuario, $motivo]
         );

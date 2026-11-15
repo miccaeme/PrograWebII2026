@@ -71,9 +71,9 @@ class AdminController
         $baseUrl = $_ENV['BASE_URL'] ?? '/PrograWebII2026';
 
         $filtros = $_SESSION['admin_filtros'] ?? [
-            'periodo' => 'todo',
-            'fecha'   => date('Y-m-d'),
-            'agrupar' => 'dia'
+                'periodo' => 'todo',
+                'fecha'   => date('Y-m-d'),
+                'agrupar' => 'dia'
         ];
 
         $periodo = $filtros['periodo'];
@@ -88,27 +88,42 @@ class AdminController
         $serieJugadores = $this->model->obtenerSerieTemporal('usuarios', 'fecha_registro', "rol = 'jugador'", $agrupar);
         $porCategoria   = $this->model->obtenerPreguntasPorCategoria($periodo, $fecha);
 
+        $etiquetas = [
+                'todo' => 'Reporte histórico completo',
+                'dia'  => 'Reporte del día ' . $fecha,
+                'mes'  => 'Reporte del mes ' . substr($fecha, 0, 7),
+                'anio' => 'Reporte del año ' . substr($fecha, 0, 4),
+        ];
+        $tituloReporte = $etiquetas[$periodo] ?? 'Reporte';
+
         $data = [
-            "logueado"          => true,
-            "nombre_usuario"    => $_SESSION["nombre_usuario"] ?? "Admin",
-            "total_jugadores"   => $totalJugadores,
-            "total_partidas"    => $totalPartidas,
-            "total_preguntas"   => $totalPreguntas,
-            "fecha_actual"      => $fecha,
-            "es_todo"           => $periodo === 'todo',
-            "es_dia"            => $periodo === 'dia',
-            "es_mes"            => $periodo === 'mes',
-            "es_anio"           => $periodo === 'anio',
-            "agrupar_dia"       => $agrupar === 'dia',
-            "agrupar_mes"       => $agrupar === 'mes',
-            "agrupar_anio"      => $agrupar === 'anio',
-            "partidas_labels"   => json_encode(array_column($seriePartidas, 'etiqueta')),
-            "partidas_values"   => json_encode(array_map('intval', array_column($seriePartidas, 'total'))),
-            "jugadores_labels"  => json_encode(array_column($serieJugadores, 'etiqueta')),
-            "jugadores_values"  => json_encode(array_map('intval', array_column($serieJugadores, 'total'))),
-            "categorias_labels" => json_encode(array_column($porCategoria, 'categoria')),
-            "categorias_values" => json_encode(array_map('intval', array_column($porCategoria, 'total'))),
-            "categorias_colors" => json_encode(array_column($porCategoria, 'color'))
+                "logueado"          => true,
+                "nombre_usuario"    => $_SESSION["nombre_usuario"] ?? "Admin",
+                "total_jugadores"   => $totalJugadores,
+                "total_partidas"    => $totalPartidas,
+                "total_preguntas"   => $totalPreguntas,
+                "fecha_actual"      => $fecha,
+                "es_todo"           => $periodo === 'todo',
+                "es_dia"            => $periodo === 'dia',
+                "es_mes"            => $periodo === 'mes',
+                "es_anio"           => $periodo === 'anio',
+                "agrupar_dia"       => $agrupar === 'dia',
+                "agrupar_mes"       => $agrupar === 'mes',
+                "agrupar_anio"      => $agrupar === 'anio',
+                "tabla_partidas"    => $seriePartidas,
+                "tabla_jugadores"   => $serieJugadores,
+                "tabla_categorias"  => $porCategoria,
+                "por_pais"          => $this->model->obtenerUsuariosPorPais($periodo, $fecha),
+                "por_sexo"          => $this->model->obtenerUsuariosPorSexo($periodo, $fecha),
+                "por_edad"          => $this->model->obtenerUsuariosPorEdad($periodo, $fecha),
+                "titulo_reporte"    => $tituloReporte,
+                "partidas_labels"   => json_encode(array_column($seriePartidas, 'etiqueta')),
+                "partidas_values"   => json_encode(array_map('intval', array_column($seriePartidas, 'total'))),
+                "jugadores_labels"  => json_encode(array_column($serieJugadores, 'etiqueta')),
+                "jugadores_values"  => json_encode(array_map('intval', array_column($serieJugadores, 'total'))),
+                "categorias_labels" => json_encode(array_column($porCategoria, 'categoria')),
+                "categorias_values" => json_encode(array_map('intval', array_column($porCategoria, 'total'))),
+                "categorias_colors" => json_encode(array_column($porCategoria, 'color'))
         ];
 
         $this->render->renderiza("adminDashboard", $data);

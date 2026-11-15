@@ -52,7 +52,7 @@ class Configuration
 
     public function getLobbyController()
     {
-        return new LobbyController($this->getLobbyModel(), $this->getRender());
+        return new LobbyController($this->getLobbyModel(), $this->getRankingModel(), $this->getRender());
     }
 
     public function getLoginController()

@@ -30,6 +30,15 @@
         <a href="{{baseUrl}}/admin/limpiarFiltros">Limpiar</a>
     </form>
 
+    <nav class="admin-indice">
+        <a href="#seccion-graficos">Gráficos</a>
+        <a href="#seccion-tablas">Tablas</a>
+        <a href="#tabla-pais">País</a>
+        <a href="#tabla-sexo">Sexo</a>
+        <a href="#tabla-edad">Edad</a>
+        <button type="button" class="admin-imprimir" onclick="window.print()">Imprimir reportes</button>
+    </nav>
+
     <section class="admin-kpis">
         <article class="kpi-card">
             <span>Jugadores Registrados</span>
@@ -45,7 +54,7 @@
         </article>
     </section>
 
-    <section class="admin-graficos">
+    <section class="admin-graficos" id="seccion-graficos">
         <div class="chart-box">
             <h3>Partidas Jugadas</h3>
             <div class="chart-container">
@@ -72,6 +81,70 @@
                         data-values='{{{categorias_values}}}'
                         data-colors='{{{categorias_colors}}}'></canvas>
             </div>
+        </div>
+    </section>
+
+    <section class="admin-tablas" id="seccion-tablas">
+        <h2 class="reporte-titulo">{{titulo_reporte}}</h2>
+
+        <div class="tabla-box">
+            <h3>Partidas jugadas</h3>
+            <table class="tabla-datos">
+                <thead><tr><th>Período</th><th>Partidas</th></tr></thead>
+                <tbody>
+                {{#tabla_partidas}}<tr><td>{{etiqueta}}</td><td>{{total}}</td></tr>{{/tabla_partidas}}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="tabla-box">
+            <h3>Nuevos jugadores</h3>
+            <table class="tabla-datos">
+                <thead><tr><th>Período</th><th>Jugadores</th></tr></thead>
+                <tbody>
+                {{#tabla_jugadores}}<tr><td>{{etiqueta}}</td><td>{{total}}</td></tr>{{/tabla_jugadores}}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="tabla-box">
+            <h3>Preguntas por categoría</h3>
+            <table class="tabla-datos">
+                <thead><tr><th>Categoría</th><th>Preguntas</th></tr></thead>
+                <tbody>
+                {{#tabla_categorias}}<tr><td>{{categoria}}</td><td>{{total}}</td></tr>{{/tabla_categorias}}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="tabla-box" id="tabla-pais">
+            <h3>Usuarios por país</h3>
+            <table class="tabla-datos">
+                <thead><tr><th>País</th><th>Usuarios</th></tr></thead>
+                <tbody>
+                {{#por_pais}}<tr><td>{{grupo}}</td><td>{{total}}</td></tr>{{/por_pais}}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="tabla-box" id="tabla-sexo">
+            <h3>Usuarios por sexo</h3>
+            <table class="tabla-datos">
+                <thead><tr><th>Sexo</th><th>Usuarios</th></tr></thead>
+                <tbody>
+                {{#por_sexo}}<tr><td>{{grupo}}</td><td>{{total}}</td></tr>{{/por_sexo}}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="tabla-box" id="tabla-edad">
+            <h3>Usuarios por grupo de edad</h3>
+            <table class="tabla-datos">
+                <thead><tr><th>Grupo</th><th>Usuarios</th></tr></thead>
+                <tbody>
+                {{#por_edad}}<tr><td>{{grupo}}</td><td>{{total}}</td></tr>{{/por_edad}}
+                </tbody>
+            </table>
         </div>
     </section>
 </main>

@@ -32,7 +32,7 @@
 
                 <details class="partida-reportar">
                     <summary class="partida-reportar__resumen">Reportar pregunta</summary>
-                    <form method="POST" action="{{baseUrl}}/pregunta/reportar" class="partida-reportar__form">
+                    <form method="POST" action="{{baseUrl}}/pregunta/reportar" class="partida-reportar__form" data-contexto="correcta">
                         <select name="motivo" class="partida-reportar__select" required>
                             <option value="">¿Qué problema tiene?</option>
                             <option value="La respuesta correcta es otra">La respuesta correcta es otra</option>
@@ -42,6 +42,7 @@
                             <option value="Otro">Otro</option>
                         </select>
                         <button type="submit" class="partida-reportar__boton">Enviar reporte</button>
+                        <span role="status" aria-live="polite"></span>
                     </form>
                 </details>
             </div>
@@ -51,24 +52,6 @@
     </div>
 </main>
 
-<script>
-    document.addEventListener("DOMContentLoaded", () => {
-        const btnToggle = document.getElementById("btn-toggle-reporte");
-        const formReporte = document.getElementById("form-reporte-pregunta");
-        const btnCancelar = document.getElementById("btn-cancelar-reporte");
-
-        if (btnToggle && formReporte) {
-            btnToggle.addEventListener("click", () => {
-                btnToggle.style.display = "none";
-                formReporte.style.display = "block";
-            });
-
-            btnCancelar.addEventListener("click", () => {
-                formReporte.style.display = "none";
-                btnToggle.style.display = "block";
-            });
-        }
-    });
-</script>
+<script src="{{baseUrl}}/public/javascript/reportar-pregunta.js" defer></script>
 
 {{> footer}}

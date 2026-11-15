@@ -21,20 +21,20 @@ class AdminModel
             case 'dia':
                 // Espera YYYY-MM-DD
                 return [
-                    'sql'    => " AND DATE($columnaFecha) = ? ",
+                    'sql' => " AND DATE($columnaFecha) = ? ",
                     'params' => [$fechaValor]
                 ];
             case 'mes':
 
                 $mes = substr($fechaValor, 0, 7);
                 return [
-                    'sql'    => " AND DATE_FORMAT($columnaFecha, '%Y-%m') = ? ",
+                    'sql' => " AND DATE_FORMAT($columnaFecha, '%Y-%m') = ? ",
                     'params' => [$mes]
                 ];
             case 'anio':
                 $anio = (int)substr($fechaValor, 0, 4);
                 return [
-                    'sql'    => " AND YEAR($columnaFecha) = ? ",
+                    'sql' => " AND YEAR($columnaFecha) = ? ",
                     'params' => [$anio]
                 ];
             default:
@@ -98,6 +98,7 @@ class AdminModel
         $filas = $this->database->queryParams($sql, []) ?? [];
         return array_reverse($filas);
     }
+
     public function obtenerPreguntasPorCategoria($periodo = 'todo', $fechaValor = null)
     {
         $filtro = $this->construirFiltroFecha('p.fecha_creacion', $periodo, $fechaValor);
@@ -108,5 +109,59 @@ class AdminModel
                 ORDER BY total DESC";
 
         return $this->database->queryParams($sql, $filtro['params']) ?? [];
+    }
+
+    public function obtenerUsuariosPorPais($periodo, $fecha)
+    {
+
+        $filtro = $this->construirFiltroFecha('fecha_registro', $periodo, $fecha);
+        $sql = "SELECT pais AS grupo, COUNT(*) AS total
+                FROM usuarios
+                WHERE rol = 'jugador' {$filtro['sql']}
+                GROUP BY pais
+                ORDER BY total DESC";
+        return $this->database->queryParams($sql, $filtro['params']) ?? [];
+    }
+
+    public function obtenerUsuariosPorSexo($periodo, $fecha){
+        $filtro = $this->construirFiltroFecha('fecha_registro', $periodo, $fecha);
+        $sql = "SELECT CASE sexo
+                WHEN 'M' THEN 'Masculino'
+                WHEN 'F' THEN 'Femenino'
+                ELSE 'Prefiere no decirlo'
+                END AS grupo,
+                COUNT(*) AS total
+                FROM usuarios
+                WHERE rol = 'jugador' {$filtro['sql']}
+                GROUP BY sexo";
+        $filas = $this->database->queryParams($sql, $filtro['params']) ?? [];
+        return $this->completarGrupos($filas, ['Masculino', 'Femenino', 'Prefiere no decirlo']);
+    }
+
+    public function obtenerUsuariosPorEdad($periodo, $fecha){
+        $filtro = $this->construirFiltroFecha('fecha_registro', $periodo, $fecha);
+       $sql = "SELECT CASE
+                WHEN YEAR(CURDATE()) - anio_nacimiento < 18 THEN 'Menores'
+                WHEN YEAR(CURDATE()) - anio_nacimiento >= 65 THEN 'Jubilados'
+                ELSE 'Medio'
+                END AS grupo,
+                COUNT(*) AS total
+                FROM usuarios
+                WHERE rol = 'jugador' {$filtro['sql']}
+                GROUP BY grupo";
+        $filas = $this->database->queryParams($sql, $filtro['params']) ?? [];
+        return $this->completarGrupos($filas, ['Menores', 'Medio', 'Jubilados']);
+    }
+
+    //metodo para que los grupos que no existan aparezcan en el dashboard con 0.
+    //ej: si no hay jubilados, sin este metodo no aparecian en los reportes, ahora aparece jubilado: 0
+    private function completarGrupos($filas, $grupos)
+    {
+        $totales = array_column($filas, 'total', 'grupo');
+        $resultado = [];
+        foreach ($grupos as $grupo) {
+            $resultado[] = ['grupo' => $grupo, 'total' => $totales[$grupo] ?? 0];
+        }
+        return $resultado;
     }
 }

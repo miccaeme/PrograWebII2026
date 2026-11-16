@@ -13,16 +13,19 @@ class RegistroController
     private $model;
     private $render;
 
-    public function __construct($model, $render){
+    public function __construct($model, $render)
+    {
         $this->model = $model;
         $this->render = $render;
     }
 
-    public function show(){
+    public function show()
+    {
         $this->render->renderiza("registro", []);
     }
 
-    public function procesar(){
+    public function procesar()
+    {
 
         $datos = [
             "nombre_completo" => trim(Request::post("nombre_completo", "")),
@@ -30,19 +33,20 @@ class RegistroController
             "sexo" => Request::post("sexo", ""),
             "email" => trim(Request::post("email", "")),
             "nombre_usuario" => trim(Request::post("nombre_usuario", "")),
-            "pais"            => Request::post("pais", ""),
-            "latitud"         => Request::post("latitud", ""),
-            "longitud"        => Request::post("longitud", "")
+            "pais" => Request::post("pais", ""),
+            "ciudad" => trim(Request::post("ciudad", "")),
+            "latitud" => Request::post("latitud", ""),
+            "longitud" => Request::post("longitud", "")
         ];
         $password = Request::post("password", "");
         $passwordRepetida = Request::post("password_repetida", "");
 
         $errores = $this->model->validar($datos, $password);
-        if($password !== $passwordRepetida){
+        if ($password !== $passwordRepetida) {
             $errores["password_repetida"] = "Las contraseñas no coinciden.";
         }
 
-        if($errores){
+        if ($errores) {
             $datos["errores"] = $errores;
             $datos["sexo_M"] = $datos["sexo"] === "M";
             $datos["sexo_F"] = $datos["sexo"] === "F";
@@ -70,9 +74,10 @@ class RegistroController
 
         $this->render->renderiza("login", $datos);
 
-}
+    }
 
-    public function activar(){
+    public function activar()
+    {
         $token = Request::get("token", "");
         $activada = $this->model->activarCuenta($token);
 

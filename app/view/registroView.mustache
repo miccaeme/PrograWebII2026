@@ -85,6 +85,7 @@
                 <input type="hidden" name="latitud" id="latitud">
                 <input type="hidden" name="longitud" id="longitud">
                 <input type="hidden" name="pais" id="pais">
+                <input type="hidden" name="ciudad" id="ciudad">
 
 
 
@@ -109,11 +110,15 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script>
-    const map = L.map('map').setView([-34.6037, -58.3816], 4);
-
+    const map = L.map('map', {
+        maxBounds: [[-85, -180], [85, 180]],
+        maxBoundsViscosity: 1.0,
+        minZoom: 2
+    }).setView([-34.6037, -58.3816], 4);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 18,
+        noWrap: true,
         attribution: '© OpenStreetMap'
     }).addTo(map);
 
@@ -126,27 +131,33 @@
 
 
     map.on('click', function(e) {
-        const lat = e.latlng.lat;
-        const lng = e.latlng.lng;
-
+        const punto = e.latlng.wrap();
+        const lat = punto.lat;
+        const lng = punto.lng;
 
         if (marcador) {
-            marcador.setLatLng(e.latlng);
+            marcador.setLatLng(punto);
         } else {
-            marcador = L.marker(e.latlng).addTo(map);
+            marcador = L.marker(punto).addTo(map);
         }
 
         // Guarda latitud y longitud en los inputs
         document.getElementById('latitud').value = lat;
         document.getElementById('longitud').value = lng;
 
-        // 4. Geocodificación inversa gratuita (Nominatim OpenStreetMap) para obtener el País
-        fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`)
+        // Geocodificación inversa gratuita (Nominatim OpenStreetMap) para obtener País y Ciudad
+        fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&accept-language=es&lat=${lat}&lon=${lng}`)
                 .then(response => response.json())
                 .then(data => {
-                    const pais = data.address && data.address.country ? data.address.country : 'Desconocido';
+                    const a = data.address || {};
+                    const pais = a.country ? a.country : 'Desconocido';
+                    const ciudad = a.city || a.town || a.village || a.municipality
+                            || a.city_district || a.suburb || a.county
+                            || a.state_district || a.state || 'Sin datos';
+
                     document.getElementById('pais').value = pais;
-                    document.getElementById('pais-seleccionado').textContent = `País seleccionado: ${pais}`;
+                    document.getElementById('ciudad').value = ciudad;
+                    document.getElementById('pais-seleccionado').textContent = `País seleccionado: ${pais} · Ciudad: ${ciudad}`;
                 })
                 .catch(() => {
                     document.getElementById('pais-seleccionado').textContent = `Coordenadas: ${lat.toFixed(4)}, ${lng.toFixed(4)}`;

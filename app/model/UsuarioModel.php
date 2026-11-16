@@ -87,8 +87,8 @@ class UsuarioModel
         $tokenPerfil = bin2hex(random_bytes(32));
 
         $filas = $this->database->executeParams(
-            "INSERT INTO usuarios (nombre_completo, anio_nacimiento, sexo, email, nombre_usuario, token_perfil, password, pais, latitud, longitud, token_validacion)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            "INSERT INTO usuarios (nombre_completo, anio_nacimiento, sexo, email, nombre_usuario, token_perfil, password, pais, ciudad, latitud, longitud, token_validacion)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
             [
                 $datos["nombre_completo"],
                 $datos["anio_nacimiento"],
@@ -98,6 +98,7 @@ class UsuarioModel
                 $tokenPerfil,
                 $hash,
                 $datos["pais"],
+                $datos["ciudad"],
                 $datos["latitud"],
                 $datos["longitud"],
                 $token

@@ -24,7 +24,7 @@
                 <img class="perfil__decoracion" src="{{baseUrl}}/public/img/Cerebro%20estudioso%20con%20idea%20brillante.png" alt="" aria-hidden="true">
             </section>
 
-                        <section class="perfil__seccion" aria-labelledby="perfilCompartidoDatosTitulo">
+            <section class="perfil__seccion" aria-labelledby="perfilCompartidoDatosTitulo">
                 <h2 class="perfil__subtitulo" id="perfilCompartidoDatosTitulo">Datos del jugador</h2>
                 <dl class="perfil__datos">
                     <div class="perfil__dato">
@@ -35,6 +35,10 @@
                     </div>
                     <div class="perfil__dato">
                         <div class="perfil__detalle"><dt class="perfil__etiquetaDato">País</dt><dd class="perfil__valorDato">{{pais}}</dd></div>
+                    </div>
+                    <div class="perfil__dato">
+                        <span class="perfil__icono" aria-hidden="true">&#127961;</span>
+                        <div class="perfil__detalle"><dt class="perfil__etiquetaDato">Ciudad</dt><dd class="perfil__valorDato">{{#ciudad}}{{ciudad}}{{/ciudad}}{{^ciudad}}Sin datos{{/ciudad}}</dd></div>
                     </div>
                 </dl>
             </section>

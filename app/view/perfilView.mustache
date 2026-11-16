@@ -3,87 +3,91 @@
     <section class="perfil__tarjeta">
         <div class="perfil__encabezado">
             <h1 class="perfil__titulo">Mi perfil</h1>
-<!--            <span class="perfil__editarVisual">Editar perfil</span>-->
+            <!--            <span class="perfil__editarVisual">Editar perfil</span>-->
         </div>
 
         {{#usuario}}
-        <section class="perfil__presentacion">
-            <div class="perfil__marco">
-                {{#foto_perfil}}
-                    <img class="perfil__foto" src="{{baseUrl}}/{{foto_perfil}}" alt="Foto de perfil de {{nombre_usuario}}">
-                {{/foto_perfil}}
-                {{^foto_perfil}}
-                    <div class="perfil__foto perfil__foto--vacia" aria-hidden="true"></div>
-                {{/foto_perfil}}
-            </div>
-
-            <div class="perfil__identidad">
-                <p class="perfil__nombre">{{nombre_completo}}</p>
-                <p class="perfil__usuario">@{{nombre_usuario}}</p>
-            </div>
-
-            <img class="perfil__decoracion" src="{{baseUrl}}/public/img/Cerebro%20estudioso%20con%20idea%20brillante.png" alt="" aria-hidden="true">
-
-            <form class="perfil__formulario" method="POST" action="{{baseUrl}}/perfil/subirFoto" enctype="multipart/form-data">
-                <input id="perfil-foto" class="perfil__entrada" type="file" name="foto_perfil" accept="image/jpeg,image/png,image/webp">
-                <label class="perfil__elegir" for="perfil-foto" aria-label="Elegir foto de perfil">&#128247;</label>
-                <span id="perfil-foto-nombre" class="perfil__archivo"></span>
-                <button class="perfil__boton" type="submit">Guardar foto</button>
-                <small class="perfil__error" role="alert">{{error}}</small>
-            </form>
-        </section>
-
-                <section class="perfil__seccion" aria-labelledby="perfilEstadisticasTitulo">
-            <h2 class="perfil__subtitulo" id="perfilEstadisticasTitulo">Mis estadísticas</h2>
-            <dl class="perfil__datos">
-                <div class="perfil__dato">
-                    <span class="perfil__icono" aria-hidden="true">&#11088;</span>
-                    <div class="perfil__detalle"><dt class="perfil__etiquetaDato">Puntaje total</dt><dd class="perfil__valorDato">{{puntaje_total}} pts</dd></div>
+            <section class="perfil__presentacion">
+                <div class="perfil__marco">
+                    {{#foto_perfil}}
+                        <img class="perfil__foto" src="{{baseUrl}}/{{foto_perfil}}" alt="Foto de perfil de {{nombre_usuario}}">
+                    {{/foto_perfil}}
+                    {{^foto_perfil}}
+                        <div class="perfil__foto perfil__foto--vacia" aria-hidden="true"></div>
+                    {{/foto_perfil}}
                 </div>
-                <div class="perfil__dato">
-                    <span class="perfil__icono" aria-hidden="true">&#127918;</span>
-                    <div class="perfil__detalle"><dt class="perfil__etiquetaDato">Partidas jugadas</dt><dd class="perfil__valorDato">{{partidas_jugadas}}</dd></div>
-                </div>
-            </dl>
-        </section>
 
-        <section class="perfil__seccion">
-            <h2 class="perfil__subtitulo">Información personal</h2>
-            <dl class="perfil__datos">
-                <div class="perfil__dato">
-                    <span class="perfil__icono" aria-hidden="true">&#9993;</span>
-                    <div class="perfil__detalle"><dt class="perfil__etiquetaDato">Email</dt><dd class="perfil__valorDato">{{email}}</dd></div>
+                <div class="perfil__identidad">
+                    <p class="perfil__nombre">{{nombre_completo}}</p>
+                    <p class="perfil__usuario">@{{nombre_usuario}}</p>
                 </div>
-                <div class="perfil__dato">
-                    <span class="perfil__icono" aria-hidden="true">&#128197;</span>
-                    <div class="perfil__detalle"><dt class="perfil__etiquetaDato">Año de nacimiento</dt><dd class="perfil__valorDato">{{anio_nacimiento}}</dd></div>
-                </div>
-                <div class="perfil__dato">
-                    <span class="perfil__icono" aria-hidden="true">&#9794;</span>
-                    <div class="perfil__detalle"><dt class="perfil__etiquetaDato">Sexo</dt><dd class="perfil__valorDato">{{sexo_texto}}</dd></div>
-                </div>
-                <div class="perfil__dato">
-                    <span class="perfil__icono" aria-hidden="true">&#127758;</span>
-                    <div class="perfil__detalle"><dt class="perfil__etiquetaDato">País</dt><dd class="perfil__valorDato">{{pais}}</dd></div>
-                </div>
-            </dl>
-        </section>
 
-        <!--PARA CAMBIAR CONTRASEÑA-->
-        <!--<section class="perfil__contrasena">
-            <div class="perfil__contrasenaTexto">
-                <h2 class="perfil__subtitulo">Cambiar contraseña</h2>
-                <p class="perfil__ayudaContrasena">Si querés, podés cambiar tu contraseña en cualquier momento.</p>
-            </div>
-            <span class="perfil__accionVisual">Cambiar contraseña</span>
-        </section>-->
-        <section class="perfil__seccion codigoQr" aria-labelledby="codigoQrTitulo">
-            <div class="codigoQrContenido">
-                <h2 class="perfil__subtitulo" id="codigoQrTitulo">Compartí tu perfil</h2>
-                <p class="codigoQrTexto">Escaneá este código para que otro usuario pueda consultar tu perfil.</p>
-            </div>
-            <img class="codigoQrImagen" src="{{codigo_qr_data_uri}}" alt="Código QR para abrir el perfil compartido de {{nombre_usuario}}">
-        </section>
+                <img class="perfil__decoracion" src="{{baseUrl}}/public/img/Cerebro%20estudioso%20con%20idea%20brillante.png" alt="" aria-hidden="true">
+
+                <form class="perfil__formulario" method="POST" action="{{baseUrl}}/perfil/subirFoto" enctype="multipart/form-data">
+                    <input id="perfil-foto" class="perfil__entrada" type="file" name="foto_perfil" accept="image/jpeg,image/png,image/webp">
+                    <label class="perfil__elegir" for="perfil-foto" aria-label="Elegir foto de perfil">&#128247;</label>
+                    <span id="perfil-foto-nombre" class="perfil__archivo"></span>
+                    <button class="perfil__boton" type="submit">Guardar foto</button>
+                    <small class="perfil__error" role="alert">{{error}}</small>
+                </form>
+            </section>
+
+            <section class="perfil__seccion" aria-labelledby="perfilEstadisticasTitulo">
+                <h2 class="perfil__subtitulo" id="perfilEstadisticasTitulo">Mis estadísticas</h2>
+                <dl class="perfil__datos">
+                    <div class="perfil__dato">
+                        <span class="perfil__icono" aria-hidden="true">&#11088;</span>
+                        <div class="perfil__detalle"><dt class="perfil__etiquetaDato">Puntaje total</dt><dd class="perfil__valorDato">{{puntaje_total}} pts</dd></div>
+                    </div>
+                    <div class="perfil__dato">
+                        <span class="perfil__icono" aria-hidden="true">&#127918;</span>
+                        <div class="perfil__detalle"><dt class="perfil__etiquetaDato">Partidas jugadas</dt><dd class="perfil__valorDato">{{partidas_jugadas}}</dd></div>
+                    </div>
+                </dl>
+            </section>
+
+            <section class="perfil__seccion">
+                <h2 class="perfil__subtitulo">Información personal</h2>
+                <dl class="perfil__datos">
+                    <div class="perfil__dato">
+                        <span class="perfil__icono" aria-hidden="true">&#9993;</span>
+                        <div class="perfil__detalle"><dt class="perfil__etiquetaDato">Email</dt><dd class="perfil__valorDato">{{email}}</dd></div>
+                    </div>
+                    <div class="perfil__dato">
+                        <span class="perfil__icono" aria-hidden="true">&#128197;</span>
+                        <div class="perfil__detalle"><dt class="perfil__etiquetaDato">Año de nacimiento</dt><dd class="perfil__valorDato">{{anio_nacimiento}}</dd></div>
+                    </div>
+                    <div class="perfil__dato">
+                        <span class="perfil__icono" aria-hidden="true">&#9794;</span>
+                        <div class="perfil__detalle"><dt class="perfil__etiquetaDato">Sexo</dt><dd class="perfil__valorDato">{{sexo_texto}}</dd></div>
+                    </div>
+                    <div class="perfil__dato">
+                        <span class="perfil__icono" aria-hidden="true">&#127758;</span>
+                        <div class="perfil__detalle"><dt class="perfil__etiquetaDato">País</dt><dd class="perfil__valorDato">{{pais}}</dd></div>
+                    </div>
+                    <div class="perfil__dato">
+                        <span class="perfil__icono" aria-hidden="true">&#127961;</span>
+                        <div class="perfil__detalle"><dt class="perfil__etiquetaDato">Ciudad</dt><dd class="perfil__valorDato">{{#ciudad}}{{ciudad}}{{/ciudad}}{{^ciudad}}Sin datos{{/ciudad}}</dd></div>
+                    </div>
+                </dl>
+            </section>
+
+            <!--PARA CAMBIAR CONTRASEÑA-->
+            <!--<section class="perfil__contrasena">
+                <div class="perfil__contrasenaTexto">
+                    <h2 class="perfil__subtitulo">Cambiar contraseña</h2>
+                    <p class="perfil__ayudaContrasena">Si querés, podés cambiar tu contraseña en cualquier momento.</p>
+                </div>
+                <span class="perfil__accionVisual">Cambiar contraseña</span>
+            </section>-->
+            <section class="perfil__seccion codigoQr" aria-labelledby="codigoQrTitulo">
+                <div class="codigoQrContenido">
+                    <h2 class="perfil__subtitulo" id="codigoQrTitulo">Compartí tu perfil</h2>
+                    <p class="codigoQrTexto">Escaneá este código para que otro usuario pueda consultar tu perfil.</p>
+                </div>
+                <img class="codigoQrImagen" src="{{codigo_qr_data_uri}}" alt="Código QR para abrir el perfil compartido de {{nombre_usuario}}">
+            </section>
         {{/usuario}}
     </section>
 </main>

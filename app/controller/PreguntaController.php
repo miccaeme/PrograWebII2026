@@ -108,7 +108,7 @@ class PreguntaController
         $respuestas = $datos["respuestas"] ?? [];
         $correcta = $datos["correcta"] ?? "";
 
-        $categorias = $this->model->obtenerCategorias();
+        $categorias = $this->model->obtenerCategorias($datos["id_pregunta"] ?? 0);
         foreach($categorias as &$categoria) {
             $categoria["seleccionada"] = (string)$categoria["id"] === $idCategoria;
         }

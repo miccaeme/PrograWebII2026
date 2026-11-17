@@ -13,6 +13,9 @@ class PartidaModel
     const PORCENTAJE_DIFICIL = 0.3;
     const DIAS_SIN_REPETIR = 10;
 
+    private const CATEGORIAS_JUGABLES = "c.activa = 1 AND EXISTS (
+        SELECT 1 FROM preguntas p WHERE p.id_categoria = c.id AND p.estado = 'activa'
+    )";
 
     private $database;
 
@@ -21,14 +24,20 @@ class PartidaModel
         $this->database = $database;
     }
 
-    public function obtenerCategorias()
+    public function obtenerCategorias($idCategoriaActual = 0)
     {
-        return $this->database->queryAll("SELECT id, nombre, color, icono FROM categorias");
+        return $this->database->queryParams(
+            "SELECT c.id, c.nombre, c.color, c.icono FROM categorias c WHERE (" .
+            self::CATEGORIAS_JUGABLES . ") OR c.id = ?",
+            [$idCategoriaActual]
+        );
     }
 
     public function obtenerCategoriaAleatoria()
     {
-        return $this->database->queryOne("SELECT id, nombre, color, icono FROM categorias ORDER BY RAND() LIMIT 1");
+        return $this->database->queryOne(
+            "SELECT c.id FROM categorias c WHERE " . self::CATEGORIAS_JUGABLES . " ORDER BY RAND() LIMIT 1"
+        );
     }
 
     public function obtenerPreguntaAleatoriaPorCategoria($idCategoria, $preguntasRespondidas = [], $dificultad = null)
@@ -191,6 +200,10 @@ class PartidaModel
         return $this->operarPartida($idPartida, $idUsuario, function ($partida) use ($idUsuario, $usadas) {
             if ($partida['estado'] !== 'en_curso' || $partida['pregunta_actual_id']) return $partida;
             $categoria = $this->obtenerCategoriaAleatoria();
+            if (!$categoria) {
+                $partida['sin_preguntas_disponibles'] = true;
+                return $partida;
+            }
             $pregunta = $this->obtenerPreguntaAleatoriaPorCategoria($categoria['id'],
                 array_merge($usadas, $this->obtenerIdVistos($idUsuario)),
                 $this->obtenerDificultadParaUsuario($idUsuario));

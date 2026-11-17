@@ -24,6 +24,179 @@
     font-weight: 900;
 }
 
+.pregunta.panel-editor {
+    padding-block: clamp(10px, 2vh, 24px);
+}
+
+.panel-editor__contenedor {
+    width: min(100%, 860px);
+    gap: clamp(9px, 1.1vw, 14px);
+    border-radius: clamp(24px, 3vw, 36px);
+    padding: clamp(13px, 1.8vw, 21px);
+}
+
+.panel-editor__encabezado {
+    display: grid;
+    grid-template-columns: minmax(0, 29%) minmax(0, 1fr);
+    align-items: center;
+    gap: clamp(10px, 1.5vw, 20px);
+}
+
+.panel-editor__personaje {
+    display: block;
+    width: min(100%, 174px);
+    height: auto;
+    justify-self: center;
+    margin-block: -12px;
+}
+
+.panel-editor__introduccion {
+    border-inline-start: 1px solid #eee9fb;
+    padding-inline-start: clamp(10px, 1.5vw, 20px);
+}
+
+.panel-editor__titulo {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding-inline-end: 12px;
+    border-radius: 999px;
+    background: #f2eefc;
+    font-size: clamp(22px, 2.25vw, 30px);
+    line-height: 1.15;
+}
+
+.panel-editor__corona {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 1.55em;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: #ffe1a0;
+    font-size: .86em;
+}
+
+.panel-editor__introduccion .pregunta__subtitulo {
+    margin-block-start: 7px;
+    color: var(--cerebrito-ink);
+    font-size: clamp(14px, 1.3vw, 17px);
+    line-height: 1.4;
+}
+
+.panel-editor__grilla {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(8px, 1vw, 12px);
+}
+
+.panel-editor__acceso {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: clamp(8px, 1vw, 14px);
+    padding: clamp(8px, 1vw, 12px);
+    border-radius: clamp(17px, 2.4vw, 30px);
+    background: var(--acceso-fondo);
+    color: var(--cerebrito-ink);
+    text-decoration: none;
+    transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.panel-editor__acceso:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(48, 38, 83, .13);
+}
+
+.panel-editor__acceso:focus-visible {
+    outline: 3px solid var(--cerebrito-purple);
+    outline-offset: 3px;
+}
+
+.panel-editor__acceso--violeta { --acceso-fondo: #ede6fc; --acceso-icono: #7354e8; }
+.panel-editor__acceso--celeste { --acceso-fondo: #e0f2fc; --acceso-icono: #1fa8dc; }
+.panel-editor__acceso--amarillo { --acceso-fondo: #fff1d3; --acceso-icono: #ed9e00; }
+.panel-editor__acceso--verde { --acceso-fondo: #ddf6eb; --acceso-icono: #26b981; }
+.panel-editor__acceso--rosa { --acceso-fondo: #fce5f3; --acceso-icono: #c8529b; }
+.panel-editor__acceso--durazno { --acceso-fondo: #fce9e0; --acceso-icono: #d66d4e; }
+
+.panel-editor__icono {
+    display: grid;
+    place-items: center;
+    width: clamp(34px, 3.5vw, 44px);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: var(--acceso-icono);
+    color: #fff;
+    font-size: clamp(17px, 1.9vw, 25px);
+    font-weight: 900;
+    line-height: 1;
+}
+
+.panel-editor__acceso strong,
+.panel-editor__acceso small {
+    display: block;
+    overflow-wrap: anywhere;
+}
+
+.panel-editor__acceso strong {
+    font-size: clamp(16px, 1.45vw, 20px);
+    font-weight: 900;
+    line-height: 1.2;
+}
+
+.panel-editor__acceso small {
+    margin-top: 3px;
+    font-size: clamp(13px, 1.15vw, 15px);
+    line-height: 1.35;
+}
+
+.panel-editor__flecha {
+    font-size: clamp(16px, 1.8vw, 24px);
+    line-height: 1;
+}
+
+.panel-editor__pendientes {
+    margin: 0;
+    color: var(--cerebrito-ink);
+    font-size: clamp(17px, 1.6vw, 21px);
+}
+
+.panel-editor .revision {
+    margin-bottom: 0;
+}
+
+@media (max-width: 680px) {
+    .panel-editor__encabezado,
+    .panel-editor__grilla {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .panel-editor__personaje {
+        width: min(62%, 145px);
+    }
+
+    .panel-editor__introduccion {
+        border: 0;
+        padding: 0;
+        text-align: center;
+    }
+
+    .panel-editor .revision__acciones {
+        flex-wrap: wrap;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .panel-editor__acceso {
+        transition: none;
+    }
+
+    .panel-editor__acceso:hover {
+        transform: none;
+    }
+}
+
 .pregunta__subtitulo {
     margin: 0;
     color: #716b83;
@@ -245,6 +418,10 @@ textarea.pregunta__entrada {
     font-weight: 700;
     color: #6655d9;
     margin-bottom: 8px;
+}
+
+.categoria-acciones {
+    flex-wrap: wrap;
 }
 
 .partida-reportar {

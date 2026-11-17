@@ -35,6 +35,13 @@ class EditorController
         ]);
     }
 
+    public function categorias()
+    {
+        Auth::requiereRol(["editor", "admin"]);
+
+        Redirect::toController("categoria", Request::get("crear") === "1" ? "crear" : "show");
+    }
+
     public function aprobar()
     {
         Auth::requiereRol(["editor", "admin"]);

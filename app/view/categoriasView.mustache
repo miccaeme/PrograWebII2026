@@ -1,0 +1,25 @@
+{{> header}}
+<main class="pregunta">
+    <section class="pregunta__tarjeta">
+        <a href="{{baseUrl}}/editor/show">Volver al panel del editor</a>
+        <h1 class="pregunta__titulo">Categorías</h1>
+        {{#mensaje}}<p class="pregunta__exito" role="status">{{mensaje}}</p>{{/mensaje}}
+        <a class="pregunta__boton pregunta__boton--enlace" href="{{baseUrl}}/categoria/crear">Crear categoría</a>
+
+        {{#categorias}}
+            <article class="revision">
+                <h2 class="revision__enunciado">{{nombre}}</h2>
+                {{#descripcion}}<p class="revision__datos">{{descripcion}}</p>{{/descripcion}}
+                <p class="revision__datos">{{#activa}}Activa{{/activa}}{{^activa}}Inactiva{{/activa}}</p>
+                <div class="revision__acciones categoria-acciones">
+                    <a class="pregunta__boton pregunta__boton--enlace" href="{{baseUrl}}/categoria/editar?id={{id}}">Modificar</a>
+                    {{#activa}}
+                        <a class="pregunta__boton pregunta__boton--enlace revision__rechazar" href="{{baseUrl}}/categoria/confirmarBaja?id={{id}}">Dar de baja</a>
+                    {{/activa}}
+                </div>
+            </article>
+        {{/categorias}}
+        {{^categorias}}<p class="pregunta__subtitulo">Todavía no hay categorías.</p>{{/categorias}}
+    </section>
+</main>
+{{> footer}}

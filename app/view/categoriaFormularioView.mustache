@@ -1,0 +1,34 @@
+{{> header}}
+<main class="pregunta">
+    <section class="pregunta__tarjeta">
+        <h1 class="pregunta__titulo">{{#id}}Modificar categoría{{/id}}{{^id}}Crear categoría{{/id}}</h1>
+        {{^id}}<p class="pregunta__subtitulo">Agregá una categoría para usarla al crear preguntas.</p>{{/id}}
+        <a href="{{baseUrl}}/categoria/show">Volver a categorías</a>
+
+        {{#error_general}}<p class="pregunta__error-general" role="alert">{{error_general}}</p>{{/error_general}}
+
+        <form class="pregunta__formulario" method="POST" action="{{baseUrl}}/categoria/{{#id}}actualizar{{/id}}{{^id}}guardar{{/id}}">
+            <input type="hidden" name="csrf_categoria" value="{{csrf_categoria}}">
+            {{#id}}<input type="hidden" name="id" value="{{id}}">{{/id}}
+
+            <div class="pregunta__campo">
+                <label class="pregunta__etiqueta" for="categoria-nombre">Nombre</label>
+                <input class="pregunta__entrada" id="categoria-nombre" name="nombre" value="{{nombre}}" maxlength="50" required>
+                <small class="pregunta__error" role="alert">{{errores.nombre}}</small>
+            </div>
+            <div class="pregunta__campo">
+                <label class="pregunta__etiqueta" for="categoria-descripcion">Descripción (opcional)</label>
+                <textarea class="pregunta__entrada" id="categoria-descripcion" name="descripcion" maxlength="150">{{descripcion}}</textarea>
+                <small class="pregunta__error" role="alert">{{errores.descripcion}}</small>
+            </div>
+            <div class="pregunta__campo">
+                <label class="pregunta__etiqueta" for="categoria-color">Color</label>
+                <input class="pregunta__entrada" id="categoria-color" name="color" type="color" value="{{color}}">
+                <small class="pregunta__error" role="alert">{{errores.color}}</small>
+            </div>
+
+            <button class="pregunta__boton" type="submit">{{#id}}Guardar cambios{{/id}}{{^id}}Crear categoría{{/id}}</button>
+        </form>
+    </section>
+</main>
+{{> footer}}

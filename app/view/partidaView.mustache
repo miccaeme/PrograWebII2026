@@ -1,4 +1,14 @@
 {{> header}}
+{{#sin_preguntas_disponibles}}
+    <main class="pregunta">
+        <section class="pregunta__tarjeta">
+            <h1 class="pregunta__titulo">No hay preguntas disponibles</h1>
+            <p class="pregunta__subtitulo">Tu partida se conserva. Podés continuar cuando haya preguntas disponibles.</p>
+            <a class="pregunta__boton pregunta__boton--enlace" href="{{baseUrl}}/lobby/show">Volver al inicio</a>
+        </section>
+    </main>
+{{/sin_preguntas_disponibles}}
+{{^sin_preguntas_disponibles}}
 <link rel="stylesheet" href="{{baseUrl}}/public/css/partida.css">
 
 <main class="partida-contenedor">
@@ -344,4 +354,5 @@
     });
 </script>
 
+{{/sin_preguntas_disponibles}}
 {{> footer}}

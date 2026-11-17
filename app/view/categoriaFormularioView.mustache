@@ -1,9 +1,22 @@
 {{> header}}
-<main class="pregunta">
-    <section class="pregunta__tarjeta">
-        <h1 class="pregunta__titulo">{{#id}}Modificar categoría{{/id}}{{^id}}Crear categoría{{/id}}</h1>
-        {{^id}}<p class="pregunta__subtitulo">Agregá una categoría para usarla al crear preguntas.</p>{{/id}}
-        <a href="{{baseUrl}}/categoria/show">Volver a categorías</a>
+<main class="pregunta{{^id}} crear-categoria{{/id}}">
+    <section class="pregunta__tarjeta{{^id}} crear-categoria__panel{{/id}}" aria-labelledby="categoria-formulario-titulo">
+        {{#id}}
+            <h1 class="pregunta__titulo" id="categoria-formulario-titulo">Modificar categoría</h1>
+            <a href="{{baseUrl}}/categoria/show">Volver a categorías</a>
+        {{/id}}
+        {{^id}}
+            <div class="crear-categoria__encabezado">
+                <img src="{{baseUrl}}/public/img/etiqueta-brillantes.png" width="1313" height="1198" alt="">
+                <div>
+                    <h1 class="pregunta__titulo" id="categoria-formulario-titulo">Crear categoría</h1>
+                    <p class="pregunta__subtitulo">Agregá una categoría para usarla al crear preguntas.</p>
+                </div>
+            </div>
+            <a class="pregunta__boton pregunta__boton--enlace crear-categoria__boton crear-categoria__boton--claro" href="{{baseUrl}}/categoria/show">
+                 Volver a categorías
+            </a>
+        {{/id}}
 
         {{#error_general}}<p class="pregunta__error-general" role="alert">{{error_general}}</p>{{/error_general}}
 
@@ -13,12 +26,12 @@
 
             <div class="pregunta__campo">
                 <label class="pregunta__etiqueta" for="categoria-nombre">Nombre</label>
-                <input class="pregunta__entrada" id="categoria-nombre" name="nombre" value="{{nombre}}" maxlength="50" required>
+                <input class="pregunta__entrada" id="categoria-nombre" name="nombre" value="{{nombre}}" maxlength="50" {{^id}}placeholder="Escribí el nombre de la categoría..." {{/id}}required>
                 <small class="pregunta__error" role="alert">{{errores.nombre}}</small>
             </div>
             <div class="pregunta__campo">
                 <label class="pregunta__etiqueta" for="categoria-descripcion">Descripción (opcional)</label>
-                <textarea class="pregunta__entrada" id="categoria-descripcion" name="descripcion" maxlength="150">{{descripcion}}</textarea>
+                <textarea class="pregunta__entrada" id="categoria-descripcion" name="descripcion" maxlength="150"{{^id}} placeholder="Agregá una breve descripción..."{{/id}}>{{descripcion}}</textarea>
                 <small class="pregunta__error" role="alert">{{errores.descripcion}}</small>
             </div>
             <div class="pregunta__campo">
@@ -27,7 +40,19 @@
                 <small class="pregunta__error" role="alert">{{errores.color}}</small>
             </div>
 
-            <button class="pregunta__boton" type="submit">{{#id}}Guardar cambios{{/id}}{{^id}}Crear categoría{{/id}}</button>
+            {{#id}}
+                <button class="pregunta__boton" type="submit">Guardar cambios</button>
+            {{/id}}
+            {{^id}}
+                <div class="crear-categoria__acciones">
+                    <a class="pregunta__boton pregunta__boton--enlace crear-categoria__boton crear-categoria__boton--claro" href="{{baseUrl}}/categoria/show">
+                        <svg class="crear-categoria__icono" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg> Cancelar
+                    </a>
+                    <button class="pregunta__boton crear-categoria__boton" type="submit">
+                        <svg class="crear-categoria__icono" viewBox="0 0 24 24" aria-hidden="true"><path d="m4 12 5 5L20 6"/></svg> Crear categoría
+                    </button>
+                </div>
+            {{/id}}
         </form>
     </section>
 </main>

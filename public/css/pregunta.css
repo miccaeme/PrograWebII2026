@@ -471,7 +471,8 @@ textarea.pregunta__entrada {
 
 .pregunta.activas,
 .pregunta.categorias-panel,
-.pregunta.crear-pregunta {
+.pregunta.crear-pregunta,
+.pregunta.crear-categoria {
     padding-block: clamp(14px, 3vh, 28px);
 }
 
@@ -484,14 +485,16 @@ textarea.pregunta__entrada {
 .activas__panel,
 .categorias-panel__contenedor,
 .categorias-panel__dialogo,
-.crear-pregunta__panel {
+.crear-pregunta__panel,
+.crear-categoria__panel {
     --activas-violeta: #6438cf;
     --activas-texto: #56516d;
 }
 
 .activas__panel,
 .categorias-panel__contenedor,
-.crear-pregunta__panel {
+.crear-pregunta__panel,
+.crear-categoria__panel {
     width: min(100%, 860px);
     min-width: 0;
     align-self: flex-start;
@@ -504,6 +507,7 @@ textarea.pregunta__entrada {
 .categorias-panel__encabezado,
 .categorias-panel__navegacion,
 .crear-pregunta__encabezado,
+.crear-categoria__encabezado,
 .activas__navegacion {
     display: flex;
     align-items: center;
@@ -512,7 +516,8 @@ textarea.pregunta__entrada {
 
 .activas__encabezado img,
 .categorias-panel__encabezado img,
-.crear-pregunta__encabezado img {
+.crear-pregunta__encabezado img,
+.crear-categoria__encabezado img {
     width: clamp(70px, 10vw, 100px);
     height: auto;
     flex: none;
@@ -520,13 +525,15 @@ textarea.pregunta__entrada {
 
 .activas__encabezado .pregunta__titulo,
 .categorias-panel__encabezado .pregunta__titulo,
-.crear-pregunta__encabezado .pregunta__titulo {
+.crear-pregunta__encabezado .pregunta__titulo,
+.crear-categoria__encabezado .pregunta__titulo {
     line-height: 1.15;
 }
 
 .activas__encabezado .pregunta__subtitulo,
 .categorias-panel__encabezado .pregunta__subtitulo,
-.crear-pregunta__encabezado .pregunta__subtitulo {
+.crear-pregunta__encabezado .pregunta__subtitulo,
+.crear-categoria__encabezado .pregunta__subtitulo {
     margin-top: 5px;
     color: var(--activas-texto);
 }
@@ -538,7 +545,8 @@ textarea.pregunta__entrada {
 
 .activas__boton,
 .categorias-panel__boton,
-.crear-pregunta__boton {
+.crear-pregunta__boton,
+.crear-categoria__boton {
     --boton-fondo: var(--activas-violeta);
     --boton-hover: #542bb6;
     --boton-color: #fff;
@@ -559,7 +567,8 @@ textarea.pregunta__entrada {
 
 .activas__boton:hover,
 .categorias-panel__boton:hover,
-.crear-pregunta__boton:hover {
+.crear-pregunta__boton:hover,
+.crear-categoria__boton:hover {
     background: var(--boton-hover);
 }
 
@@ -567,14 +576,16 @@ textarea.pregunta__entrada {
 .categorias-panel__boton--volver,
 .activas__boton--editar,
 .categorias-panel__boton--editar,
-.crear-pregunta__boton--claro {
+.crear-pregunta__boton--claro,
+.crear-categoria__boton--claro {
     --boton-color: var(--cerebrito-ink);
     --boton-hover: #e9dfff;
 }
 
 .activas__boton--volver,
 .categorias-panel__boton--volver,
-.crear-pregunta__boton--claro { --boton-fondo: #f0e9ff; }
+.crear-pregunta__boton--claro,
+.crear-categoria__boton--claro { --boton-fondo: #f0e9ff; }
 .activas__boton--editar,
 .categorias-panel__boton--editar { --boton-fondo: #fff; }
 
@@ -587,7 +598,8 @@ textarea.pregunta__entrada {
 }
 
 .activas__icono,
-.categorias-panel__icono {
+.categorias-panel__icono,
+.crear-categoria__icono {
     width: 1.15em;
     height: 1.15em;
     flex: none;
@@ -722,7 +734,8 @@ textarea.pregunta__entrada {
 
 .activas :focus-visible,
 .categorias-panel :focus-visible,
-.crear-pregunta :focus-visible {
+.crear-pregunta :focus-visible,
+.crear-categoria :focus-visible {
     outline: 2px solid var(--activas-violeta);
     outline-offset: 2px;
 }
@@ -755,13 +768,15 @@ textarea.pregunta__entrada {
     .categorias-panel__fila,
     .activas__boton,
     .categorias-panel__boton,
-    .crear-pregunta__boton {
+    .crear-pregunta__boton,
+    .crear-categoria__boton {
         transition: none;
     }
 
     .activas__boton:hover,
     .categorias-panel__boton:hover,
-    .crear-pregunta__boton:hover {
+    .crear-pregunta__boton:hover,
+    .crear-categoria__boton:hover {
         transform: none;
     }
 }
@@ -887,15 +902,18 @@ textarea.pregunta__entrada {
     font-size: 1.35rem;
 }
 
-.crear-pregunta__panel {
+.crear-pregunta__panel,
+.crear-categoria__panel {
     width: min(100%, 790px);
 }
 
-.crear-pregunta .pregunta__formulario {
+.crear-pregunta .pregunta__formulario,
+.crear-categoria .pregunta__formulario {
     gap: 12px;
 }
 
 .crear-pregunta .pregunta__campo,
+.crear-categoria .pregunta__campo,
 .crear-pregunta .pregunta__respuestas {
     gap: 6px;
     min-width: 0;
@@ -905,7 +923,8 @@ textarea.pregunta__entrada {
     margin-bottom: 6px;
 }
 
-.crear-pregunta .pregunta__entrada {
+.crear-pregunta .pregunta__entrada,
+.crear-categoria .pregunta__entrada {
     min-height: 40px;
     padding: 7px 11px;
 }
@@ -942,11 +961,40 @@ textarea.pregunta__entrada {
     color: #fff;
 }
 
-.crear-pregunta__acciones {
+.crear-pregunta__acciones,
+.crear-categoria__acciones {
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-end;
     gap: 8px;
+}
+
+
+.crear-categoria textarea.pregunta__entrada {
+    min-height: 88px;
+}
+
+.crear-categoria input[type="color"] {
+    height: 42px;
+    cursor: pointer;
+}
+
+.crear-categoria input[type="color"]::-webkit-color-swatch-wrapper {
+    padding: 2px 0;
+}
+
+.crear-categoria input[type="color"]::-webkit-color-swatch {
+    border: 1px solid rgba(31, 19, 62, .32);
+    border-radius: 4px;
+}
+
+.crear-categoria input[type="color"]::-moz-color-swatch {
+    border: 1px solid rgba(31, 19, 62, .32);
+    border-radius: 4px;
+}
+
+.crear-categoria__acciones {
+    margin-top: 6px;
 }
 
 @media (max-width: 560px) {

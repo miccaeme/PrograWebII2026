@@ -16,6 +16,13 @@
                     {{#activa}}
                         <a class="pregunta__boton pregunta__boton--enlace revision__rechazar" href="{{baseUrl}}/categoria/confirmarBaja?id={{id}}">Dar de baja</a>
                     {{/activa}}
+                    {{^activa}}
+                        <form method="POST" action="{{baseUrl}}/categoria/reactivar">
+                            <input type="hidden" name="id" value="{{id}}">
+                            <input type="hidden" name="csrf_categoria" value="{{csrf_categoria}}">
+                            <button class="pregunta__boton" type="submit">Reactivar</button>
+                        </form>
+                    {{/activa}}
                 </div>
             </article>
         {{/categorias}}

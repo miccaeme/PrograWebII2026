@@ -26,6 +26,7 @@ class CategoriaController
             "creada" => "La categoría se creó correctamente.",
             "modificada" => "La categoría se modificó correctamente.",
             "baja" => "La categoría quedó inactiva.",
+            "reactivada" => "La categoría volvió a estar activa.",
             "inexistente" => "No se encontró la categoría solicitada."
         ];
         $estado = Request::get("estado");
@@ -78,6 +79,14 @@ class CategoriaController
         $categoria = $this->buscarCategoria(Request::post("id"));
         $this->model->darDeBaja($categoria["id"]);
         $this->volverAlListado("baja");
+    }
+
+    public function reactivar()
+    {
+        $this->validarPost();
+        $categoria = $this->buscarCategoria(Request::post("id"));
+        $this->model->reactivar($categoria["id"]);
+        $this->volverAlListado("reactivada");
     }
 
     private function mostrar($vista, $datos)

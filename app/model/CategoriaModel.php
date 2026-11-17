@@ -48,4 +48,9 @@ class CategoriaModel
     {
         $this->database->executeParams("UPDATE categorias SET activa = 0 WHERE id = ? AND activa = 1", [$id]);
     }
+
+    public function reactivar($id)
+    {
+        $this->database->executeParams("UPDATE categorias SET activa = 1 WHERE id = ? AND activa = 0", [$id]);
+    }
 }

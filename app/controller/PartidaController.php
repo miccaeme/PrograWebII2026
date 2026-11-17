@@ -80,7 +80,8 @@ class PartidaController
             // No entregar el contenido antes de habilitar el plazo en el servidor.
             'enunciado' => $habilitada ? $pregunta['enunciado'] : '',
             'respuestas' => $habilitada ? $pregunta['respuestas'] : [],
-            'categorias_carrusel' => $this->model->obtenerCategorias()
+            'categorias_carrusel' => $this->model->obtenerCategorias($pregunta['categoria_id'] ?? 0),
+            'sin_preguntas_disponibles' => $partida['sin_preguntas_disponibles'] ?? false
         ]);
     }
 

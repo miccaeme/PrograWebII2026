@@ -1,0 +1,87 @@
+{{> header}}
+<main class="pregunta categorias-panel">
+    <svg class="categorias-panel__simbolos" width="0" height="0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+        <symbol id="categorias-icono-volver" viewBox="0 0 24 24"><path d="M19 12H5m6-6-6 6 6 6"/></symbol>
+        <symbol id="categorias-icono-crear" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+        <symbol id="categorias-icono-editar" viewBox="0 0 24 24"><path d="m4 16-1 5 5-1L21 7l-4-4L4 16Zm10-10 4 4M4 16l4 4"/></symbol>
+        <symbol id="categorias-icono-baja" viewBox="0 0 24 24"><path d="M3 6h18M9 6V3h6v3M5 6l1 15h12l1-15m-9 4v7m4-7v7"/></symbol>
+        <symbol id="categorias-icono-etiqueta" viewBox="0 0 24 24"><path d="M3 4h8l10 10-7 7L3 10V4Zm4 4h.01"/></symbol>
+        <symbol id="categorias-icono-mapa" viewBox="0 0 24 24"><path d="M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0ZM2 12h20M4 7h16M4 17h16M12 2c-6 5-6 15 0 20 6-5 6-15 0-20Z"/></symbol>
+        <symbol id="categorias-icono-arte" viewBox="0 0 24 24"><path d="M2 7l10-5 10 5v3H2Zm2 3v9m5-9v9m6-9v9m5-9v9M2 19h20v3H2Z"/></symbol>
+        <symbol id="categorias-icono-ciencia" viewBox="0 0 24 24"><path d="M9 3h6v2l-1 1v5l6 8a2 2 0 0 1-2 3H6a2 2 0 0 1-2-3l6-8V6L9 5ZM8 16h8m-5 3h.01m2-5h.01"/></symbol>
+        <symbol id="categorias-icono-deporte" viewBox="0 0 24 24"><path d="M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0ZM12 8l4 3-2 5h-4l-2-5Zm0 0V2m4 9 5-2m-7 7 3 5m-7-5-3 5m1-10L3 9"/></symbol>
+        <symbol id="categorias-icono-geek" viewBox="0 0 24 24"><path d="M7 7h10a4 4 0 0 1 4 3l1 6a2 2 0 0 1-3 2l-3-3H8l-3 3a2 2 0 0 1-3-2l1-6a4 4 0 0 1 4-3Zm0 3v4m-2-2h4m7-1h.01m2 2h.01"/></symbol>
+    </svg>
+
+    <section class="pregunta__tarjeta categorias-panel__contenedor" aria-labelledby="categorias-titulo">
+        <div class="categorias-panel__encabezado">
+            <img src="{{baseUrl}}/public/img/etiqueta-brillantes.png" width="1313" height="1198" alt="">
+            <div>
+                <h1 class="pregunta__titulo" id="categorias-titulo">Categorías</h1>
+                <p class="pregunta__subtitulo">Organizá las preguntas del juego por temas</p>
+            </div>
+        </div>
+
+        <nav class="categorias-panel__navegacion" aria-label="Acciones de categorías">
+            <a class="pregunta__boton pregunta__boton--enlace categorias-panel__boton categorias-panel__boton--volver" href="{{baseUrl}}/editor/show">
+                 Volver al panel
+            </a>
+            <a class="pregunta__boton pregunta__boton--enlace categorias-panel__boton" href="{{baseUrl}}/categoria/crear">
+                <svg class="categorias-panel__icono" aria-hidden="true"><use href="#categorias-icono-crear"/></svg> Crear categoría
+            </a>
+        </nav>
+
+        {{#mensaje}}<p class="pregunta__exito" role="status">{{mensaje}}</p>{{/mensaje}}
+
+        {{#categorias}}
+            <article class="revision categorias-panel__fila" data-icono="{{icono}}">
+                <span class="categorias-panel__tema" aria-hidden="true">
+                    <svg class="categorias-panel__icono categorias-panel__tema-etiqueta" aria-hidden="true"><use href="#categorias-icono-etiqueta"/></svg>
+                    <svg class="categorias-panel__icono categorias-panel__tema-mapa" aria-hidden="true"><use href="#categorias-icono-mapa"/></svg>
+                    <svg class="categorias-panel__icono categorias-panel__tema-arte" aria-hidden="true"><use href="#categorias-icono-arte"/></svg>
+                    <svg class="categorias-panel__icono categorias-panel__tema-ciencia" aria-hidden="true"><use href="#categorias-icono-ciencia"/></svg>
+                    <svg class="categorias-panel__icono categorias-panel__tema-deporte" aria-hidden="true"><use href="#categorias-icono-deporte"/></svg>
+                    <svg class="categorias-panel__icono categorias-panel__tema-geek" aria-hidden="true"><use href="#categorias-icono-geek"/></svg>
+                </span>
+                <div class="categorias-panel__datos">
+                    <h2 class="revision__enunciado">{{nombre}}{{^activa}} <span class="categorias-panel__estado">Inactiva</span>{{/activa}}</h2>
+                    {{#descripcion}}<p class="revision__datos">{{descripcion}}</p>{{/descripcion}}
+                </div>
+
+                <div class="revision__acciones categoria-acciones">
+                    <a class="pregunta__boton pregunta__boton--enlace categorias-panel__boton categorias-panel__boton--editar" href="{{baseUrl}}/categoria/editar?id={{id}}">
+                        <svg class="categorias-panel__icono" aria-hidden="true"><use href="#categorias-icono-editar"/></svg> Editar
+                    </a>
+                    {{#activa}}
+                        <a class="pregunta__boton pregunta__boton--enlace categorias-panel__boton categorias-panel__boton--baja"
+                           href="{{baseUrl}}/categoria/confirmarBaja?id={{id}}"
+                           data-baja-id="{{id}}" data-baja-nombre="{{nombre}}">
+                            <svg class="categorias-panel__icono" aria-hidden="true"><use href="#categorias-icono-baja"/></svg> Dar de baja
+                        </a>
+                    {{/activa}}
+                    {{^activa}}
+                        <form method="POST" action="{{baseUrl}}/categoria/reactivar">
+                            <input type="hidden" name="id" value="{{id}}">
+                            <input type="hidden" name="csrf_categoria" value="{{csrf_categoria}}">
+                            <button class="pregunta__boton categorias-panel__boton" type="submit">Reactivar</button>
+                        </form>
+                    {{/activa}}
+                </div>
+            </article>
+        {{/categorias}}
+        {{^categorias}}<p class="pregunta__subtitulo">Todavía no hay categorías. Podés crear la primera con el botón «Crear categoría».</p>{{/categorias}}
+    </section>
+
+    <dialog id="categorias-baja" class="categorias-panel__dialogo" aria-labelledby="categorias-baja-titulo" aria-describedby="categorias-baja-mensaje">
+        <h2 class="pregunta__titulo" id="categorias-baja-titulo">Dar de baja la categoría</h2>
+        <p class="pregunta__subtitulo" id="categorias-baja-mensaje"><span id="categorias-baja-nombre"></span> dejará de estar disponible para nuevas preguntas y rondas. Se conservarán sus preguntas y el historial de partidas.</p>
+        <form method="POST" action="{{baseUrl}}/categoria/baja" class="revision__acciones categoria-acciones">
+            <input type="hidden" name="id" id="categorias-baja-id">
+            <input type="hidden" name="csrf_categoria" value="{{csrf_categoria}}">
+            <button class="pregunta__boton categorias-panel__boton categorias-panel__boton--volver" id="categorias-baja-cancelar" type="button" autofocus>Cancelar</button>
+            <button class="pregunta__boton categorias-panel__boton categorias-panel__boton--baja" type="submit">Confirmar baja</button>
+        </form>
+    </dialog>
+</main>
+<script src="{{baseUrl}}/public/javascript/categorias.js" defer></script>
+{{> footer}}

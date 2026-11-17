@@ -1,12 +1,53 @@
 {{> header}}
-<main class="pregunta">
-    <section class="pregunta__tarjeta">
-        <h1 class="pregunta__titulo">Panel del editor</h1>
-        <p class="pregunta__subtitulo">Preguntas sugeridas por jugadores, pendientes de revisión.</p>
+<main class="pregunta panel-editor">
+    <section class="pregunta__tarjeta panel-editor__contenedor" aria-labelledby="panel-editor-titulo">
+        <div class="panel-editor__encabezado">
+            <img class="panel-editor__personaje" src="{{baseUrl}}/public/img/cerebrito-feliz.png" width="1363" height="1154" alt="">
+            <div class="panel-editor__introduccion">
+                <h1 class="pregunta__titulo panel-editor__titulo" id="panel-editor-titulo">
+                    <span class="panel-editor__corona" aria-hidden="true">👑</span>
+                    Panel del editor
+                </h1>
 
-        <a class="pregunta__boton pregunta__boton--enlace" href="{{baseUrl}}/pregunta/crear">Crear pregunta</a>
-        <a class="pregunta__boton pregunta__boton--enlace" href="{{baseUrl}}/editor/activas">Ver preguntas activas</a>
-        <a class="pregunta__boton pregunta__boton--enlace" href="{{baseUrl}}/editor/inactivas">Ver preguntas inactivas</a>
+            </div>
+        </div>
+
+        <nav class="panel-editor__grilla" aria-label="Funciones del editor">
+            <a class="panel-editor__acceso panel-editor__acceso--violeta" href="{{baseUrl}}/pregunta/crear">
+                <span class="panel-editor__icono" aria-hidden="true">+</span>
+                <span><strong>Crear pregunta</strong></span>
+
+            </a>
+            <a class="panel-editor__acceso panel-editor__acceso--verde" href="{{baseUrl}}/categoria/crear">
+                <span class="panel-editor__icono" aria-hidden="true">◇</span>
+                <span><strong>Crear categoría</strong></span>
+
+            </a>
+            <a class="panel-editor__acceso panel-editor__acceso--celeste" href="{{baseUrl}}/editor/activas">
+                <span class="panel-editor__icono" aria-hidden="true">▶</span>
+                <span><strong>Ver preguntas activas</strong></span>
+
+            </a>
+
+
+            <a class="panel-editor__acceso panel-editor__acceso--rosa" href="{{baseUrl}}/categoria/show">
+                <span class="panel-editor__icono" aria-hidden="true">▦</span>
+                <span><strong>Ver categorías</strong></span>
+
+            </a>
+            <a class="panel-editor__acceso panel-editor__acceso--amarillo" href="{{baseUrl}}/editor/inactivas">
+                <span class="panel-editor__icono" aria-hidden="true">Ⅱ</span>
+                <span><strong>Ver preguntas inactivas</strong></span>
+
+            </a>
+            <a class="panel-editor__acceso panel-editor__acceso--durazno" href="{{baseUrl}}/editor/reportadas">
+                <span class="panel-editor__icono" aria-hidden="true">!</span>
+                <span><strong>Ver preguntas reportadas</strong></span>
+
+            </a>
+        </nav>
+
+        <h2 class="panel-editor__pendientes">Preguntas pendientes de revisión</h2>
 
         {{#sin_pendientes}}
             <p class="pregunta__exito" role="status">No hay preguntas pendientes. ¡Todo al día!</p>

@@ -1,13 +1,22 @@
 {{> header}}
-<main class="pregunta">
-    <section class="pregunta__tarjeta">
-        <h1 class="pregunta__titulo">{{#modo_edicion}}Editar pregunta{{/modo_edicion}}{{^modo_edicion}}Crear pregunta{{/modo_edicion}}</h1>
-
+<main class="pregunta{{^modo_edicion}}{{#puede_publicar}} crear-pregunta{{/puede_publicar}}{{/modo_edicion}}">
+    <section class="pregunta__tarjeta{{^modo_edicion}}{{#puede_publicar}} crear-pregunta__panel{{/puede_publicar}}{{/modo_edicion}}" aria-labelledby="pregunta-titulo">
+        {{#modo_edicion}}
+            <h1 class="pregunta__titulo" id="pregunta-titulo">Editar pregunta</h1>
+        {{/modo_edicion}}
         {{^modo_edicion}}
             {{#puede_publicar}}
-                <p class="pregunta__subtitulo">Como editor, la pregunta que cargues se publica directamente en el juego.</p>
+                <div class="crear-pregunta__encabezado">
+                    <img src="{{baseUrl}}/public/img/portapapeles.png" width="1293" height="1216" alt="">
+                    <div>
+                        <h1 class="pregunta__titulo" id="pregunta-titulo">Crear pregunta</h1>
+                        <p class="pregunta__subtitulo">Como editor, la pregunta que cargues se publica directamente en el juego.</p>
+                    </div>
+                </div>
+                <a class="pregunta__boton pregunta__boton--enlace crear-pregunta__boton crear-pregunta__boton--claro" href="{{baseUrl}}/editor/show">Volver al panel</a>
             {{/puede_publicar}}
             {{^puede_publicar}}
+                <h1 class="pregunta__titulo" id="pregunta-titulo">Crear pregunta</h1>
                 <p class="pregunta__subtitulo">Sugerí una pregunta. Un editor la va a revisar antes de que aparezca en el juego.</p>
             {{/puede_publicar}}
         {{/modo_edicion}}
@@ -25,9 +34,11 @@
             <p class="pregunta__error-general" role="alert">{{error_general}}</p>
         {{/error_general}}
 
-        {{#puede_publicar}}
-            <a class="pregunta__boton pregunta__boton--enlace" href="{{baseUrl}}/editor/show">Volver al panel</a>
-        {{/puede_publicar}}
+        {{#modo_edicion}}
+            {{#puede_publicar}}
+                <a class="pregunta__boton pregunta__boton--enlace" href="{{baseUrl}}/editor/show">Volver al panel</a>
+            {{/puede_publicar}}
+        {{/modo_edicion}}
 
         <form class="pregunta__formulario" method="POST" action="{{baseUrl}}/pregunta/{{#modo_edicion}}actualizar{{/modo_edicion}}{{^modo_edicion}}guardar{{/modo_edicion}}">
             {{#modo_edicion}}
@@ -36,7 +47,7 @@
 
             <div class="pregunta__campo">
                 <label class="pregunta__etiqueta" for="enunciado">Pregunta</label>
-                <textarea class="pregunta__entrada" id="enunciado" name="enunciado" maxlength="255" required>{{enunciado}}</textarea>
+                <textarea class="pregunta__entrada" id="enunciado" name="enunciado" maxlength="255" {{^modo_edicion}}{{#puede_publicar}}placeholder="Escribí el enunciado de la pregunta..." {{/puede_publicar}}{{/modo_edicion}}required>{{enunciado}}</textarea>
                 <small class="pregunta__error" role="alert">{{errores.enunciado}}</small>
             </div>
 
@@ -58,7 +69,7 @@
                     <div class="pregunta__opcion">
                         <input class="pregunta__radio" type="radio" id="correcta-{{posicion}}" name="correcta" value="{{posicion}}" {{#es_correcta}}checked{{/es_correcta}} required>
                         <label class="pregunta__letra" for="correcta-{{posicion}}">{{letra}}</label>
-                        <input class="pregunta__entrada" type="text" name="respuestas[]" value="{{texto}}" maxlength="150" placeholder="Respuesta{{letra}}" required>
+                        <input class="pregunta__entrada" type="text" name="respuestas[]" value="{{texto}}" maxlength="150" aria-label="Respuesta {{letra}}" placeholder="{{#modo_edicion}}Respuesta{{letra}}{{/modo_edicion}}{{^modo_edicion}}{{#puede_publicar}}Escribí una opción de respuesta...{{/puede_publicar}}{{^puede_publicar}}Respuesta{{letra}}{{/puede_publicar}}{{/modo_edicion}}" required>
                     </div>
                 {{/opciones}}
 
@@ -68,7 +79,20 @@
 
             </fieldset>
 
-            <button class="pregunta__boton" type="submit">{{#modo_edicion}}Guardar cambios{{/modo_edicion}}{{^modo_edicion}}Enviar pregunta{{/modo_edicion}}</button>
+            {{#modo_edicion}}
+                <button class="pregunta__boton" type="submit">Guardar cambios</button>
+            {{/modo_edicion}}
+            {{^modo_edicion}}
+                {{#puede_publicar}}
+                    <div class="crear-pregunta__acciones">
+                        <a class="pregunta__boton pregunta__boton--enlace crear-pregunta__boton crear-pregunta__boton--claro" href="{{baseUrl}}/editor/show">Cancelar</a>
+                        <button class="pregunta__boton crear-pregunta__boton" type="submit">Crear pregunta</button>
+                    </div>
+                {{/puede_publicar}}
+                {{^puede_publicar}}
+                    <button class="pregunta__boton" type="submit">Enviar pregunta</button>
+                {{/puede_publicar}}
+            {{/modo_edicion}}
 
         </form>
     </section>

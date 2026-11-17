@@ -14,10 +14,14 @@ class PreguntaModel
         $this->database = $database;
     }
 
-    public function obtenerCategorias()
+    public function obtenerCategorias($idPregunta = 0)
     {
-        return $this->database->queryAll("SELECT id, nombre, color, icono
-        FROM categorias ORDER BY nombre");
+        return $this->database->queryParams(
+            "SELECT id, nombre, color, icono FROM categorias
+             WHERE activa = 1 OR id = (SELECT id_categoria FROM preguntas WHERE id = ?)
+             ORDER BY nombre",
+            [$idPregunta]
+        );
     }
 
     public function validar($enunciado, $idCategoria, $respuestas, $idExcluir = 0)
@@ -28,7 +32,7 @@ class PreguntaModel
             $errores["enunciado"] = "Esa pregunta ya existe.";
         }
 
-        if(!$this->existeCategoria($idCategoria)) {
+        if(!$this->existeCategoria($idCategoria, $idExcluir)) {
             $errores["categoria"] = "Elegí una categoría válida";
         }
 
@@ -50,10 +54,11 @@ class PreguntaModel
         return $fila !== null;
     }
 
-    public function existeCategoria($idCategoria)
+    public function existeCategoria($idCategoria, $idPregunta = 0, $bloquear = false)
     {
-        $fila = $this->database->queryOneParams("SELECT id FROM categorias
-        WHERE id = ?", [$idCategoria]);
+        $sql = "SELECT id FROM categorias WHERE id = ?
+                AND (activa = 1 OR id = (SELECT id_categoria FROM preguntas WHERE id = ?))";
+        $fila = $this->database->queryOneParams($sql . ($bloquear ? " FOR UPDATE" : ""), [$idCategoria, $idPregunta]);
     
         return $fila !== null;
     }
@@ -63,6 +68,10 @@ class PreguntaModel
         $this->database->beginTransaction();
 
         try {
+            if (!$this->existeCategoria($idCategoria, 0, true)) {
+                $this->database->rollback();
+                return false;
+            }
             $this->database->executeParams(
                 "INSERT INTO preguntas (enunciado, id_categoria, estado, id_usuario_creador) VALUES (?, ?, ?, ?)", [$enunciado, $idCategoria, $estado, $idUsuario]);
                 $idPregunta = $this->database->lastInsertId();
@@ -176,6 +185,10 @@ class PreguntaModel
         $this->database->beginTransaction();
 
         try {
+            if (!$this->existeCategoria($idCategoria, $idPregunta, true)) {
+                $this->database->rollback();
+                return false;
+            }
             $this->database->executeParams(
                 "UPDATE preguntas SET enunciado = ?, id_categoria = ? WHERE id = ?",
                 [$enunciado, $idCategoria, $idPregunta]

@@ -1,0 +1,14 @@
+{{> header}}
+<main class="pregunta">
+    <section class="pregunta__tarjeta">
+        <h1 class="pregunta__titulo">Dar de baja la categoría</h1>
+        <p class="pregunta__subtitulo">{{nombre}} dejará de estar disponible para nuevas preguntas y rondas. Se conservarán sus preguntas y el historial de partidas.</p>
+        <form method="POST" action="{{baseUrl}}/categoria/baja" class="revision__acciones categoria-acciones">
+            <input type="hidden" name="id" value="{{id}}">
+            <input type="hidden" name="csrf_categoria" value="{{csrf_categoria}}">
+            <a class="pregunta__boton pregunta__boton--enlace" href="{{baseUrl}}/categoria/show">Cancelar</a>
+            <button class="pregunta__boton revision__rechazar" type="submit">Confirmar baja</button>
+        </form>
+    </section>
+</main>
+{{> footer}}

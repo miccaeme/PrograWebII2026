@@ -5,7 +5,8 @@ CREATE TABLE IF NOT EXISTS categorias(
     nombre VARCHAR(50) NOT NULL UNIQUE,
     descripcion VARCHAR(150) NULL,
     color CHAR(7) NOT NULL,
-    icono VARCHAR(50) NOT NULL DEFAULT 'cerebro-default'
+    icono VARCHAR(50) NOT NULL DEFAULT 'cerebro-default',
+    activa TINYINT(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO categorias (id, nombre, descripcion, color, icono) VALUES

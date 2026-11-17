@@ -22,11 +22,18 @@ class CategoriaController
     public function show()
     {
         Auth::requiereRol(["editor", "admin"]);
+        $nombreReactivada = $_SESSION["nombre_categoria_reactivada"] ?? null;
+        $nombreDadaDeBaja = $_SESSION["nombre_categoria_dada_de_baja"] ?? null;
+        unset($_SESSION["nombre_categoria_reactivada"], $_SESSION["nombre_categoria_dada_de_baja"]);
         $mensajes = [
             "creada" => "La categoría se creó correctamente.",
             "modificada" => "La categoría se modificó correctamente.",
-            "baja" => "La categoría quedó inactiva.",
-            "reactivada" => "La categoría volvió a estar activa.",
+            "baja" => $nombreDadaDeBaja === null
+                ? "La categoría quedó inactiva."
+                : "La categoría {$nombreDadaDeBaja} quedó inactiva.",
+            "reactivada" => $nombreReactivada === null
+                ? "La categoría volvió a estar activa."
+                : "La categoría {$nombreReactivada} volvió a estar activa.",
             "inexistente" => "No se encontró la categoría solicitada."
         ];
         $estado = Request::get("estado");
@@ -78,6 +85,7 @@ class CategoriaController
         $this->validarPost();
         $categoria = $this->buscarCategoria(Request::post("id"));
         $this->model->darDeBaja($categoria["id"]);
+        $_SESSION["nombre_categoria_dada_de_baja"] = $categoria["nombre"];
         $this->volverAlListado("baja");
     }
 
@@ -86,6 +94,7 @@ class CategoriaController
         $this->validarPost();
         $categoria = $this->buscarCategoria(Request::post("id"));
         $this->model->reactivar($categoria["id"]);
+        $_SESSION["nombre_categoria_reactivada"] = $categoria["nombre"];
         $this->volverAlListado("reactivada");
     }
 

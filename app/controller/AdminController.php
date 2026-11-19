@@ -123,7 +123,8 @@ class AdminController
                 "jugadores_values"  => json_encode(array_map('intval', array_column($serieJugadores, 'total'))),
                 "categorias_labels" => json_encode(array_column($porCategoria, 'categoria')),
                 "categorias_values" => json_encode(array_map('intval', array_column($porCategoria, 'total'))),
-                "categorias_colors" => json_encode(array_column($porCategoria, 'color'))
+                "categorias_colors" => json_encode(array_column($porCategoria, 'color')),
+                "por_usuario"       => $this->model->obtenerCorrectasPorUsuario(),
         ];
 
         $this->render->renderiza("adminDashboard", $data);

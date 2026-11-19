@@ -38,6 +38,13 @@
                 </div>
             </article>
         {{/preguntas}}
+        {{#hay_paginas}}
+            <nav class="paginado" aria-label="Paginado">
+                {{#hay_anterior}}<a href="{{baseUrl}}/editor/activas?pagina={{pagina_anterior}}">&laquo; Anterior</a>{{/hay_anterior}}
+                <span>Página {{pagina}} de {{total_paginas}}</span>
+                {{#hay_siguiente}}<a href="{{baseUrl}}/editor/activas?pagina={{pagina_siguiente}}">Siguiente &raquo;</a>{{/hay_siguiente}}
+            </nav>
+        {{/hay_paginas}}
     </section>
 </main>
 

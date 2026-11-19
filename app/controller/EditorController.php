@@ -11,6 +11,8 @@ class EditorController
 
     private $model;
     private $render;
+
+    private const POR_PAGINA = 3;
     public function __construct($model, $render)
     {
         $this->model = $model;
@@ -67,36 +69,38 @@ class EditorController
     {
         Auth::requiereRol(["editor", "admin"]);
 
-        $preguntas = $this->model->obtenerActivas();
+        $paginado = $this->datosPaginado($this->model->contarActivas());
+        $preguntas = $this->model->obtenerActivas(self::POR_PAGINA, $paginado["offset"]);
 
         foreach ($preguntas as $i => $p) {
             $preguntas[$i]["respuestas"] = $this->model->obtenerRespuestas($p["id"]);
         }
 
-        $this->render->renderiza("editorActivas", [
+        $this->render->renderiza("editorActivas", array_merge($paginado, [
             "logueado" => true,
             "nombre_usuario" => $_SESSION["nombre_usuario"] ?? "",
             "preguntas" => $preguntas,
             "sin_activas" => empty($preguntas)
-        ]);
+        ]));
     }
 
     public function inactivas()
     {
         Auth::requiereRol(["editor", "admin"]);
 
-        $preguntas = $this->model->obtenerInactivas();
+        $paginado = $this->datosPaginado($this->model->contarInactivas());
+        $preguntas = $this->model->obtenerInactivas(self::POR_PAGINA, $paginado["offset"]);
 
         foreach ($preguntas as $i => $p) {
             $preguntas[$i]["respuestas"] = $this->model->obtenerRespuestas($p["id"]);
         }
 
-        $this->render->renderiza("editorInactivas", [
+        $this->render->renderiza("editorInactivas", array_merge($paginado, [
             "logueado" => true,
             "nombre_usuario" => $_SESSION["nombre_usuario"] ?? "",
             "preguntas" => $preguntas,
             "sin_inactivas" => empty($preguntas)
-        ]);
+        ]));
     }
 
     public function baja()
@@ -169,6 +173,24 @@ class EditorController
         $this->model->resolverReportes($id);
 
         Redirect::toController("editor", "reportadas");
+    }
+
+    private function datosPaginado($total)
+    {
+        $totalPaginas = max(1, (int) ceil($total / self::POR_PAGINA));
+        $pagina = (int) Request::get("pagina", 1);
+        $pagina = min(max(1, $pagina), $totalPaginas);
+
+        return [
+            "pagina"           => $pagina,
+            "offset"           => ($pagina - 1) * self::POR_PAGINA,
+            "total_paginas"    => $totalPaginas,
+            "hay_paginas"      => $totalPaginas > 1,
+            "hay_anterior"     => $pagina > 1,
+            "hay_siguiente"    => $pagina < $totalPaginas,
+            "pagina_anterior"  => $pagina - 1,
+            "pagina_siguiente" => $pagina + 1
+        ];
     }
 
 

@@ -140,17 +140,25 @@ class PreguntaModel
         return $respuestas;
     }
 
-    public function obtenerActivas()
+    public function obtenerActivas($limite = 10, $offset = 0)
     {
         return $this->database->queryAll("SELECT p.id, p.enunciado, p.fecha_creacion,
-        c.nombre AS categoria,
-        u.nombre_usuario AS creador
-        FROM preguntas p
-        INNER JOIN categorias c ON p.id_categoria = c.id
-        LEFT JOIN usuarios u ON p.id_usuario_creador = u.id
-        WHERE p.estado = 'activa'
-        ORDER BY p.fecha_creacion DESC");
+    c.nombre AS categoria,
+    u.nombre_usuario AS creador
+    FROM preguntas p
+    INNER JOIN categorias c ON p.id_categoria = c.id
+    LEFT JOIN usuarios u ON p.id_usuario_creador = u.id
+    WHERE p.estado = 'activa'
+    ORDER BY p.fecha_creacion DESC
+    LIMIT " . (int)$limite . " OFFSET " . (int)$offset);
     }
+
+    public function contarActivas()
+    {
+        $fila = $this->database->queryOne("SELECT COUNT(*) AS total FROM preguntas WHERE estado = 'activa'");
+        return (int)($fila['total'] ?? 0);
+    }
+
 
     public function obtenerPorId($idPregunta)
     {
@@ -203,16 +211,23 @@ class PreguntaModel
         }
     }
 
-    public function obtenerInactivas()
+    public function obtenerInactivas($limite = 10, $offset = 0)
     {
         return $this->database->queryAll("SELECT p.id, p.enunciado, p.fecha_creacion,
-        c.nombre AS categoria,
-        u.nombre_usuario AS creador
-        FROM preguntas p
-        INNER JOIN categorias c ON p.id_categoria = c.id
-        LEFT JOIN usuarios u ON p.id_usuario_creador = u.id
-        WHERE p.estado = 'inactiva'
-        ORDER BY p.fecha_creacion DESC");
+    c.nombre AS categoria,
+    u.nombre_usuario AS creador
+    FROM preguntas p
+    INNER JOIN categorias c ON p.id_categoria = c.id
+    LEFT JOIN usuarios u ON p.id_usuario_creador = u.id
+    WHERE p.estado = 'inactiva'
+    ORDER BY p.fecha_creacion DESC
+    LIMIT " . (int)$limite . " OFFSET " . (int)$offset);
+    }
+
+    public function contarInactivas()
+    {
+        $fila = $this->database->queryOne("SELECT COUNT(*) AS total FROM preguntas WHERE estado = 'inactiva'");
+        return (int)($fila['total'] ?? 0);
     }
 
     public function reportar($idUsuario, $idPregunta, $motivo)

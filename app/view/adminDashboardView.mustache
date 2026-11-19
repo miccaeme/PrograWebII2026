@@ -36,6 +36,7 @@
         <a href="#tabla-pais">País</a>
         <a href="#tabla-sexo">Sexo</a>
         <a href="#tabla-edad">Edad</a>
+        <a href="#tabla-usuarios">Usuarios</a>
         <button type="button" class="admin-imprimir" onclick="window.print()">Imprimir reportes</button>
     </nav>
 
@@ -143,6 +144,16 @@
                 <thead><tr><th>Grupo</th><th>Usuarios</th></tr></thead>
                 <tbody>
                 {{#por_edad}}<tr><td>{{grupo}}</td><td>{{total}}</td></tr>{{/por_edad}}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="tabla-box" id="tabla-usuarios">
+            <h3>Respuestas correctas por usuario (histórico)</h3>
+            <table class="tabla-datos">
+                <thead><tr><th>Usuario</th><th>Correctas</th><th>Respondidas</th><th>%</th></tr></thead>
+                <tbody>
+                {{#por_usuario}}<tr><td>{{usuario}}</td><td>{{correctas}}</td><td>{{respondidas}}</td><td>{{porcentaje}}%</td></tr>{{/por_usuario}}
                 </tbody>
             </table>
         </div>

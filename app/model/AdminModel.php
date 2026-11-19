@@ -164,4 +164,18 @@ class AdminModel
         }
         return $resultado;
     }
+
+    public function obtenerCorrectasPorUsuario()
+    {
+        $sql = "SELECT u.nombre_usuario AS usuario,
+                   SUM(p.puntaje) AS correctas,
+                   SUM(p.puntaje) + COUNT(p.id) AS respondidas,
+                   ROUND(SUM(p.puntaje) * 100 / (SUM(p.puntaje) + COUNT(p.id)), 1) AS porcentaje
+            FROM usuarios u
+            INNER JOIN partidas p ON p.id_usuario = u.id AND p.estado = 'finalizada'
+            WHERE u.rol = 'jugador'
+            GROUP BY u.id, u.nombre_usuario
+            ORDER BY porcentaje DESC, respondidas DESC";
+        return $this->database->queryAll($sql) ?? [];
+    }
 }

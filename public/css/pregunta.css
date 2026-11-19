@@ -469,6 +469,7 @@ textarea.pregunta__entrada {
     background: #991b1b;
 }
 
+
 .pregunta.activas,
 .pregunta.categorias-panel,
 .pregunta.crear-pregunta,
@@ -1014,4 +1015,38 @@ textarea.pregunta__entrada {
         flex: 1 1 125px;
         padding-inline: 8px;
     }
+}
+
+.paginado {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin: 24px 0 8px;
+}
+
+.paginado span {
+    color: var(--cerebrito-ink);
+    font-weight: 800;
+}
+
+.paginado a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 40px;
+    padding: 0 16px;
+    border: 1px solid #6655d9;
+    border-radius: 12px;
+    background: #fff;
+    color: #6655d9;
+    font-weight: 800;
+    text-decoration: none;
+    transition: background .2s ease, color .2s ease, transform .2s ease;
+}
+
+.paginado a:hover {
+    background: #6655d9;
+    color: #fff;
+    transform: translateY(-1px);
 }

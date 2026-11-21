@@ -24,7 +24,7 @@ class RankingModel
 
         $jugadores = $this->database->queryParams(
             "SELECT u.id, u.nombre_usuario, u.token_perfil, u.foto_perfil,
-            COALESCE(SUM(p.puntaje), 0) AS puntaje_total,
+            COALESCE(MAX(p.puntaje), 0) AS puntaje_total,
             COUNT(p.id) AS partidas_jugadas
             FROM usuarios u 
             LEFT JOIN partidas p ON p.id_usuario = u.id AND p.estado = 'finalizada' $filtroFecha

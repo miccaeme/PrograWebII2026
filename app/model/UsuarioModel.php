@@ -123,7 +123,7 @@ class UsuarioModel
         $usuario = $this->database->queryOneParams(
             "SELECT u.id, u.nombre_completo, u.anio_nacimiento, u.sexo, u.pais, u.ciudad, u.email,
                 u.nombre_usuario, u.foto_perfil, u.fecha_registro, u.token_perfil,
-            (SELECT COALESCE(SUM(p.puntaje), 0) FROM partidas p
+            (SELECT COALESCE(MAX(p.puntaje), 0) FROM partidas p
             WHERE p.id_usuario = u.id AND p.estado = 'finalizada') AS puntaje_total,
             (SELECT COUNT(*) FROM partidas p
             WHERE p.id_usuario = u.id AND p.estado = 'finalizada') AS partidas_jugadas
@@ -148,7 +148,7 @@ class UsuarioModel
 
         return $this->database->queryOneParams(
                         "SELECT u.nombre_completo, u.nombre_usuario, u.foto_perfil, u.pais,
-            COALESCE(SUM(p.puntaje), 0) AS puntaje_total,
+            COALESCE(MAX(p.puntaje), 0) AS puntaje_total,
             COUNT(p.id) AS partidas_jugadas
             FROM usuarios u
             LEFT JOIN partidas p ON p.id_usuario = u.id AND p.estado = 'finalizada'

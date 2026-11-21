@@ -149,6 +149,7 @@
         }
 
         function mostrarTiempoAgotado() {
+            window.Sonido?.reproducir("incorrecto");
             detenerTemporizador();
             temporizadorFinalizado = true;
             bloquearRespuestas(true);
@@ -318,6 +319,7 @@
         function girarRuleta() {
             items.forEach(el => el.classList.remove("activa"));
             items[indice].classList.add("activa");
+            window.Sonido?.reproducir("tic");
 
             pasoActual++;
 

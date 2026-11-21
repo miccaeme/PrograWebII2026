@@ -116,6 +116,52 @@ body {
 
 .header__login:hover { color: var(--cerebrito-purple); }
 
+.header__sonido {
+    display: inline-grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    border: 1.5px solid color-mix(in srgb, currentColor 40%, transparent);
+    border-radius: 50%;
+    background: transparent;
+    color: var(--cerebrito-ink);
+    cursor: pointer;
+    transition: background .2s, transform .2s;
+}
+
+.header__sonido:hover {
+    background: color-mix(in srgb, currentColor 12%, transparent);
+    transform: scale(1.06);
+}
+
+.header__sonido:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+}
+
+.header__sonido-icono {
+    width: 22px;
+    height: 22px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* El parlante va relleno; las ondas y la cruz, solo con línea */
+.header__sonido-icono path:first-child { fill: currentColor; }
+
+/* Mostrar un ícono u otro según el estado */
+.header__sonido-icono--silenciado { display: none; }
+.header__sonido[aria-pressed="true"] .header__sonido-icono--activo { display: none; }
+.header__sonido[aria-pressed="true"] .header__sonido-icono--silenciado { display: block; }
+
+/* En login y registro el header tiene el cielo de fondo: ícono blanco */
+.header:is(:has(+ .inicio-sesion), :has(~ .registro)) .header__sonido { color: #fff; }
+
 .header__play {
     display: inline-flex;
     align-items: center;
@@ -159,7 +205,7 @@ body {
     height: 60px;
 }
 
-.header:has(~ :is(.lobby, .perfil, .partida-contenedor, .ranking)) :is(.header__link, .header__login, .usuario-badge, .header__menu-toggle) {
+.header:has(~ :is(.lobby, .perfil, .partida-contenedor, .ranking)) :is(.header__link, .header__login, .usuario-badge, .header__menu-toggle, .header__sonido) {
     color: #fff;
 }
 
@@ -190,8 +236,10 @@ body {
     .header__actions { width: 100%; justify-content: center; }
 }
 
-@media (max-width: 700px) {
+@media (max-width: 950px) {
     .header__container { position: relative; flex-wrap: nowrap; justify-content: space-between; }
+    .usuario-badge { display: none; }
+    .header__actions { border-top: 1px solid rgba(48, 38, 83, .12); padding-top: 10px; }
     .header__menu-toggle { display: block; color: var(--cerebrito-ink); }
     .header:has(+ .inicio-sesion) .header__menu-toggle,
     .header:has(~ .registro) .header__menu-toggle { color: #fff; }
@@ -217,5 +265,7 @@ body {
     .header__login { padding: 9px 15px; color: var(--cerebrito-ink) !important; }
     .header:has(~ :is(.lobby, .perfil, .partida-contenedor, .ranking)) .usuario-badge { color: var(--cerebrito-ink); }
     .header__play { align-self: flex-start; }
+    .header__menu-toggle { order: 2; }
+    .header__sonido { margin-left: auto; }
 }
 

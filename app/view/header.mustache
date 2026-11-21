@@ -57,6 +57,19 @@
                 {{/logueado}}
             </div>
         </div>
+        <button id="boton-sonido" class="header__sonido" type="button" aria-pressed="false" aria-label="Silenciar sonido" title="Silenciar sonido">
+            <svg class="header__sonido-icono header__sonido-icono--activo" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M11 5 6 9H3v6h3l5 4z"/>
+                <path d="M15.5 8.5a5 5 0 0 1 0 7"/>
+                <path d="M18.5 5.5a9 9 0 0 1 0 13"/>
+            </svg>
+            <svg class="header__sonido-icono header__sonido-icono--silenciado" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M11 5 6 9H3v6h3l5 4z"/>
+                <path d="m16 9 5 6"/>
+                <path d="m21 9-5 6"/>
+            </svg>
+        </button>
         <script src="{{baseUrl}}/public/javascript/menu.js" defer></script>
+        <script src="{{baseUrl}}/public/javascript/sonido.js" defer></script>
     </div>
 </header>

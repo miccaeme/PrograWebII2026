@@ -29,23 +29,32 @@
             </a>
         </nav>
 
-        {{^sin_activas}}
-            <div class="activas__filtros" hidden>
-                <label class="activas__filtro">
-                    <svg class="activas__icono" aria-hidden="true"><use href="#activas-icono-buscar"/></svg>
-                    <input class="pregunta__entrada" id="activas-busqueda" type="search" aria-label="Buscar por enunciado" placeholder="Buscar pregunta...">
-                </label>
-                <label class="activas__filtro">
-                    <svg class="activas__icono" aria-hidden="true"><use href="#activas-icono-categoria"/></svg>
-                    <select class="pregunta__entrada" id="activas-categoria" aria-label="Filtrar por categoría">
-                        <option value="">Todas las categorías</option>
-                    </select>
-                </label>
+        <form class="activas__filtros" method="GET" action="{{baseUrl}}/editor/activas">
+            <label class="activas__filtro">
+                <svg class="activas__icono" aria-hidden="true"><use href="#activas-icono-buscar"/></svg>
+                <input class="pregunta__entrada" name="q" type="search" value="{{busqueda}}" aria-label="Buscar por enunciado" placeholder="Buscar pregunta...">
+            </label>
+            <label class="activas__filtro">
+                <svg class="activas__icono" aria-hidden="true"><use href="#activas-icono-categoria"/></svg>
+                <select class="pregunta__entrada" name="categoria" aria-label="Filtrar por categoría">
+                    <option value="0">Todas las categorías</option>
+                    {{#categorias}}
+                        <option value="{{id}}" {{#seleccionada}}selected{{/seleccionada}}>{{nombre}}</option>
+                    {{/categorias}}
+                </select>
+            </label>
+            <div class="activas__filtros-acciones">
+                <button class="pregunta__boton activas__boton" type="submit">Filtrar</button>
+                {{#hay_filtros}}<a class="pregunta__boton pregunta__boton--enlace activas__boton activas__boton--volver" href="{{baseUrl}}/editor/activas">Limpiar</a>{{/hay_filtros}}
             </div>
-            <div class="activas__estado" role="status">
-                <p class="pregunta__subtitulo" id="activas-sin-coincidencias" hidden>No hay preguntas que coincidan con los filtros.</p>
-            </div>
-        {{/sin_activas}}
+        </form>
+
+        {{#sin_resultados}}
+            <p class="pregunta__subtitulo" role="status">
+                {{#hay_filtros}}No hay preguntas que coincidan con los filtros.{{/hay_filtros}}
+                {{^hay_filtros}}No hay preguntas activas.{{/hay_filtros}}
+            </p>
+        {{/sin_resultados}}
 
         {{#sin_activas}}
             <p class="pregunta__subtitulo" role="status">No hay preguntas activas.</p>
@@ -86,13 +95,12 @@
         {{/preguntas}}
         {{#hay_paginas}}
             <nav class="paginado" aria-label="Paginado">
-                {{#hay_anterior}}<a href="{{baseUrl}}/editor/activas?pagina={{pagina_anterior}}">&laquo; Anterior</a>{{/hay_anterior}}
+                {{#hay_anterior}}<a href="{{baseUrl}}/editor/activas?pagina={{pagina_anterior}}&q={{busqueda_url}}&categoria={{categoria_actual}}">&laquo; Anterior</a>{{/hay_anterior}}
                 <span>Página {{pagina}} de {{total_paginas}}</span>
-                {{#hay_siguiente}}<a href="{{baseUrl}}/editor/activas?pagina={{pagina_siguiente}}">Siguiente &raquo;</a>{{/hay_siguiente}}
+                {{#hay_siguiente}}<a href="{{baseUrl}}/editor/activas?pagina={{pagina_siguiente}}&q={{busqueda_url}}&categoria={{categoria_actual}}">Siguiente &raquo;</a>{{/hay_siguiente}}
             </nav>
         {{/hay_paginas}}
     </section>
 </main>
 
-<script src="{{baseUrl}}/public/javascript/editor-activas.js" defer></script>
 {{> footer}}

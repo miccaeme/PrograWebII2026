@@ -271,6 +271,11 @@ class PreguntaController
             return;
         }
 
+        $detalle = trim((string)($datos['detalle'] ?? ''));
+        if ($motivo === 'Otro' && $detalle !== '') {
+            $motivo = 'Otro: ' . mb_substr($detalle, 0, 90);
+        }
+
         $idPregunta = $contexto === 'correcta'
             ? ($_SESSION['ultima_pregunta_correcta'] ?? null)
             : ($_SESSION['ultima_pregunta_resultado'] ?? null);
@@ -282,7 +287,7 @@ class PreguntaController
         try {
             $insertadas = $this->model->reportar($_SESSION['usuario_id'], $idPregunta, $motivo);
             if ($insertadas < 1) {
-                $this->responderReporte(409, false, 'No se registró el reporte. Es posible que ya hayas reportado esta pregunta.');
+                $this->responderReporte(409, false, 'Ya reportaste esta pregunta y está pendiente de revisión.');
                 return;
             }
             $this->responderReporte(201, true, 'El reporte se registró correctamente.');

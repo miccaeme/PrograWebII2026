@@ -1050,3 +1050,36 @@ textarea.pregunta__entrada {
     color: #fff;
     transform: translateY(-1px);
 }
+
+.partida-reportar__detalle {
+    padding: 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    font-size: 0.9rem;
+}
+
+.revision__acciones {
+    flex-wrap: wrap;
+}
+
+.revision__acciones .pregunta__boton {
+    white-space: nowrap;
+}
+
+@media (max-width: 480px) {
+    .revision__acciones .pregunta__boton {
+        padding: 0 18px;
+    }
+}
+
+.activas__filtros-acciones {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+.activas__filtros-acciones .activas__boton {
+    margin-bottom: 0;
+}

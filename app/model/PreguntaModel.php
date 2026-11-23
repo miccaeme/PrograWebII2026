@@ -149,22 +149,45 @@ class PreguntaModel
         return $respuestas;
     }
 
-    public function obtenerActivas($limite = 10, $offset = 0)
+    public function obtenerActivas($limite = 10, $offset = 0, $busqueda = '', $idCategoria = 0)
     {
-        return $this->database->queryAll("SELECT p.id, p.enunciado, p.fecha_creacion,
-    c.nombre AS categoria,
-    u.nombre_usuario AS creador
-    FROM preguntas p
-    INNER JOIN categorias c ON p.id_categoria = c.id
-    LEFT JOIN usuarios u ON p.id_usuario_creador = u.id
-    WHERE p.estado = 'activa'
-    ORDER BY p.fecha_creacion DESC
-    LIMIT " . (int)$limite . " OFFSET " . (int)$offset);
+        $sql = "SELECT p.id, p.enunciado, p.fecha_creacion,
+            c.nombre AS categoria,
+            u.nombre_usuario AS creador
+            FROM preguntas p
+            INNER JOIN categorias c ON p.id_categoria = c.id
+            LEFT JOIN usuarios u ON p.id_usuario_creador = u.id
+            WHERE p.estado = 'activa'";
+        $params = [];
+
+        if ($busqueda !== '') {
+            $sql .= " AND p.enunciado LIKE ?";
+            $params[] = '%' . $busqueda . '%';
+        }
+        if ($idCategoria > 0) {
+            $sql .= " AND p.id_categoria = ?";
+            $params[] = $idCategoria;
+        }
+
+        $sql .= " ORDER BY p.fecha_creacion DESC LIMIT " . (int)$limite . " OFFSET " . (int)$offset;
+        return $this->database->queryParams($sql, $params);
     }
 
-    public function contarActivas()
+    public function contarActivas($busqueda = '', $idCategoria = 0)
     {
-        $fila = $this->database->queryOne("SELECT COUNT(*) AS total FROM preguntas WHERE estado = 'activa'");
+        $sql = "SELECT COUNT(*) AS total FROM preguntas p WHERE p.estado = 'activa'";
+        $params = [];
+
+        if ($busqueda !== '') {
+            $sql .= " AND p.enunciado LIKE ?";
+            $params[] = '%' . $busqueda . '%';
+        }
+        if ($idCategoria > 0) {
+            $sql .= " AND p.id_categoria = ?";
+            $params[] = $idCategoria;
+        }
+
+        $fila = $this->database->queryOneParams($sql, $params);
         return (int)($fila['total'] ?? 0);
     }
 
@@ -246,7 +269,11 @@ class PreguntaModel
     public function reportar($idUsuario, $idPregunta, $motivo)
     {
         return $this->database->executeParams(
-            "INSERT IGNORE INTO reportes_preguntas (id_pregunta, id_usuario, motivo) VALUES (?, ?, ?)",
+            "INSERT INTO reportes_preguntas (id_pregunta, id_usuario, motivo) VALUES (?, ?, ?)
+         ON DUPLICATE KEY UPDATE
+            fecha    = IF(resuelto = 1, NOW(), fecha),
+            motivo   = IF(resuelto = 1, VALUES(motivo), motivo),
+            resuelto = 0",
             [$idPregunta, $idUsuario, $motivo]
         );
     }

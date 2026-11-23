@@ -1,8 +1,16 @@
 document.querySelectorAll('.partida-reportar__form').forEach((formulario) => {
     const boton = formulario.querySelector('button[type="submit"]');
     const mensaje = formulario.querySelector('[role="status"]');
+    const detalle = formulario.querySelector('.partida-reportar__detalle');
     let enviando = false;
     let reportada = false;
+
+    formulario.elements.motivo.addEventListener('change', () => {
+        if (!detalle) return;
+        const esOtro = formulario.elements.motivo.value === 'Otro';
+        detalle.hidden = !esOtro;
+        if (!esOtro) detalle.value = '';
+    });
 
     formulario.addEventListener('submit', async (event) => {
         event.preventDefault();
@@ -21,6 +29,7 @@ document.querySelectorAll('.partida-reportar__form').forEach((formulario) => {
                 },
                 body: JSON.stringify({
                     motivo: formulario.elements.motivo.value,
+                    detalle: detalle ? detalle.value : '',
                     contexto: formulario.dataset.contexto
                 })
             });

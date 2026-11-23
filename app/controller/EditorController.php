@@ -76,18 +76,31 @@ class EditorController
     {
         Auth::requiereRol(["editor", "admin"]);
 
-        $paginado = $this->datosPaginado($this->model->contarActivas());
-        $preguntas = $this->model->obtenerActivas(self::POR_PAGINA, $paginado["offset"]);
+        $busqueda = trim((string) Request::get("q", ""));
+        $idCategoria = (int) Request::get("categoria", 0);
+
+        $paginado = $this->datosPaginado($this->model->contarActivas($busqueda, $idCategoria));
+        $preguntas = $this->model->obtenerActivas(self::POR_PAGINA, $paginado["offset"], $busqueda, $idCategoria);
 
         foreach ($preguntas as $i => $p) {
             $preguntas[$i]["respuestas"] = $this->model->obtenerRespuestas($p["id"]);
+        }
+
+        $categorias = $this->model->obtenerCategorias();
+        foreach ($categorias as $i => $c) {
+            $categorias[$i]["seleccionada"] = ((int)$c["id"] === $idCategoria);
         }
 
         $this->render->renderiza("editorActivas", array_merge($paginado, [
             "logueado" => true,
             "nombre_usuario" => $_SESSION["nombre_usuario"] ?? "",
             "preguntas" => $preguntas,
-            "sin_activas" => empty($preguntas)
+            "categorias" => $categorias,
+            "busqueda" => $busqueda,
+            "busqueda_url" => urlencode($busqueda),
+            "categoria_actual" => $idCategoria,
+            "hay_filtros" => ($busqueda !== '' || $idCategoria > 0),
+            "sin_resultados" => empty($preguntas)
         ]));
     }
 

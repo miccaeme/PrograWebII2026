@@ -60,7 +60,7 @@
 
 .admin-kpis {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
     gap: 1.5rem;
 }
 
@@ -97,7 +97,7 @@
 
 .admin-graficos {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
     gap: 1.5rem;
 }
 
@@ -258,4 +258,24 @@ html {
 .admin-boton:hover {
     background: #eee9fb;
     transform: translateY(-2px);
+}
+
+.admin-dashboard > *,
+.chart-box,
+.tabla-box {
+    min-width: 0;
+}
+
+.tabla-box {
+    overflow-x: auto;
+}
+
+@media (max-width: 480px) {
+    .admin-dashboard {
+        padding: 0 1rem;
+    }
+
+    .admin-imprimir {
+        width: 100%;
+    }
 }

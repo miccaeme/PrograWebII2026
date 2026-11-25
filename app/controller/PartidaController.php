@@ -266,8 +266,6 @@ class PartidaController
 
         ];
 
-        $_SESSION['ultima_pregunta_resultado'] = $info['id_pregunta'] ?? null;
-        unset($_SESSION['partida_finalizada']);
         $this->render->renderiza("resultado", $data);
     }
 }

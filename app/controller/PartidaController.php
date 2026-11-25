@@ -99,6 +99,7 @@ class PartidaController
     public function nueva()
     {
         $this->autenticar();
+        unset($_SESSION['partida_finalizada'], $_SESSION['ultima_pregunta_resultado']);
         $idUsuario = $_SESSION['usuario_id'];
         $activa = $this->model->obtenerPartidaActiva($idUsuario);
         $idPartida = $activa['id'] ?? $this->model->crearPartida($idUsuario);
@@ -250,7 +251,9 @@ class PartidaController
 
         $info = $_SESSION['partida_finalizada'] ?? null;
         $puntaje = $info['puntaje'] ?? 0;
-
+        if (!empty($info['id_pregunta'])) {
+            $_SESSION['ultima_pregunta_resultado'] = $info['id_pregunta'];
+        }
 
         $data = [
             "logueado"           => true,

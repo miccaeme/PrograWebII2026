@@ -236,16 +236,17 @@ class PartidaModel
         });
     }
 
-    public function responderConTiempo($idPartida, $idUsuario, $idRespuesta, $idPregunta, $vencimiento)
+    public function responderConTiempo($idPartida, $idUsuario, $idRespuesta, $vencimiento)
     {
         return $this->operarPartida($idPartida, $idUsuario,
-            function ($partida) use ($idRespuesta, $idPregunta, $vencimiento) {
+            function ($partida) use ($idRespuesta, $vencimiento) {
                 $partida['respuesta_aceptada'] = false;
                 if ($partida['estado'] !== 'en_curso' || !$partida['pregunta_actual_id']
                     || !$partida['pregunta_vence_en']
-                    || (int)$idPregunta !== (int)$partida['pregunta_actual_id']
                     || $vencimiento !== $partida['pregunta_vence_en']) return $partida;
 
+                $idPregunta = (int)$partida['pregunta_actual_id'];
+                $partida['pregunta_respondida_id'] = $idPregunta;
                 $respuesta = $this->database->queryOneParams(
                     "SELECT es_correcta FROM respuestas WHERE id = ? AND id_pregunta = ?",
                     [$idRespuesta, $partida['pregunta_actual_id']]

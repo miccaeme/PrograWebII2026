@@ -63,7 +63,6 @@
             <!-- Respuestas  -->
             <form method="POST" action="{{baseUrl}}/partida/responder" class="partida-respuestas-lista">
                 <input type="hidden" name="id_partida" value="{{id_partida}}">
-                <input type="hidden" name="id_pregunta" value="{{id_pregunta}}">
                 <input type="hidden" name="pregunta_vence_en" value="{{pregunta_vence_en}}">
                 {{#respuestas}}
                     <button type="submit" name="id_respuesta" value="{{id}}" class="partida-btn-respuesta">
@@ -189,13 +188,10 @@
                 const pregunta = estado.pregunta;
                 // Una pestaña vieja no debe convertir su formulario en el de otra pregunta.
                 if (String(pregunta.categoria_id) !== String(idGanador)
-                    || (formularioRespuestas.elements.id_pregunta.value
-                        && (String(estado.id_pregunta) !== formularioRespuestas.elements.id_pregunta.value
-                            || estado.pregunta_vence_en !== formularioRespuestas.elements.pregunta_vence_en.value))) {
+                    || (formularioRespuestas.elements.pregunta_vence_en.value && estado.pregunta_vence_en !== formularioRespuestas.elements.pregunta_vence_en.value)){
                     window.location.reload();
                     return;
                 }
-                formularioRespuestas.elements.id_pregunta.value = estado.id_pregunta;
                 formularioRespuestas.elements.pregunta_vence_en.value = estado.pregunta_vence_en;
                 document.querySelector(".partida-enunciado").textContent = pregunta.enunciado;
                 formularioRespuestas.querySelectorAll("button").forEach(boton => boton.remove());

@@ -38,6 +38,11 @@ class Router
 
     private function getMethod($controller, $method)
     {
-        return method_exists($controller, $method) ? $method : $this->defaultMethod;
+        if(is_string($method) && $method !== "" && $method[0] !== "_" && is_callable([$controller, $method])){
+            return $method;          
+        }
+
+        return $this->defaultMethod;
+        // return method_exists($controller, $method) ? $method : $this->defaultMethod;
     }
 }

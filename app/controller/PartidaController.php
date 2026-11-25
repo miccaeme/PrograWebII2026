@@ -26,6 +26,22 @@ class PartidaController
         exit();
     }
 
+    private function codigoRespuesta($idPartida, $idRespuesta)
+    {
+        $_SESSION['secreto_respuestas'] ??= bin2hex(random_bytes(32));
+        return hash_hmac('sha256', $idPartida . '|' . $idRespuesta, $_SESSION['secreto_respuestas']);
+    }
+
+    private function ocultarIdsRespuestas($pregunta, $idPartida)
+    {
+        if(!$pregunta) return $pregunta;
+        foreach($pregunta['respuestas'] as $i => $respuesta){
+            $pregunta['respuestas'][$i]['id'] = $this->codigoRespuesta($idPartida, $respuesta['id']);
+        }
+
+        return $pregunta;
+    }
+
     public function show()
     {
         $this->autenticar();
@@ -68,7 +84,6 @@ class PartidaController
         $this->render->renderiza('partida', [
             'logueado' => true, 'nombre_usuario' => $_SESSION['nombre_usuario'] ?? 'Jugador',
             'puntaje_actual' => (int)$partida['puntaje'], 'id_partida' => (int)$partida['id'],
-            'id_pregunta' => $habilitada ? $partida['pregunta_actual_id'] : '',
             'pregunta_vence_en' => $habilitada ? $partida['pregunta_vence_en'] : '',
             'tiempo_restante_ms' => $habilitada ? $partida['tiempo_restante_ms'] : 0,
             'segundos_restantes' => $habilitada ? (int)ceil($partida['tiempo_restante_ms'] / 1000) : 0,
@@ -79,7 +94,7 @@ class PartidaController
             'categoria_color' => $pregunta['categoria_color'] ?? '#7028E8',
             // No entregar el contenido antes de habilitar el plazo en el servidor.
             'enunciado' => $habilitada ? $pregunta['enunciado'] : '',
-            'respuestas' => $habilitada ? $pregunta['respuestas'] : [],
+            'respuestas' => $habilitada ? $this->ocultarIdsRespuestas($pregunta, $partida['id'])['respuestas'] : [],
             'categorias_carrusel' => $this->model->obtenerCategorias($pregunta['categoria_id'] ?? 0),
             'sin_preguntas_disponibles' => $partida['sin_preguntas_disponibles'] ?? false
         ]);
@@ -159,11 +174,10 @@ class PartidaController
             $this->sincronizarPartida($partida);
             echo json_encode([
                 'estado' => $partida['estado'], 'motivo' => $partida['motivo_finalizacion'],
-                'id_pregunta' => $partida['pregunta_actual_id'],
                 'pregunta_vence_en' => $partida['pregunta_vence_en'],
                 'tiempo_restante_ms' => $partida['tiempo_restante_ms'],
                 'pregunta' => $partida['estado'] === 'en_curso' && $partida['pregunta_vence_en']
-                    ? $partida['pregunta'] : null
+                    ? $this->ocultarIdsRespuestas($partida['pregunta'], $partida['id']) : null
             ]);
         } catch (\Throwable $error) {
             \Log::error('Error al consultar el temporizador: ' . $error->getMessage());
@@ -179,15 +193,24 @@ class PartidaController
         $this->autenticar();
         $this->comprobarPostTemporizador();
         $idPartida = filter_var(Request::post('id_partida'), FILTER_VALIDATE_INT);
-        $idRespuesta = filter_var(Request::post('id_respuesta'), FILTER_VALIDATE_INT);
-        $idPregunta = filter_var(Request::post('id_pregunta'), FILTER_VALIDATE_INT);
+        $codigo = Request::post('id_respuesta');
+        $idRespuesta = null;
+        if ($idPartida && is_string($codigo)) {
+            $actual = $this->model->consultarPartida($idPartida, $_SESSION['usuario_id']);
+            foreach ($actual['pregunta']['respuestas'] ?? [] as $respuesta) {
+                if (hash_equals($this->codigoRespuesta($idPartida, $respuesta['id']), $codigo)) {
+                    $idRespuesta = (int)$respuesta['id'];
+                    break;
+                }
+            }
+        }
         $vencimiento = Request::post('pregunta_vence_en');
-        if (!$idPartida || !$idRespuesta || !$idPregunta || !is_string($vencimiento)) {
+        if (!$idPartida || !$idRespuesta || !is_string($vencimiento)) {
             http_response_code(400);
             return;
         }
         $partida = $this->model->responderConTiempo($idPartida, $_SESSION['usuario_id'],
-            $idRespuesta, $idPregunta, $vencimiento);
+            $idRespuesta, $vencimiento);
         if (!$partida) {
             http_response_code(404);
             return;
@@ -208,7 +231,7 @@ class PartidaController
             $this->redirigir('resultado');
         }
         if (!empty($partida['respuesta_aceptada'])) {
-            $_SESSION['ultima_pregunta_correcta'] = $idPregunta;
+            $_SESSION['ultima_pregunta_correcta'] = $partida['pregunta_respondida_id'];
             $this->redirigir('respuestaCorrecta');
         } else {
             $this->redirigir('jugar');

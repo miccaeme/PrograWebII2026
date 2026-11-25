@@ -55,8 +55,12 @@ class UsuarioModel
         if ($datos["nombre_usuario"] !== "" && $this->existeUsuario($datos["nombre_usuario"])) {
             $errores["nombre_usuario"] = "Ese nombre de usuario ya existe.";
         }
-        if (empty($datos["pais"]) && empty($datos["latitud"])) {
-            return "Debes seleccionar tu ubicación en el mapa.";
+        // if (empty($datos["pais"]) && empty($datos["latitud"])) {
+        //     return "Debes seleccionar tu ubicación en el mapa.";
+        // }
+
+        if(empty($datos["pais"]) || !is_numeric($datos["latitud"]) || !is_numeric($datos["longitud"])) {
+            $errores["ubicacion"] = "Debes seleccionar tu ubicación en el mapa.";
         }
 
         return $errores;

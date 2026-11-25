@@ -53,6 +53,7 @@ class LoginController
 
 
         $usuarioLogueado = $resultado["usuario"];
+        session_regenerate_id(true);
         $_SESSION["usuario_id"] = $usuarioLogueado["id"] ?? null;
         $_SESSION["nombre_usuario"] = $usuarioLogueado["nombre_usuario"] ?? "";
         $_SESSION["logueado"] = true;

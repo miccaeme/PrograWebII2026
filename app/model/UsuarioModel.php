@@ -147,13 +147,13 @@ class UsuarioModel
         }
 
         return $this->database->queryOneParams(
-                        "SELECT u.nombre_completo, u.nombre_usuario, u.foto_perfil, u.pais,
+                        "SELECT u.nombre_completo, u.nombre_usuario, u.foto_perfil, u.pais, u.ciudad,
             COALESCE(MAX(p.puntaje), 0) AS puntaje_total,
             COUNT(p.id) AS partidas_jugadas
             FROM usuarios u
             LEFT JOIN partidas p ON p.id_usuario = u.id AND p.estado = 'finalizada'
             WHERE u.token_perfil = ?
-            GROUP BY u.id, u.nombre_completo, u.nombre_usuario, u.foto_perfil, u.pais",
+            GROUP BY u.id, u.nombre_completo, u.nombre_usuario, u.foto_perfil, u.pais, u.ciudad",
             [$token]
         );
     }

@@ -57,6 +57,18 @@ class RegistroController
 
         $token = $this->model->crear($datos, $password);
 
+        $avisoFoto = "";
+        $archivo = Request::file("foto_perfil");
+
+        if($token && $archivo && $archivo["error"] === UPLOAD_ERR_OK){
+            $usuario = $this->model->buscarPorUsuarioOEmail($datos["nombre_usuario"]);
+            $resultadoFoto = $this->model->cambiarFoto($usuario["id"], $archivo);
+
+            if(isset($resultadoFoto["error"])){
+                $avisoFoto = " No pudimos guardar tu foto (" . $resultadoFoto["error"] . "), podés subirla después desde tu perfil.";
+            }
+        }
+
         $protocolo = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
         $link = $protocolo . '://' . $_SERVER['HTTP_HOST']
             . UrlHelper::controllerUrl("registro", "activar")
@@ -67,7 +79,7 @@ class RegistroController
         $enviado = $mailer->enviarValidacion($datos["email"], $datos["nombre_completo"], $link);
 
         if ($enviado) {
-            $datos = ["exito" => "¡Registro exitoso! Te enviamos un mail para activar tu cuenta."];
+            $datos = ["exito" => "¡Registro exitoso! Te enviamos un mail para activar tu cuenta." . $avisoFoto];
         } else {
             $datos = ["error" => "Tu cuenta se creó, pero no pudimos enviar el mail de activación."];
         }

@@ -15,7 +15,7 @@
             <p class="registro__subtitulo">Completá tus datos para unirte a Cerebrito</p>
 
 
-            <form id="registro-form" class="registro__formulario" method="POST" action="{{baseUrl}}/registro/procesar">
+            <form id="registro-form" class="registro__formulario" method="POST" action="{{baseUrl}}/registro/procesar" enctype="multipart/form-data">
                 <p class="registro__campo">
                     <label class="registro__etiqueta">Nombre completo</label>
                     <input class="w3-input registro__entrada" type="text" name="nombre_completo" value="{{nombre_completo}}" maxlength="100" aria-describedby="nombre-completo-error">

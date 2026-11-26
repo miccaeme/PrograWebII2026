@@ -3,7 +3,6 @@
     <svg class="activas__simbolos" width="0" height="0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
         <symbol id="activas-icono-volver" viewBox="0 0 24 24"><path d="M19 12H5m6-6-6 6 6 6"/></symbol>
         <symbol id="activas-icono-ver" viewBox="0 0 24 24"><path d="M2 12s4-6 10-6 10 6 10 6-4 6-10 6S2 12 2 12Zm13 0a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/></symbol>
-        <symbol id="activas-icono-buscar" viewBox="0 0 24 24"><path d="M21 21l-5-5m2-5a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"/></symbol>
         <symbol id="activas-icono-categoria" viewBox="0 0 24 24"><path d="M3 4h8l10 10-7 7L3 10V4Zm4 4h.01"/></symbol>
         <symbol id="activas-icono-usuario" viewBox="0 0 24 24"><path d="M4 21v-2a5 5 0 0 1 5-5h6a5 5 0 0 1 5 5v2m-4-14a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z"/></symbol>
         <symbol id="activas-icono-fecha" viewBox="0 0 24 24"><path d="M5 5h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Zm2-2v4m10-4v4M3 10h18"/></symbol>
@@ -29,25 +28,7 @@
             </a>
         </nav>
 
-        <form class="activas__filtros" method="GET" action="{{baseUrl}}/editor/activas">
-            <label class="activas__filtro">
-                <svg class="activas__icono" aria-hidden="true"><use href="#activas-icono-buscar"/></svg>
-                <input class="pregunta__entrada" name="q" type="search" value="{{busqueda}}" aria-label="Buscar por enunciado" placeholder="Buscar pregunta...">
-            </label>
-            <label class="activas__filtro">
-                <svg class="activas__icono" aria-hidden="true"><use href="#activas-icono-categoria"/></svg>
-                <select class="pregunta__entrada" name="categoria" aria-label="Filtrar por categoría">
-                    <option value="0">Todas las categorías</option>
-                    {{#categorias}}
-                        <option value="{{id}}" {{#seleccionada}}selected{{/seleccionada}}>{{nombre}}</option>
-                    {{/categorias}}
-                </select>
-            </label>
-            <div class="activas__filtros-acciones">
-                <button class="pregunta__boton activas__boton" type="submit">Filtrar</button>
-                {{#hay_filtros}}<a class="pregunta__boton pregunta__boton--enlace activas__boton activas__boton--volver" href="{{baseUrl}}/editor/activas">Limpiar</a>{{/hay_filtros}}
-            </div>
-        </form>
+        {{> editorFiltrosPreguntas}}
 
         {{#sin_resultados}}
             <p class="pregunta__subtitulo" role="status">
@@ -65,6 +46,9 @@
                 <h2 class="revision__enunciado">{{enunciado}}</h2>
                 <div class="revision__datos">
                     <span class="activas__categoria"><svg class="activas__icono" aria-hidden="true"><use href="#activas-icono-categoria"/></svg> {{categoria}}</span>
+                    {{#categoria_inactiva}}
+                        <span class="revision__categoria-inactiva">Categoría inactiva</span>
+                    {{/categoria_inactiva}}
                     <span><svg class="activas__icono" aria-hidden="true"><use href="#activas-icono-usuario"/></svg> Creada por {{creador}}</span>
                     <span><svg class="activas__icono" aria-hidden="true"><use href="#activas-icono-fecha"/></svg> {{fecha_creacion}}</span>
                 </div>

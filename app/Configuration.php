@@ -140,7 +140,8 @@ class Configuration
     }
 
     public function getEditorController(){
-        return new EditorController($this->getPreguntaModel(), $this->getRender());
+        $database = $this->getDatabase();
+        return new EditorController(new PreguntaModel($database), new CategoriaModel($database), $this->getRender());
     }
 
     public function getCategoriaController()

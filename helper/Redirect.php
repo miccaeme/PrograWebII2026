@@ -8,10 +8,6 @@ class Redirect
         exit();
     }
 
-    public static function toIndex()
-    {
-        self::to(UrlHelper::indexUrl());
-    }
 
     public static function toController($controller, $method)
     {

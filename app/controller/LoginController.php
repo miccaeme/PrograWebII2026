@@ -58,13 +58,18 @@ class LoginController
         $_SESSION["nombre_usuario"] = $usuarioLogueado["nombre_usuario"] ?? "";
         $_SESSION["logueado"] = true;
         $_SESSION["rol"] = ($usuarioLogueado["rol"] ?? "") ?: "jugador";
-
+        $this->model->actualizarSessionId($_SESSION["usuario_id"], session_id());
         Auth::irAlInicio();
 
     }
 
     public function logout()
     {
+        if (!empty($_SESSION["usuario_id"])) {
+            $this->model->actualizarSessionId($_SESSION["usuario_id"], null);
+        }
+
+        $_SESSION = [];
         session_destroy();
         Redirect::toController("login", "show");
     }

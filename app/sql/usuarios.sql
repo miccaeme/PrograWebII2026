@@ -23,3 +23,4 @@ CREATE TABLE IF NOT EXISTS usuarios(
     preguntas_respondidas INT NOT NULL DEFAULT 0,
     preguntas_acertadas INT NOT NULL DEFAULT 0
 );
+ ALTER TABLE usuarios ADD COLUMN session_id VARCHAR(128) NULL Default NULL;

@@ -281,4 +281,15 @@ class UsuarioModel
         );
     }
 
+    public function actualizarSessionId($idUsuario, $sessionId){
+        $sql =  "UPDATE usuarios SET session_id = ? WHERE id = ?";
+        return $this->database->executeParams($sql, [$sessionId, $idUsuario]);
+
+    }
+    public function obtenerSessionId($idUsuario){
+        $sql = "SELECT session_id FROM usuarios WHERE id = ? LIMIT 1";
+        $res = $this->database->queryOneParams($sql, [$idUsuario]);
+        return $res["session_id"]?? null;
+    }
+
 }

@@ -50,9 +50,10 @@ class Auth
 
     public static function requiereLogin()
     {
-        if (empty($_SESSION["logueado"])) {
+        if (empty($_SESSION["logueado"]) || empty($_SESSION["usuario_id"])) {
             Redirect::toController("login", "show");
         }
+        self::verificarSesionUnica();
     }
 
     public static function requiereRol($rolesPermitidos)
@@ -74,6 +75,31 @@ class Auth
             Redirect::toController("editor", "show");
         } else {
             Redirect::toController("lobby", "show");
+        }
+    }
+
+    private static function verificarSesionUnica()
+    {
+        $config = new \app\Configuration();
+        $usuarioModel = $config->getUsuarioModel();
+
+        $sessionActivaEnDb = $usuarioModel->obtenerSessionId($_SESSION["usuario_id"]);
+
+        if ($sessionActivaEnDb !== null && $sessionActivaEnDb !== session_id()) {
+            $_SESSION = [];
+            session_destroy();
+
+            $esAjax = str_contains($_SERVER["HTTP_ACCEPT"] ?? "", "application/json")
+                || strtolower($_SERVER["HTTP_X_REQUESTED_WITH"] ?? "") === "xmlhttprequest";
+
+            if ($esAjax) {
+                http_response_code(401);
+                header("Content-Type: application/json; charset=utf-8");
+                echo json_encode(["error" => "Tu sesión fue cerrada porque ingresaste desde otro dispositivo o ventana."]);
+                exit();
+            }
+
+            Redirect::toController("login", "show");
         }
     }
 }

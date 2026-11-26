@@ -365,6 +365,16 @@ textarea.pregunta__entrada {
     margin: 0 0 12px;
 }
 
+.revision__datos .revision__categoria-inactiva {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: #fef3c7;
+    color: #854d0e;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
 .revision__acciones {
     display: flex;
     gap: 12px;
@@ -484,6 +494,7 @@ textarea.pregunta__entrada {
 }
 
 .activas__panel,
+.activas__filtros,
 .categorias-panel__contenedor,
 .categorias-panel__dialogo,
 .crear-pregunta__panel,
@@ -645,6 +656,10 @@ textarea.pregunta__entrada {
 
 .activas__filtro .pregunta__entrada:focus {
     border-color: var(--activas-violeta);
+}
+
+.activas__opcion-desactivada {
+    color: #b91c1c;
 }
 
 .activas__pregunta:not([hidden]) {

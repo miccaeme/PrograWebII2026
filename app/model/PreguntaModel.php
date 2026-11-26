@@ -153,29 +153,29 @@ class PreguntaModel
     {
         $sql = "SELECT p.id, p.enunciado, p.fecha_creacion,
             c.nombre AS categoria,
+            (c.activa = 0) AS categoria_inactiva,
             u.nombre_usuario AS creador
             FROM preguntas p
             INNER JOIN categorias c ON p.id_categoria = c.id
             LEFT JOIN usuarios u ON p.id_usuario_creador = u.id
             WHERE p.estado = 'activa'";
-        $params = [];
+        [$filtros, $params] = $this->filtrosListado($busqueda, $idCategoria);
 
-        if ($busqueda !== '') {
-            $sql .= " AND p.enunciado LIKE ?";
-            $params[] = '%' . $busqueda . '%';
-        }
-        if ($idCategoria > 0) {
-            $sql .= " AND p.id_categoria = ?";
-            $params[] = $idCategoria;
-        }
-
-        $sql .= " ORDER BY p.fecha_creacion DESC LIMIT " . (int)$limite . " OFFSET " . (int)$offset;
+        $sql .= $filtros . " ORDER BY p.fecha_creacion DESC LIMIT " . (int)$limite . " OFFSET " . (int)$offset;
         return $this->database->queryParams($sql, $params);
     }
 
     public function contarActivas($busqueda = '', $idCategoria = 0)
     {
         $sql = "SELECT COUNT(*) AS total FROM preguntas p WHERE p.estado = 'activa'";
+        [$filtros, $params] = $this->filtrosListado($busqueda, $idCategoria);
+        $fila = $this->database->queryOneParams($sql . $filtros, $params);
+        return (int)($fila['total'] ?? 0);
+    }
+
+    private function filtrosListado($busqueda, $idCategoria)
+    {
+        $sql = "";
         $params = [];
 
         if ($busqueda !== '') {
@@ -187,8 +187,7 @@ class PreguntaModel
             $params[] = $idCategoria;
         }
 
-        $fila = $this->database->queryOneParams($sql, $params);
-        return (int)($fila['total'] ?? 0);
+        return [$sql, $params];
     }
 
 
@@ -247,22 +246,26 @@ class PreguntaModel
         }
     }
 
-    public function obtenerInactivas($limite = 10, $offset = 0)
+    public function obtenerInactivas($limite = 10, $offset = 0, $busqueda = '', $idCategoria = 0)
     {
-        return $this->database->queryAll("SELECT p.id, p.enunciado, p.fecha_creacion,
-    c.nombre AS categoria,
-    u.nombre_usuario AS creador
-    FROM preguntas p
-    INNER JOIN categorias c ON p.id_categoria = c.id
-    LEFT JOIN usuarios u ON p.id_usuario_creador = u.id
-    WHERE p.estado = 'inactiva'
-    ORDER BY p.fecha_creacion DESC
-    LIMIT " . (int)$limite . " OFFSET " . (int)$offset);
+        $sql = "SELECT p.id, p.enunciado, p.fecha_creacion,
+            c.nombre AS categoria,
+            (c.activa = 0) AS categoria_inactiva,
+            u.nombre_usuario AS creador
+            FROM preguntas p
+            INNER JOIN categorias c ON p.id_categoria = c.id
+            LEFT JOIN usuarios u ON p.id_usuario_creador = u.id
+            WHERE p.estado = 'inactiva'";
+        [$filtros, $params] = $this->filtrosListado($busqueda, $idCategoria);
+        $sql .= $filtros . " ORDER BY p.fecha_creacion DESC LIMIT " . (int)$limite . " OFFSET " . (int)$offset;
+        return $this->database->queryParams($sql, $params);
     }
 
-    public function contarInactivas()
+    public function contarInactivas($busqueda = '', $idCategoria = 0)
     {
-        $fila = $this->database->queryOne("SELECT COUNT(*) AS total FROM preguntas WHERE estado = 'inactiva'");
+        $sql = "SELECT COUNT(*) AS total FROM preguntas p WHERE p.estado = 'inactiva'";
+        [$filtros, $params] = $this->filtrosListado($busqueda, $idCategoria);
+        $fila = $this->database->queryOneParams($sql . $filtros, $params);
         return (int)($fila['total'] ?? 0);
     }
 

@@ -10,12 +10,14 @@ class EditorController
 {
 
     private $model;
+    private $categoriaModel;
     private $render;
 
     private const POR_PAGINA = 3;
-    public function __construct($model, $render)
+    public function __construct($model, $categoriaModel, $render)
     {
         $this->model = $model;
+        $this->categoriaModel = $categoriaModel;
         $this->render = $render;
     }
 
@@ -86,20 +88,10 @@ class EditorController
             $preguntas[$i]["respuestas"] = $this->model->obtenerRespuestas($p["id"]);
         }
 
-        $categorias = $this->model->obtenerCategorias();
-        foreach ($categorias as $i => $c) {
-            $categorias[$i]["seleccionada"] = ((int)$c["id"] === $idCategoria);
-        }
-
-        $this->render->renderiza("editorActivas", array_merge($paginado, [
+        $this->render->renderiza("editorActivas", array_merge($paginado, $this->datosFiltros($busqueda, $idCategoria, "activas"), [
             "logueado" => true,
             "nombre_usuario" => $_SESSION["nombre_usuario"] ?? "",
             "preguntas" => $preguntas,
-            "categorias" => $categorias,
-            "busqueda" => $busqueda,
-            "busqueda_url" => urlencode($busqueda),
-            "categoria_actual" => $idCategoria,
-            "hay_filtros" => ($busqueda !== '' || $idCategoria > 0),
             "sin_resultados" => empty($preguntas)
         ]));
     }
@@ -108,19 +100,40 @@ class EditorController
     {
         Auth::requiereRol(["editor", "admin"]);
 
-        $paginado = $this->datosPaginado($this->model->contarInactivas());
-        $preguntas = $this->model->obtenerInactivas(self::POR_PAGINA, $paginado["offset"]);
+        $busqueda = trim((string) Request::get("q", ""));
+        $idCategoria = (int) Request::get("categoria", 0);
+
+        $paginado = $this->datosPaginado($this->model->contarInactivas($busqueda, $idCategoria));
+        $preguntas = $this->model->obtenerInactivas(self::POR_PAGINA, $paginado["offset"], $busqueda, $idCategoria);
 
         foreach ($preguntas as $i => $p) {
             $preguntas[$i]["respuestas"] = $this->model->obtenerRespuestas($p["id"]);
         }
 
-        $this->render->renderiza("editorInactivas", array_merge($paginado, [
+        $this->render->renderiza("editorInactivas", array_merge($paginado, $this->datosFiltros($busqueda, $idCategoria, "inactivas"), [
             "logueado" => true,
             "nombre_usuario" => $_SESSION["nombre_usuario"] ?? "",
             "preguntas" => $preguntas,
             "sin_inactivas" => empty($preguntas)
         ]));
+    }
+
+    private function datosFiltros($busqueda, $idCategoria, $pestana)
+    {
+        $categorias = $this->categoriaModel->listar();
+        foreach ($categorias as $i => $categoria) {
+            $categorias[$i]["seleccionada"] = (int) $categoria["id"] === $idCategoria;
+            $categorias[$i]["desactivada"] = (int) $categoria["activa"] === 0;
+        }
+
+        return [
+            "categorias" => $categorias,
+            "busqueda" => $busqueda,
+            "busqueda_url" => urlencode($busqueda),
+            "categoria_actual" => $idCategoria,
+            "hay_filtros" => $busqueda !== "" || $idCategoria > 0,
+            "pestana_filtros" => $pestana
+        ];
     }
 
     public function baja()

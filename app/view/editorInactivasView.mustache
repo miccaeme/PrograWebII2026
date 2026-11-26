@@ -6,15 +6,24 @@
 
         <a class="pregunta__boton pregunta__boton--enlace" href="{{baseUrl}}/editor/activas">Volver a preguntas activas</a>
 
+        {{> editorFiltrosPreguntas}}
+
         {{#sin_inactivas}}
-            <p class="pregunta__subtitulo">No hay preguntas inactivas.</p>
+            <p class="pregunta__subtitulo" role="status">
+                {{#hay_filtros}}No hay preguntas que coincidan con los filtros.{{/hay_filtros}}
+                {{^hay_filtros}}No hay preguntas inactivas.{{/hay_filtros}}
+            </p>
         {{/sin_inactivas}}
 
         {{#preguntas}}
             <article class="revision">
                 <p class="revision__enunciado">{{enunciado}}</p>
                 <p class="revision__datos">
-                    Categoría: {{categoria}} · Creada por {{creador}} · {{fecha_creacion}}
+                    Categoría: {{categoria}}
+                    {{#categoria_inactiva}}
+                        <span class="revision__categoria-inactiva">Categoría inactiva</span>
+                    {{/categoria_inactiva}}
+                    · Creada por {{creador}} · {{fecha_creacion}}
                 </p>
 
                 <details class="revision__detalle">
@@ -38,9 +47,9 @@
         {{/preguntas}}
         {{#hay_paginas}}
             <nav class="paginado" aria-label="Paginado">
-                {{#hay_anterior}}<a href="{{baseUrl}}/editor/activas?pagina={{pagina_anterior}}">&laquo; Anterior</a>{{/hay_anterior}}
+                {{#hay_anterior}}<a href="{{baseUrl}}/editor/inactivas?pagina={{pagina_anterior}}&q={{busqueda_url}}&categoria={{categoria_actual}}">&laquo; Anterior</a>{{/hay_anterior}}
                 <span>Página {{pagina}} de {{total_paginas}}</span>
-                {{#hay_siguiente}}<a href="{{baseUrl}}/editor/activas?pagina={{pagina_siguiente}}">Siguiente &raquo;</a>{{/hay_siguiente}}
+                {{#hay_siguiente}}<a href="{{baseUrl}}/editor/inactivas?pagina={{pagina_siguiente}}&q={{busqueda_url}}&categoria={{categoria_actual}}">Siguiente &raquo;</a>{{/hay_siguiente}}
             </nav>
         {{/hay_paginas}}
     </section>

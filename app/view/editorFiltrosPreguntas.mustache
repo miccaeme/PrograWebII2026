@@ -1,0 +1,19 @@
+<form class="activas__filtros" method="GET" action="{{baseUrl}}/editor/{{pestana_filtros}}">
+    <label class="activas__filtro">
+        <svg class="activas__icono" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 21l-5-5m2-5a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"/></svg>
+        <input class="pregunta__entrada" name="q" type="search" value="{{busqueda}}" aria-label="Buscar por enunciado" placeholder="Buscar pregunta...">
+    </label>
+    <label class="activas__filtro">
+        <svg class="activas__icono" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h8l10 10-7 7L3 10V4Zm4 4h.01"/></svg>
+        <select class="pregunta__entrada" name="categoria" aria-label="Filtrar por categoría">
+            <option value="0">Todas las categorías</option>
+            {{#categorias}}
+                <option value="{{id}}"{{#seleccionada}} selected{{/seleccionada}}{{#desactivada}} class="activas__opcion-desactivada"{{/desactivada}}>{{nombre}}{{#desactivada}} (Desactivada){{/desactivada}}</option>
+            {{/categorias}}
+        </select>
+    </label>
+    <div class="activas__filtros-acciones">
+        <button class="pregunta__boton activas__boton" type="submit">Filtrar</button>
+        {{#hay_filtros}}<a class="pregunta__boton pregunta__boton--enlace activas__boton activas__boton--volver" href="{{baseUrl}}/editor/{{pestana_filtros}}">Limpiar</a>{{/hay_filtros}}
+    </div>
+</form>

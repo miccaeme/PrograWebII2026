@@ -156,7 +156,7 @@ class UsuarioModel
             COUNT(p.id) AS partidas_jugadas
             FROM usuarios u
             LEFT JOIN partidas p ON p.id_usuario = u.id AND p.estado = 'finalizada'
-            WHERE u.token_perfil = ?
+            WHERE u.token_perfil = ? AND u.rol = 'jugador' AND u.activo = 1
             GROUP BY u.id, u.nombre_completo, u.nombre_usuario, u.foto_perfil, u.pais, u.ciudad",
             [$token]
         );

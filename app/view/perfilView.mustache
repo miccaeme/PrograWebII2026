@@ -32,7 +32,7 @@
                     <small class="perfil__error" role="alert">{{error}}</small>
                 </form>
             </section>
-
+            {{^es_editor}}{{^es_admin}}
             <section class="perfil__seccion" aria-labelledby="perfilEstadisticasTitulo">
                 <h2 class="perfil__subtitulo" id="perfilEstadisticasTitulo">Mis estadísticas</h2>
                 <dl class="perfil__datos">
@@ -46,7 +46,7 @@
                     </div>
                 </dl>
             </section>
-
+            {{/es_admin}}{{/es_editor}}
             <section class="perfil__seccion">
                 <h2 class="perfil__subtitulo">Información personal</h2>
                 <dl class="perfil__datos">
@@ -81,6 +81,7 @@
                 </div>
                 <span class="perfil__accionVisual">Cambiar contraseña</span>
             </section>-->
+            {{^es_editor}}{{^es_admin}}
             <section class="perfil__seccion codigoQr" aria-labelledby="codigoQrTitulo">
                 <div class="codigoQrContenido">
                     <h2 class="perfil__subtitulo" id="codigoQrTitulo">Compartí tu perfil</h2>
@@ -88,6 +89,7 @@
                 </div>
                 <img class="codigoQrImagen" src="{{codigo_qr_data_uri}}" alt="Código QR para abrir el perfil compartido de {{nombre_usuario}}">
             </section>
+            {{/es_admin}}{{/es_editor}}
         {{/usuario}}
     </section>
 </main>

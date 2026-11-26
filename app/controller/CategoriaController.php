@@ -2,7 +2,7 @@
 
 namespace app\controller;
 
-use Auth;
+
 use PDOException;
 use Redirect;
 use Request;
@@ -21,7 +21,6 @@ class CategoriaController
 
     public function show()
     {
-        Auth::requiereRol(["editor", "admin"]);
         $nombreReactivada = $_SESSION["nombre_categoria_reactivada"] ?? null;
         $nombreDadaDeBaja = $_SESSION["nombre_categoria_dada_de_baja"] ?? null;
         unset($_SESSION["nombre_categoria_reactivada"], $_SESSION["nombre_categoria_dada_de_baja"]);
@@ -45,13 +44,11 @@ class CategoriaController
 
     public function crear()
     {
-        Auth::requiereRol(["editor", "admin"]);
         $this->mostrar("categoriaFormulario", ["color" => "#6655d9"]);
     }
 
     public function editar()
     {
-        Auth::requiereRol(["editor", "admin"]);
         $categoria = $this->buscarCategoria(Request::get("id"));
         $categoria["color"] ??= "#6655d9";
         $this->mostrar("categoriaFormulario", $categoria);
@@ -72,7 +69,6 @@ class CategoriaController
 
     public function confirmarBaja()
     {
-        Auth::requiereRol(["editor", "admin"]);
         $categoria = $this->buscarCategoria(Request::get("id"));
         if (!$categoria["activa"]) {
             $this->volverAlListado("baja");
@@ -110,7 +106,6 @@ class CategoriaController
 
     private function validarPost()
     {
-        Auth::requiereRol(["editor", "admin"]);
         if (($_SERVER["REQUEST_METHOD"] ?? "") !== "POST") {
             header("Allow: POST");
             http_response_code(405);

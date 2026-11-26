@@ -20,13 +20,13 @@ class PreguntaController
 
     public function crear()
     {
-        Auth::requiereLogin();
+  
         $this->mostrarFormulario(["enviada" => Request::get("enviada") === "1"]);
     }
 
     public function guardar()
     {
-        Auth::requiereLogin();
+     
 
         if($_SERVER["REQUEST_METHOD"] !== "POST") {
             Redirect::toController("pregunta", "crear");
@@ -61,7 +61,7 @@ class PreguntaController
             return;
         }
 
-        $estado = in_array($_SESSION["rol"] ?? "jugador", ["editor", "admin"], true) ? "activa" : "pendiente";
+        $estado = Auth::tieneRol(["editor"]) ? "activa" : "pendiente";
 
         $guardada = $this->model->guardar($enunciado, $idCategoria, $respuestas, $correcta, $_SESSION["usuario_id"], $estado);
 
@@ -135,13 +135,12 @@ class PreguntaController
             "enviada" => $datos["enviada"] ?? false,
             "id_pregunta" => $datos["id_pregunta"] ?? null,
             "modo_edicion" => isset($datos["id_pregunta"]),
-            "puede_publicar" => in_array($_SESSION["rol"] ?? "jugador", ["editor", "admin"], true)
+            "puede_publicar" => Auth::tieneRol(["editor"])
         ]);
     }
 
     public function mias()
     {
-        Auth::requiereLogin();
 
         $preguntas = $this->model->obtenerPorCreador($_SESSION["usuario_id"]);
 
@@ -162,7 +161,7 @@ class PreguntaController
 
     public function editar()
     {
-        Auth::requiereRol(["editor", "admin"]);
+        
 
         $pregunta = $this->model->obtenerPorId(Request::get("id"));
 
@@ -189,7 +188,7 @@ class PreguntaController
 
     public function actualizar()
     {
-        Auth::requiereRol(["editor", "admin"]);
+       
 
         if ($_SERVER["REQUEST_METHOD"] !== "POST") {
             Redirect::toController("editor", "activas");
@@ -247,7 +246,7 @@ class PreguntaController
             $this->responderReporte(401, false, 'Tu sesión venció. Volvé a iniciar sesión.');
             return;
         }
-        if ((($_SESSION['rol'] ?? '') ?: 'jugador') !== 'jugador') {
+        if (!Auth::tieneRol(["jugador"])) {
             $this->responderReporte(403, false, 'Solo los jugadores pueden reportar preguntas.');
             return;
         }

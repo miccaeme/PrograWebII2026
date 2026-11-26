@@ -2,7 +2,7 @@
 
 namespace app\controller;
 use Request;
-use Auth;
+
 
 class PartidaController
 {
@@ -15,10 +15,6 @@ class PartidaController
         $this->render = $render;
     }
 
-    private function autenticar()
-    {
-        Auth::requiereRol(["jugador"]);
-    }
 
     private function redirigir($metodo)
     {
@@ -44,7 +40,6 @@ class PartidaController
 
     public function show()
     {
-        $this->autenticar();
         $this->redirigir('nueva');
     }
 
@@ -113,7 +108,6 @@ class PartidaController
 
     public function nueva()
     {
-        $this->autenticar();
         $idUsuario = $_SESSION['usuario_id'];
         $activa = $this->model->obtenerPartidaActiva($idUsuario);
         $idPartida = $activa['id'] ?? $this->model->crearPartida($idUsuario);
@@ -127,7 +121,6 @@ class PartidaController
 
     public function jugar()
     {
-        $this->autenticar();
         $idUsuario = $_SESSION['usuario_id'];
         $idPartida = $_SESSION['partida_activa']['id_partida'] ?? null;
         if (!$idPartida) {
@@ -151,7 +144,6 @@ class PartidaController
 
     public function tiempo()
     {
-        $this->autenticar();
         $this->comprobarPostTemporizador();
         header('Content-Type: application/json; charset=utf-8');
         header('Cache-Control: no-store');
@@ -189,7 +181,6 @@ class PartidaController
 
     public function responder()
     {
-        $this->autenticar();
         $this->comprobarPostTemporizador();
         $idPartida = filter_var(Request::post('id_partida'), FILTER_VALIDATE_INT);
         $codigo = Request::post('id_respuesta');
@@ -240,7 +231,6 @@ class PartidaController
 
     public function respuestaCorrecta()
     {
-        $this->autenticar();
 
         if (isset($_SESSION['partida_activa']['id_partida'])) {
             $partida = $this->model->consultarPartida($_SESSION['partida_activa']['id_partida'], $_SESSION['usuario_id']);
@@ -269,7 +259,6 @@ class PartidaController
     // resultados
     public function resultado()
     {
-        $this->autenticar();
 
         $info = $_SESSION['partida_finalizada'] ?? null;
         $puntaje = $info['puntaje'] ?? 0;

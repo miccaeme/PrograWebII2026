@@ -2,7 +2,6 @@
 
 namespace app\controller;
 
-use Auth;
 use Redirect;
 use Request;
 
@@ -21,7 +20,6 @@ class EditorController
 
     public function show()
     {
-        Auth::requiereRol(["editor", "admin"]);
 
         $preguntas = $this->model->obtenerPendientes();
 
@@ -39,15 +37,12 @@ class EditorController
 
     public function categorias()
     {
-        Auth::requiereRol(["editor", "admin"]);
 
         Redirect::toController("categoria", Request::get("crear") === "1" ? "crear" : "show");
     }
 
     public function aprobar()
     {
-        Auth::requiereRol(["editor", "admin"]);
-
         if($_SERVER["REQUEST_METHOD"] !== "POST") {
             Redirect::toController("editor", "show");
         }
@@ -60,7 +55,6 @@ class EditorController
 
     public function rechazar()
     {
-        Auth::requiereRol(["editor", "admin"]);
 
         if($_SERVER["REQUEST_METHOD"] !== "POST") {
             Redirect::toController("editor", "show");
@@ -74,7 +68,6 @@ class EditorController
 
     public function activas()
     {
-        Auth::requiereRol(["editor", "admin"]);
 
         $busqueda = trim((string) Request::get("q", ""));
         $idCategoria = (int) Request::get("categoria", 0);
@@ -106,7 +99,6 @@ class EditorController
 
     public function inactivas()
     {
-        Auth::requiereRol(["editor", "admin"]);
 
         $paginado = $this->datosPaginado($this->model->contarInactivas());
         $preguntas = $this->model->obtenerInactivas(self::POR_PAGINA, $paginado["offset"]);
@@ -125,7 +117,6 @@ class EditorController
 
     public function baja()
     {
-        Auth::requiereRol(["editor", "admin"]);
 
         if ($_SERVER["REQUEST_METHOD"] !== "POST") {
             Redirect::toController("editor", "activas");
@@ -138,7 +129,6 @@ class EditorController
 
     public function reactivar()
     {
-        Auth::requiereRol(["editor", "admin"]);
 
         if ($_SERVER["REQUEST_METHOD"] !== "POST") {
             Redirect::toController("editor", "inactivas");
@@ -151,7 +141,7 @@ class EditorController
 
     public function reportadas()
     {
-        Auth::requiereRol(["editor", "admin"]);
+      
 
         $preguntas = $this->model->obtenerReportadas();
 
@@ -169,7 +159,6 @@ class EditorController
 
     public function mantener()
     {
-        Auth::requiereRol(["editor", "admin"]);
 
         if ($_SERVER["REQUEST_METHOD"] !== "POST") {
             Redirect::toController("editor", "reportadas");
@@ -182,7 +171,6 @@ class EditorController
 
     public function bajaReportada()
     {
-        Auth::requiereRol(["editor", "admin"]);
 
         if ($_SERVER["REQUEST_METHOD"] !== "POST") {
             Redirect::toController("editor", "reportadas");

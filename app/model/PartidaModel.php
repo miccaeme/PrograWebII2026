@@ -164,6 +164,9 @@ class PartidaModel
         $partida['tiempo_restante_ms'] = (float)($reloj['restante'] ?? 0);
         if ($partida['estado'] === 'en_curso' && $partida['pregunta_vence_en'] !== null
             && $partida['tiempo_restante_ms'] <= 0) {
+            if($partida['pregunta_actual_id']){
+                $this->sumarContadores($partida['id_usuario'], $partida['pregunta_actual_id'], false);
+            }
             $this->finalizarPartida($partida['id'], $partida['id_categoria'], $partida['puntaje'],
                 $partida['id_usuario'], 'tiempo');
             $partida['estado'] = 'finalizada';

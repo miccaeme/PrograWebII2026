@@ -2,7 +2,7 @@
 
 namespace app\controller;
 
-use Auth;
+
 use Request;
 
 class AdminController
@@ -16,14 +16,10 @@ class AdminController
         $this->render = $render;
     }
 
-    private function autenticar()
-    {
-        Auth::requiereRol(["admin"]);
-    }
+ 
 
     public function show()
     {
-        $this->autenticar();
         $baseUrl = $_ENV['BASE_URL'] ?? '/PrograWebII2026';
 
         $data = [
@@ -37,7 +33,7 @@ class AdminController
     // Guarda los filtros en sesión y redirige a /admin/dashboard (URL limpia)
     public function filtrar()
     {
-        $this->autenticar();
+        
 
         if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
             $periodo = Request::post('periodo', 'todo');
@@ -57,7 +53,7 @@ class AdminController
 
     public function limpiarFiltros()
     {
-        $this->autenticar();
+        
         unset($_SESSION['admin_filtros']);
         header("Location: " . \UrlHelper::controllerUrl('admin', 'dashboard'));
         exit();
@@ -66,7 +62,6 @@ class AdminController
     // Pantalla de Métricas (adminDashboardView.mustache)
     public function dashboard()
     {
-        $this->autenticar();
 
         $baseUrl = $_ENV['BASE_URL'] ?? '/PrograWebII2026';
 

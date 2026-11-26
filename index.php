@@ -11,7 +11,9 @@ require_once("app/Configuration.php");
 $configuration = new Configuration();
 $router = $configuration->getRouter();
 
-$router->dispatch(
-    Request::get("controller", "login"),
-    Request::get("method", "show")
-);
+$controller = Request::get("controller", "login");
+$method     = Request::get("method", "show");
+
+Auth::verificarAcceso($controller, $method);
+
+$router->dispatch($controller, $method);

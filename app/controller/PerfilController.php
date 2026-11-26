@@ -21,13 +21,12 @@ class PerfilController
 
     public function show()
     {
-        $this->requiereLogin();
         $this->mostrarPerfil([]);
     }
 
     public function compartido()
     {
-        $this->requiereLogin();
+       
 
         $token = Request::get("token", "");
         $usuario = $this->model->buscarPerfilCompartidoPorToken($token);
@@ -47,7 +46,7 @@ class PerfilController
 
     public function subirFoto()
     {
-        $this->requiereLogin();
+   
 
         if ($_SERVER["REQUEST_METHOD"] !== "POST") {
             Redirect::toController("perfil", "show");
@@ -124,10 +123,4 @@ class PerfilController
             . "?token=" . rawurlencode($token);
     }
 
-    private function requiereLogin()
-    {
-        if (empty($_SESSION["usuario_id"])) {
-            Redirect::toController("login", "show");
-        }
-    }
 }

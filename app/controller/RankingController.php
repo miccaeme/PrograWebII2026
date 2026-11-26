@@ -2,7 +2,6 @@
 
 namespace app\controller;
 
-use Auth;
 use Request;
 
 class RankingController
@@ -18,7 +17,7 @@ class RankingController
 
     public function show()
     {
-        Auth::requiereLogin();
+      
 
         $periodo = Request::get("periodo", "historico");
         

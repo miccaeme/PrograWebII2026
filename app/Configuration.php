@@ -101,7 +101,7 @@ class Configuration
 
     public function getRouter()
     {
-        return new Router($this, "lobby", "show");
+        return new Router($this, "login", "show");
     }
 
 

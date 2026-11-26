@@ -35,12 +35,9 @@
                 {{/es_editor}}
                 {{#es_admin}}
                     <a href="{{baseUrl}}/admin/show" class="header__link">Panel admin</a>
-                    <a href="{{baseUrl}}/editor/show" class="header__link">Preguntas</a>
-                    <a href="{{baseUrl}}/categoria/show" class="header__link">Categorías</a>
                 {{/es_admin}}
                 {{^es_editor}}{{^es_admin}}
                     <a href="{{baseUrl}}/" class="header__link">Inicio</a>
-                    <a href="#" class="header__link">Categorías</a>
                     <a href="{{baseUrl}}/ranking/show" class="header__link">Ranking</a>
                 {{/es_admin}}{{/es_editor}}
             </nav>

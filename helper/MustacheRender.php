@@ -23,7 +23,7 @@ class MustacheRender
     }
     public function renderiza($view, $data = [])
     {
-        $rol = $_SESSION["rol"] ?? "";
+        $rol = Auth::rolActual();
         // Las vistas usan {{baseUrl}} para cargar assets y construir enlaces.
         // Debe calcularse aquí para que esté disponible en todas las vistas.
         $data["baseUrl"] = UrlHelper::baseUrl();

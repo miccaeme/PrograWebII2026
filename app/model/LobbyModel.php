@@ -9,19 +9,6 @@ class LobbyModel
         $this->database = $database;
     }
 
-    public function getIntegrantes(){
-        return $this->database->queryAll("SELECT * FROM integrantes");
-    }
-    public function show()
-    {
-        $data = [
-            "logueado"       => $_SESSION["logueado"] ?? false,
-            "nombre_usuario" => $_SESSION["nombre_usuario"] ?? null,
-
-        ];
-
-        $this->render->renderiza("integrantes", $data);
-    }
     public function getUltimasPartidas($idUsuario){
         // Volver al inicio también reconcilia una pregunta vencida, aunque JS no haya avisado.
         $activas = $this->database->queryParams(

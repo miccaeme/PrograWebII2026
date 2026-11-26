@@ -84,14 +84,7 @@ class PartidaModel
         return $pregunta;
     }
 
-    public function esRespuestaCorrecta($idRespuesta)
-    {
-        $resultado = $this->database->queryOneParams(
-            "SELECT es_correcta FROM respuestas WHERE id = ?",
-            [$idRespuesta]
-        );
-        return $resultado && (int)$resultado['es_correcta'] === 1;
-    }
+
 // Busca si el usuario tiene una partida en curso en la BD
     public function obtenerPartidaActiva($idUsuario)
     {
@@ -282,10 +275,7 @@ class PartidaModel
                 return $partida;
             });
     }
-    //public function guardarPartida($idUsuario, $idCategoriaUltima, $puntaje)
-    //{
-    //  return $this->finalizarPartida($idPartida, $idCategoriaUltima, $puntaje);
-    //}
+
 
     private function sumarContadores($idUsuario, $idPregunta, $acerto)
     {

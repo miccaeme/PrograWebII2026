@@ -37,11 +37,7 @@ class EditorController
         ]);
     }
 
-    public function categorias()
-    {
 
-        Redirect::toController("categoria", Request::get("crear") === "1" ? "crear" : "show");
-    }
 
     public function aprobar()
     {

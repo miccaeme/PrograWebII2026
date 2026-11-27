@@ -165,7 +165,51 @@ class AdminModel
         return $resultado;
     }
 
-    public function obtenerCorrectasPorUsuario()
+    private function formatoAgrupacion($agrupacion)
+    {
+        switch ($agrupacion) {
+            case 'anio':
+                return '%Y';
+            case 'mes':
+                return '%Y-%m';
+            default:
+                return '%Y-%m-%d';
+        }
+    }
+
+    public function contarSerieTemporal($tabla, $columnaFecha, $condicionExtra = '1=1', $agrupacion = 'dia')
+    {
+        $formato = $this->formatoAgrupacion($agrupacion);
+        $sql = "SELECT COUNT(DISTINCT DATE_FORMAT($columnaFecha, '$formato')) AS total
+                FROM $tabla
+                WHERE $condicionExtra AND $columnaFecha IS NOT NULL";
+        $res = $this->database->queryOneParams($sql, []);
+        return (int)($res['total'] ?? 0);
+    }
+
+    public function obtenerSerieTemporalPaginada($tabla, $columnaFecha, $condicionExtra, $agrupacion, $limite, $offset)
+    {
+        $formato = $this->formatoAgrupacion($agrupacion);
+        $sql = "SELECT DATE_FORMAT($columnaFecha, '$formato') AS etiqueta, COUNT(*) AS total
+                FROM $tabla
+                WHERE $condicionExtra AND $columnaFecha IS NOT NULL
+                GROUP BY etiqueta
+                ORDER BY etiqueta DESC
+                LIMIT " . (int)$limite . " OFFSET " . (int)$offset;
+        return $this->database->queryParams($sql, []) ?? [];
+    }
+
+    public function contarUsuariosConPartidas()
+    {
+        $sql = "SELECT COUNT(DISTINCT u.id) AS total
+                FROM usuarios u
+                INNER JOIN partidas p ON p.id_usuario = u.id AND p.estado = 'finalizada'
+                WHERE u.rol = 'jugador'";
+        $res = $this->database->queryOneParams($sql, []);
+        return (int)($res['total'] ?? 0);
+    }
+
+    public function obtenerCorrectasPorUsuario($limite, $offset)
     {
         $sql = "SELECT u.nombre_usuario AS usuario,
                    SUM(p.puntaje) AS correctas,
@@ -175,7 +219,8 @@ class AdminModel
             INNER JOIN partidas p ON p.id_usuario = u.id AND p.estado = 'finalizada'
             WHERE u.rol = 'jugador'
             GROUP BY u.id, u.nombre_usuario
-            ORDER BY porcentaje DESC, respondidas DESC";
+            ORDER BY porcentaje DESC, respondidas DESC, u.id ASC
+            LIMIT " . (int)$limite . " OFFSET " . (int)$offset;
         return $this->database->queryAll($sql) ?? [];
     }
 }

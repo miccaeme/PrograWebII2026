@@ -88,7 +88,7 @@
     <section class="admin-tablas" id="seccion-tablas">
         <h2 class="reporte-titulo">{{titulo_reporte}}</h2>
 
-        <div class="tabla-box">
+        <div class="tabla-box" id="tabla-partidas">
             <h3>Partidas jugadas</h3>
             <table class="tabla-datos">
                 <thead><tr><th>Período</th><th>Partidas</th></tr></thead>
@@ -96,9 +96,16 @@
                 {{#tabla_partidas}}<tr><td>{{etiqueta}}</td><td>{{total}}</td></tr>{{/tabla_partidas}}
                 </tbody>
             </table>
+            {{#pag_partidas}}{{#hay_paginas}}
+                <nav class="paginado" aria-label="Paginado partidas">
+                    {{#hay_anterior}}<a href="{{baseUrl}}/admin/dashboard?pagina_partidas={{pagina_anterior}}&pagina_jugadores={{pagina_jugadores}}&pagina_usuarios={{pagina_usuarios}}#tabla-partidas">&laquo; Anterior</a>{{/hay_anterior}}
+                    <span>Página {{pagina}} de {{total_paginas}}</span>
+                    {{#hay_siguiente}}<a href="{{baseUrl}}/admin/dashboard?pagina_partidas={{pagina_siguiente}}&pagina_jugadores={{pagina_jugadores}}&pagina_usuarios={{pagina_usuarios}}#tabla-partidas">Siguiente &raquo;</a>{{/hay_siguiente}}
+                </nav>
+            {{/hay_paginas}}{{/pag_partidas}}
         </div>
 
-        <div class="tabla-box">
+        <div class="tabla-box" id="tabla-jugadores">
             <h3>Nuevos jugadores</h3>
             <table class="tabla-datos">
                 <thead><tr><th>Período</th><th>Jugadores</th></tr></thead>
@@ -106,6 +113,13 @@
                 {{#tabla_jugadores}}<tr><td>{{etiqueta}}</td><td>{{total}}</td></tr>{{/tabla_jugadores}}
                 </tbody>
             </table>
+            {{#pag_jugadores}}{{#hay_paginas}}
+                <nav class="paginado" aria-label="Paginado jugadores">
+                    {{#hay_anterior}}<a href="{{baseUrl}}/admin/dashboard?pagina_partidas={{pagina_partidas}}&pagina_jugadores={{pagina_anterior}}&pagina_usuarios={{pagina_usuarios}}#tabla-jugadores">&laquo; Anterior</a>{{/hay_anterior}}
+                    <span>Página {{pagina}} de {{total_paginas}}</span>
+                    {{#hay_siguiente}}<a href="{{baseUrl}}/admin/dashboard?pagina_partidas={{pagina_partidas}}&pagina_jugadores={{pagina_siguiente}}&pagina_usuarios={{pagina_usuarios}}#tabla-jugadores">Siguiente &raquo;</a>{{/hay_siguiente}}
+                </nav>
+            {{/hay_paginas}}{{/pag_jugadores}}
         </div>
 
         <div class="tabla-box">
@@ -156,6 +170,13 @@
                 {{#por_usuario}}<tr><td>{{usuario}}</td><td>{{correctas}}</td><td>{{respondidas}}</td><td>{{porcentaje}}%</td></tr>{{/por_usuario}}
                 </tbody>
             </table>
+            {{#pag_usuarios}}{{#hay_paginas}}
+                <nav class="paginado" aria-label="Paginado usuarios">
+                    {{#hay_anterior}}<a href="{{baseUrl}}/admin/dashboard?pagina_partidas={{pagina_partidas}}&pagina_jugadores={{pagina_jugadores}}&pagina_usuarios={{pagina_anterior}}#tabla-usuarios">&laquo; Anterior</a>{{/hay_anterior}}
+                    <span>Página {{pagina}} de {{total_paginas}}</span>
+                    {{#hay_siguiente}}<a href="{{baseUrl}}/admin/dashboard?pagina_partidas={{pagina_partidas}}&pagina_jugadores={{pagina_jugadores}}&pagina_usuarios={{pagina_siguiente}}#tabla-usuarios">Siguiente &raquo;</a>{{/hay_siguiente}}
+                </nav>
+            {{/hay_paginas}}{{/pag_usuarios}}
         </div>
     </section>
 </main>

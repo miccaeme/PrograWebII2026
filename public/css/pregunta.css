@@ -609,6 +609,23 @@ textarea.pregunta__entrada {
     --boton-hover: #ffe0e0;
 }
 
+.activas__boton--reactivar {
+    --boton-color: #166534;
+    --boton-borde: #15803d;
+    --boton-fondo: #f0fdf4;
+    --boton-hover: #dcfce7;
+}
+
+.activas__vacio {
+    margin: 0;
+    padding: 16px;
+    border: 1px dashed #cec0ef;
+    border-radius: 15px;
+    background: #fcfbfe;
+    color: var(--activas-texto);
+    text-align: center;
+}
+
 .activas__icono,
 .categorias-panel__icono,
 .crear-categoria__icono {
@@ -721,6 +738,19 @@ textarea.pregunta__entrada {
 .activas__pregunta[data-categoria^="Geografía"] .activas__categoria {
     background: #dff2ff;
     color: #155fa8;
+}
+
+.revision__reportes {
+    flex-basis: 100%;
+    min-width: 0;
+    padding: 8px 12px;
+    border-radius: 8px;
+    background: #fef3c7;
+    color: #854d0e;
+}
+
+.revision__reportes p {
+    margin: 2px 0 0;
 }
 
 .activas .revision__detalle {

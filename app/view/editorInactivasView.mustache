@@ -1,30 +1,40 @@
 {{> header}}
-<main class="pregunta">
-    <section class="pregunta__tarjeta">
-        <h1 class="pregunta__titulo">Preguntas inactivas</h1>
-        <p class="pregunta__subtitulo">Preguntas dadas de baja. Podés volver a activarlas.</p>
+<main class="pregunta activas">
+    {{> editorIconosPreguntas}}
 
-        <a class="pregunta__boton pregunta__boton--enlace" href="{{baseUrl}}/editor/activas">Volver a preguntas activas</a>
+    <section class="pregunta__tarjeta activas__panel" aria-labelledby="inactivas-titulo">
+        <div class="activas__encabezado">
+            <img src="{{baseUrl}}/public/img/portapapeles.png" width="1293" height="1216" alt="">
+            <div>
+                <h1 class="pregunta__titulo" id="inactivas-titulo">Preguntas inactivas</h1>
+                <p class="pregunta__subtitulo">Preguntas dadas de baja. Podés volver a activarlas.</p>
+            </div>
+        </div>
+
+        <nav class="activas__navegacion" aria-label="Navegación del editor">
+            <a class="pregunta__boton pregunta__boton--enlace activas__boton activas__boton--volver" href="{{baseUrl}}/editor/activas">Volver a preguntas activas</a>
+        </nav>
 
         {{> editorFiltrosPreguntas}}
 
         {{#sin_inactivas}}
-            <p class="pregunta__subtitulo" role="status">
+            <p class="activas__vacio" role="status">
                 {{#hay_filtros}}No hay preguntas que coincidan con los filtros.{{/hay_filtros}}
                 {{^hay_filtros}}No hay preguntas inactivas.{{/hay_filtros}}
             </p>
         {{/sin_inactivas}}
 
         {{#preguntas}}
-            <article class="revision">
-                <p class="revision__enunciado">{{enunciado}}</p>
-                <p class="revision__datos">
-                    Categoría: {{categoria}}
+            <article class="revision activas__pregunta" data-categoria="{{categoria}}">
+                <h2 class="revision__enunciado">{{enunciado}}</h2>
+                <div class="revision__datos">
+                    <span class="activas__categoria"><svg class="activas__icono" aria-hidden="true"><use href="#activas-icono-categoria"/></svg> {{categoria}}</span>
                     {{#categoria_inactiva}}
                         <span class="revision__categoria-inactiva">Categoría inactiva</span>
                     {{/categoria_inactiva}}
-                    · Creada por {{creador}} · {{fecha_creacion}}
-                </p>
+                    <span><svg class="activas__icono" aria-hidden="true"><use href="#activas-icono-usuario"/></svg> Creada por {{creador}}</span>
+                    <span><svg class="activas__icono" aria-hidden="true"><use href="#activas-icono-fecha"/></svg> {{fecha_creacion}}</span>
+                </div>
 
                 <details class="revision__detalle">
                     <summary>Ver respuestas</summary>
@@ -40,7 +50,7 @@
                 <div class="revision__acciones">
                     <form method="POST" action="{{baseUrl}}/editor/reactivar">
                         <input type="hidden" name="id" value="{{id}}">
-                        <button class="pregunta__boton" type="submit">Reactivar</button>
+                        <button class="pregunta__boton activas__boton activas__boton--reactivar" type="submit">Reactivar</button>
                     </form>
                 </div>
             </article>

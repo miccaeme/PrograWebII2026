@@ -1,22 +1,35 @@
 {{> header}}
-<main class="pregunta">
-    <section class="pregunta__tarjeta">
-        <h1 class="pregunta__titulo">Preguntas reportadas</h1>
-        <p class="pregunta__subtitulo">Preguntas que los jugadores marcaron como incorrectas.</p>
+<main class="pregunta activas">
+    {{> editorIconosPreguntas}}
 
-        <a class="pregunta__boton pregunta__boton--enlace" href="{{baseUrl}}/editor/show">Volver al panel</a>
+    <section class="pregunta__tarjeta activas__panel" aria-labelledby="reportadas-titulo">
+        <div class="activas__encabezado">
+            <img src="{{baseUrl}}/public/img/portapapeles.png" width="1293" height="1216" alt="">
+            <div>
+                <h1 class="pregunta__titulo" id="reportadas-titulo">Preguntas reportadas</h1>
+                <p class="pregunta__subtitulo">Preguntas que los jugadores marcaron como incorrectas.</p>
+            </div>
+        </div>
+
+        <nav class="activas__navegacion" aria-label="Navegación del editor">
+            <a class="pregunta__boton pregunta__boton--enlace activas__boton activas__boton--volver" href="{{baseUrl}}/editor/show">Volver al panel</a>
+        </nav>
 
         {{#sin_reportadas}}
-            <p class="pregunta__subtitulo">No hay preguntas reportadas.</p>
+            <p class="activas__vacio" role="status">No hay preguntas reportadas.</p>
         {{/sin_reportadas}}
 
         {{#preguntas}}
-            <article class="revision">
-                <p class="revision__enunciado">{{enunciado}}</p>
-                <p class="revision__datos">
-                    Categoría: {{categoria}} · Creada por {{creador}} · Reportes: {{cantidad_reportes}}
-                </p>
-                <p class="revision__datos">Motivos: {{motivos}}</p>
+            <article class="revision activas__pregunta" data-categoria="{{categoria}}">
+                <h2 class="revision__enunciado">{{enunciado}}</h2>
+                <div class="revision__datos">
+                    <span class="activas__categoria"><svg class="activas__icono" aria-hidden="true"><use href="#activas-icono-categoria"/></svg> {{categoria}}</span>
+                    <span><svg class="activas__icono" aria-hidden="true"><use href="#activas-icono-usuario"/></svg> Creada por {{creador}}</span>
+                    <div class="revision__reportes">
+                        <strong>Reportes: {{cantidad_reportes}}</strong>
+                        <p>Motivos: {{motivos}}</p>
+                    </div>
+                </div>
 
                 <details class="revision__detalle">
                     <summary>Ver respuestas</summary>
@@ -32,13 +45,13 @@
                 <div class="revision__acciones">
                     <form method="POST" action="{{baseUrl}}/editor/mantener">
                         <input type="hidden" name="id" value="{{id}}">
-                        <button class="pregunta__boton" type="submit">Mantener</button>
+                        <button class="pregunta__boton activas__boton" type="submit">Mantener</button>
                     </form>
                     <form method="POST" action="{{baseUrl}}/editor/bajaReportada">
                         <input type="hidden" name="id" value="{{id}}">
-                        <button class="pregunta__boton revision__rechazar" type="submit">Dar de baja</button>
+                        <button class="pregunta__boton activas__boton activas__boton--baja" type="submit">Dar de baja</button>
                     </form>
-                    <a class="pregunta__boton pregunta__boton--enlace" href="{{baseUrl}}/pregunta/editar?id={{id}}">Editar</a>
+                    <a class="pregunta__boton pregunta__boton--enlace activas__boton activas__boton--editar" href="{{baseUrl}}/pregunta/editar?id={{id}}"><svg class="activas__icono" aria-hidden="true"><use href="#activas-icono-editar"/></svg> Editar</a>
                 </div>
             </article>
         {{/preguntas}}

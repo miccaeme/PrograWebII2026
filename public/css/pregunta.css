@@ -495,6 +495,7 @@ textarea.pregunta__entrada {
 
 .activas__panel,
 .activas__filtros,
+.activas__dialogo,
 .categorias-panel__contenedor,
 .categorias-panel__dialogo,
 .crear-pregunta__panel,
@@ -926,6 +927,7 @@ textarea.pregunta__entrada {
     min-width: 86px;
 }
 
+.activas__dialogo,
 .categorias-panel__dialogo {
     width: min(calc(100% - 32px), 460px);
     padding: clamp(16px, 4vw, 24px);
@@ -936,16 +938,27 @@ textarea.pregunta__entrada {
     overflow-wrap: anywhere;
 }
 
-.categorias-panel__dialogo::backdrop {
+:is(.activas__dialogo, .categorias-panel__dialogo)::backdrop {
     background: rgba(31, 19, 62, .55);
 }
 
-.categorias-panel__dialogo .pregunta__subtitulo {
+:is(.activas__dialogo, .categorias-panel__dialogo) .pregunta__subtitulo {
     margin-block: 8px 16px;
 }
 
-.categorias-panel__dialogo .pregunta__titulo {
+:is(.activas__dialogo, .categorias-panel__dialogo) .pregunta__titulo {
     font-size: 1.35rem;
+}
+
+.activas__dialogo #pregunta-baja-enunciado {
+    font-weight: 800;
+    margin-bottom: 0;
+}
+
+@media (max-width: 380px) {
+    .activas__dialogo .revision__acciones > button {
+        flex: 1 0 100%;
+    }
 }
 
 .crear-pregunta__panel,

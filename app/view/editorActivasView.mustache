@@ -60,12 +60,11 @@
                     <a class="pregunta__boton pregunta__boton--enlace activas__boton activas__boton--editar" href="{{baseUrl}}/pregunta/editar?id={{id}}">
                         <svg class="activas__icono" aria-hidden="true"><use href="#activas-icono-editar"/></svg> Editar
                     </a>
-                    <form method="POST" action="{{baseUrl}}/editor/baja">
-                        <input type="hidden" name="id" value="{{id}}">
-                        <button class="pregunta__boton activas__boton activas__boton--baja" type="submit">
-                            <svg class="activas__icono" aria-hidden="true"><use href="#activas-icono-baja"/></svg> Dar de baja
-                        </button>
-                    </form>
+                    <button class="pregunta__boton activas__boton activas__boton--baja" type="button"
+                            aria-haspopup="dialog" aria-controls="pregunta-baja"
+                            data-pregunta-baja-id="{{id}}" data-pregunta-baja-enunciado="{{enunciado}}">
+                        <svg class="activas__icono" aria-hidden="true"><use href="#activas-icono-baja"/></svg> Dar de baja
+                    </button>
                 </div>
             </article>
         {{/preguntas}}
@@ -77,6 +76,19 @@
             </nav>
         {{/hay_paginas}}
     </section>
+
+    <dialog id="pregunta-baja" class="activas__dialogo" aria-labelledby="pregunta-baja-titulo"
+            aria-describedby="pregunta-baja-enunciado pregunta-baja-mensaje">
+        <h2 class="pregunta__titulo" id="pregunta-baja-titulo">Dar de baja la pregunta</h2>
+        <p class="pregunta__subtitulo" id="pregunta-baja-enunciado"></p>
+        <p class="pregunta__subtitulo" id="pregunta-baja-mensaje">La pregunta saldrá del juego. Podés reactivarla desde Preguntas inactivas.</p>
+        <form method="POST" action="{{baseUrl}}/editor/baja" class="revision__acciones">
+            <input type="hidden" name="id" id="pregunta-baja-id">
+            <button class="pregunta__boton activas__boton activas__boton--volver" id="pregunta-baja-cancelar" type="button" autofocus>Cancelar</button>
+            <button class="pregunta__boton activas__boton activas__boton--baja" type="submit">Confirmar baja</button>
+        </form>
+    </dialog>
 </main>
 
+<script src="{{baseUrl}}/public/javascript/preguntas-activas.js" defer></script>
 {{> footer}}
